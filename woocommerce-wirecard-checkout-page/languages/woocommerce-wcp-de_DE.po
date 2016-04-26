@@ -1,0 +1,453 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-24 16:52+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: class-woocommerce-wcp-gateway.php:38
+msgid "Wirecard Checkout Page"
+msgstr "Wirecard Checkout Page"
+
+#: class-woocommerce-wcp-gateway.php:39
+msgid ""
+"Wirecard CEE is a popular payment service provider (PSP) and has connections "
+"with over 20 national and international currencies. "
+msgstr ""
+"Wirecard CEE Österreichs marktführender Payment-Service-Provider (PSP) und hat Anbindungen an über 20 nationale und internationale Zahlungsmittel."
+"Wirecard CEE ist Teil des Wirecard-Konzerns und Kompetenzzentrum für Österreich und die CEE-Märkte (Central and Eastern Europe)."
+
+#: class-woocommerce-wcp-gateway.php:79
+msgid "Enable/Disable"
+msgstr "Aktiviern/Deaktivieren"
+
+#: class-woocommerce-wcp-gateway.php:81
+msgid "Enable Wirecard Checkout Page"
+msgstr "Wirecard Checkout Page aktivieren"
+
+#: class-woocommerce-wcp-gateway.php:85
+msgid "Title"
+msgstr "Titel"
+
+#: class-woocommerce-wcp-gateway.php:87
+msgid "This controls the title which the user sees during checkout."
+msgstr "Legt den Titel fest, den der Kunde während des Checkout sieht."
+
+#: class-woocommerce-wcp-gateway.php:88
+msgid "Wirecard"
+msgstr "Wirecard"
+
+#: class-woocommerce-wcp-gateway.php:92
+msgid "Description"
+msgstr "Beschreibung"
+
+#: class-woocommerce-wcp-gateway.php:94
+msgid "This controls the description which the user sees during checkout."
+msgstr "Legt die Beschreibung fest, die der Kunde während des Checkout sieht."
+
+#: class-woocommerce-wcp-gateway.php:95
+msgid "Pay via Wirecard Checkout Page"
+msgstr "Bezahlung via Wirecard Checkout Page"
+
+#: class-woocommerce-wcp-gateway.php:101
+msgid "Debug Log"
+msgstr "Protokolldatei"
+
+#: class-woocommerce-wcp-gateway.php:102
+msgid "Log Wirecard Checkout Page events."
+msgstr "Wirecard Checkout Page Ereignisse werden in eine Logdatei geschrieben."
+
+#: class-woocommerce-wcp-gateway.php:106
+msgid "Customer Id"
+msgstr "Kundennummer"
+
+#: class-woocommerce-wcp-gateway.php:109
+msgid "Wirecard CEE Customer Id."
+msgstr "Wirecard CEE Kundennummer"
+
+#: class-woocommerce-wcp-gateway.php:113
+msgid "Shop Id"
+msgstr "Shop Id"
+
+#: class-woocommerce-wcp-gateway.php:116
+msgid "Wirecard CEE Shop Id."
+msgstr "Wirecard CEE Shop Id."
+
+#: class-woocommerce-wcp-gateway.php:120
+msgid "Secret"
+msgstr "Secret"
+
+#: class-woocommerce-wcp-gateway.php:123
+msgid "Wirecard CEE Secret."
+msgstr "Preshared Key zur Signierung der übertragenen Parameter"
+
+#: class-woocommerce-wcp-gateway.php:127
+msgid "Service Url"
+msgstr "Service Url"
+
+#: class-woocommerce-wcp-gateway.php:130
+msgid ""
+"Backlink on the Wirecard Checkout Page to your shop, usualy links to contact "
+"or imprint page."
+msgstr "URL Ihrer Kontakt-/Impressumsseite."
+
+#: class-woocommerce-wcp-gateway.php:134
+msgid "Image Url"
+msgstr "Bild Url"
+
+#: class-woocommerce-wcp-gateway.php:137
+msgid ""
+"Image Url for displaying an image on the Wirecard Checkout Page (95x65 "
+"pixels preferred)."
+msgstr "Url zu Ihrem Logo auf der Bezahlseite (vorzugsweise 95x65 Pixel)."
+
+#: class-woocommerce-wcp-gateway.php:141
+msgid "Max. retries"
+msgstr "Max. Versuche"
+
+#: class-woocommerce-wcp-gateway.php:144
+msgid "Maximal number of payment retries."
+msgstr "Anzahl der maximalen Zahlungsversuche."
+
+#: class-woocommerce-wcp-gateway.php:149
+msgid "Enable auto deposit"
+msgstr "Autom. abbuchen"
+
+#: class-woocommerce-wcp-gateway.php:151
+msgid "Auto deposit."
+msgstr "Automatisches Abbuchen der Zahlung."
+
+#: class-woocommerce-wcp-gateway.php:156
+msgid "Send additional data"
+msgstr "Detaillierte Kundendaten senden"
+
+#: class-woocommerce-wcp-gateway.php:158
+msgid "Send additional customer information."
+msgstr "Detaillierte Kundendaten senden"
+
+#: class-woocommerce-wcp-gateway.php:163
+msgid "Use Iframe"
+msgstr "IFrame verwenden"
+
+#: class-woocommerce-wcp-gateway.php:165
+msgid "Use Iframe."
+msgstr "Bezahlfenster wird in einem Iframe geöffnet."
+
+#: class-woocommerce-wcp-gateway.php:169
+msgid "Display text"
+msgstr "Text auf der Bezahlseite"
+
+#: class-woocommerce-wcp-gateway.php:171
+msgid "Display Text on the Wirecard Checkout Page."
+msgstr "Text, der dem Kunden zu den Bestelldaten angezeigt wird"
+
+#: class-woocommerce-wcp-gateway.php:179
+msgid "Payment is choosen on the Wirecard Checkout Page."
+msgstr "Die Zahlungsart wird auf der Wirecard Checkout Page ausgewählt."
+
+#: class-woocommerce-wcp-gateway.php:186
+msgid "Credit Card."
+msgstr "Kredikartenzahlung."
+
+#: class-woocommerce-wcp-gateway.php:193
+msgid "Credit Card mobile-, tele-order."
+msgstr "Kredikartenzahlung Mobil-, Tele-Order"
+
+#: class-woocommerce-wcp-gateway.php:200
+msgid "Maestro SecureCode."
+msgstr "Maestro SecureCode."
+
+#: class-woocommerce-wcp-gateway.php:207
+msgid "eps Online Bank Transfer."
+msgstr "eps Online-Überweisung."
+
+#: class-woocommerce-wcp-gateway.php:214
+msgid "iDEAL."
+msgstr "iDEAL."
+
+#: class-woocommerce-wcp-gateway.php:221
+msgid "giropay."
+msgstr "giropay."
+
+#: class-woocommerce-wcp-gateway.php:226
+msgid "SOFORT banking (PIN/TAN)"
+msgstr "SOFORT Überweisung (PIN/TAN)"
+
+#: class-woocommerce-wcp-gateway.php:228
+msgid "SOFORT banking (PIN/TAN)."
+msgstr "SOFORT Überweisung (PIN/TAN)."
+
+#: class-woocommerce-wcp-gateway.php:235
+msgid "Mobile Phone Invoicing."
+msgstr "Bezahlung am Handy via paybox"
+
+#: class-woocommerce-wcp-gateway.php:242
+msgid "paysafecard."
+msgstr "paysafecard."
+
+#: class-woocommerce-wcp-gateway.php:249
+msgid "@QUICK."
+msgstr "@QUICK."
+
+#: class-woocommerce-wcp-gateway.php:256
+msgid "PayPal."
+msgstr "PayPal."
+
+#: class-woocommerce-wcp-gateway.php:263
+msgid "Direct Debit."
+msgstr "Lastschriftverfahren."
+
+#: class-woocommerce-wcp-gateway.php:270
+msgid "CLICK2PAY."
+msgstr "CLICK2PAY."
+
+#: class-woocommerce-wcp-gateway.php:277
+msgid "Invoice."
+msgstr "Kauf auf Rechnung."
+
+#: class-woocommerce-wcp-gateway.php:282
+#: class-woocommerce-wcp-gateway.php:1053
+msgid "Installment"
+msgstr "Ratenzahlung"
+
+#: class-woocommerce-wcp-gateway.php:284
+msgid "Installment."
+msgstr "Ratenzahlung."
+
+#: class-woocommerce-wcp-gateway.php:291
+msgid "Bancontact/Mister Cash."
+msgstr "Bancontact/Mister Cash."
+
+#: class-woocommerce-wcp-gateway.php:298
+msgid "Przelewy24."
+msgstr "Przelewy24."
+
+#: class-woocommerce-wcp-gateway.php:305
+msgid "moneta.ru."
+msgstr "moneta.ru."
+
+#: class-woocommerce-wcp-gateway.php:312
+msgid "POLi."
+msgstr "POLi."
+
+#: class-woocommerce-wcp-gateway.php:319
+msgid "eKonto."
+msgstr "eKonto."
+
+#: class-woocommerce-wcp-gateway.php:326
+msgid "InstantBank."
+msgstr "InstantBank."
+
+#: class-woocommerce-wcp-gateway.php:333
+msgid "mpass."
+msgstr "mpass."
+
+#: class-woocommerce-wcp-gateway.php:340
+msgid "Skrill Direct."
+msgstr "Skrill Direct."
+
+#: class-woocommerce-wcp-gateway.php:347
+msgid "Skrill Digital Wallet."
+msgstr "Skrill Digital Wallet."
+
+#: class-woocommerce-wcp-gateway.php:352
+msgid "Invoice minimum amount"
+msgstr "Min. Bestellsumme für Rechnung"
+
+#: class-woocommerce-wcp-gateway.php:354
+msgid "Invoice minimum amount."
+msgstr "Min. Bestellsumme für Rechnung."
+
+#: class-woocommerce-wcp-gateway.php:359
+msgid "Invoice maximum amount"
+msgstr "Max. Bestellsumme für Rechnung"
+
+#: class-woocommerce-wcp-gateway.php:361
+msgid "Invoice maximum amount."
+msgstr "Max. Bestellsumme für Rechnung."
+
+#: class-woocommerce-wcp-gateway.php:366
+msgid "Installment minimum amount"
+msgstr "Min. Bestellsumme für Ratenzahlung."
+
+#: class-woocommerce-wcp-gateway.php:368
+msgid "Installment minimum amount."
+msgstr "Min. Bestellsumme für Ratenzahlung."
+
+#: class-woocommerce-wcp-gateway.php:373
+msgid "Installment maximum amount"
+msgstr "Max. Bestellsumme für Ratenzahlung"
+
+#: class-woocommerce-wcp-gateway.php:375
+msgid "Installment maximum amount."
+msgstr "Max. Bestellsumme für Ratenzahlung."
+
+#: class-woocommerce-wcp-gateway.php:419
+msgid "Please select a payment type."
+msgstr ""
+
+#: class-woocommerce-wcp-gateway.php:426
+msgid "Payment type is not available, please select another payment type."
+msgstr "Die ausgewählte Zahlungsart ist nicht verfügbar, bitte wählen Sie eine andere aus."
+
+#: class-woocommerce-wcp-gateway.php:436
+msgid "Please fill out the birthday field."
+msgstr "Bitte füllen Sie das Geburtstagsfeld aus."
+
+#: class-woocommerce-wcp-gateway.php:446
+msgid "Birthday field is invalid."
+msgstr "Der Geburtstag ist ungültig."
+
+#: class-woocommerce-wcp-gateway.php:454
+msgid "You are not allowed to use this payment type."
+msgstr "Diese Zahlungsart ist nicht erlaubt."
+
+#: class-woocommerce-wcp-gateway.php:475
+msgid "Starting payment."
+msgstr "Starte den Bezahlvorgang."
+
+#: class-woocommerce-wcp-gateway.php:555 class-woocommerce-wcp-gateway.php:562
+msgid "Panic: Order-Id missing"
+msgstr "Panik: Order-Id fehlt"
+
+#: class-woocommerce-wcp-gateway.php:574
+msgid "Payment has been cancelled."
+msgstr "Der Bezahlvorgang wurde abgebrochen."
+
+#: class-woocommerce-wcp-gateway.php:584
+msgid "Payment has failed."
+msgstr "Der Bezahlvorgang ist fehl geschlagen."
+
+#: class-woocommerce-wcp-gateway.php:637
+msgid "Validation error: invalid response"
+msgstr "Fehler bei der Überprüfung: ungültige Antwort"
+
+#: class-woocommerce-wcp-gateway.php:654
+msgid "Awaiting payment notification from 3rd party."
+msgstr "Warte auf die Zahlungsbestätigung eines dritten Institutes."
+
+#: class-woocommerce-wcp-gateway.php:658
+msgid "Payment cancelled."
+msgstr "Die Bezahlung wurde abgebrochen."
+
+#: class-woocommerce-wcp-gateway.php:662
+msgid "Payment failed."
+msgstr "Die Bezahlung ist fehlgeschlagen."
+
+#: class-woocommerce-wcp-gateway.php:687
+msgid ""
+"Your order will be processed, as soon as we get the payment notification "
+"from your bank institute"
+msgstr "Ihre Bestellung wir verarbeitet, sobald wir die Bestätigung Ihres Bankinstitutes erhalten haben"
+
+#: class-woocommerce-wcp-gateway.php:726
+msgid "Birthday"
+msgstr "Geburtstag"
+
+#: class-woocommerce-wcp-gateway.php:1008
+msgid "Select"
+msgstr "Select"
+
+#: class-woocommerce-wcp-gateway.php:1011
+msgid "Credit Card"
+msgstr "Kreditkarte"
+
+#: class-woocommerce-wcp-gateway.php:1014
+msgid "Credit Card MoTo"
+msgstr "Kreditkarte MoTo"
+
+#: class-woocommerce-wcp-gateway.php:1017
+msgid "Maestro"
+msgstr "Maestro"
+
+#: class-woocommerce-wcp-gateway.php:1020
+msgid "eps Online Bank Transfer"
+msgstr "eps Online-Überweisung"
+
+#: class-woocommerce-wcp-gateway.php:1023
+msgid "iDEAL"
+msgstr "iDEAL"
+
+#: class-woocommerce-wcp-gateway.php:1026
+msgid "giropay"
+msgstr "giropay"
+
+#: class-woocommerce-wcp-gateway.php:1029
+msgid "sofortueberweisung"
+msgstr "sofortueberweisung"
+
+#: class-woocommerce-wcp-gateway.php:1032
+msgid "Mobile Phone Invoicing"
+msgstr "Handyabrechnung"
+
+#: class-woocommerce-wcp-gateway.php:1035
+msgid "paysafecard"
+msgstr "paysafecard"
+
+#: class-woocommerce-wcp-gateway.php:1038
+msgid "@QUICK"
+msgstr "@QUICK"
+
+#: class-woocommerce-wcp-gateway.php:1041
+msgid "PayPal"
+msgstr "PayPal"
+
+#: class-woocommerce-wcp-gateway.php:1044
+msgid "Direct Debit"
+msgstr "Lastschriftverfahren"
+
+#: class-woocommerce-wcp-gateway.php:1047
+msgid "CLICK2PAY"
+msgstr "CLICK2PAY"
+
+#: class-woocommerce-wcp-gateway.php:1050
+msgid "Invoice"
+msgstr "Zahlung auf Rechnung"
+
+#: class-woocommerce-wcp-gateway.php:1056
+msgid "Bancontact/Mister Cash"
+msgstr "Bancontact/Mister Cash"
+
+#: class-woocommerce-wcp-gateway.php:1059
+msgid "Przelewy24"
+msgstr "Przelewy24"
+
+#: class-woocommerce-wcp-gateway.php:1062
+msgid "moneta.ru"
+msgstr "moneta.ru"
+
+#: class-woocommerce-wcp-gateway.php:1065
+msgid "POLi"
+msgstr "POLi"
+
+#: class-woocommerce-wcp-gateway.php:1068
+msgid "eKonto"
+msgstr "eKonto"
+
+#: class-woocommerce-wcp-gateway.php:1071
+msgid "InstantBank"
+msgstr "InstantBank"
+
+#: class-woocommerce-wcp-gateway.php:1074
+msgid "mpass"
+msgstr "mpass"
+
+#: class-woocommerce-wcp-gateway.php:1077
+msgid "Skrill Direct"
+msgstr "Skrill Direct"
+
+#: class-woocommerce-wcp-gateway.php:1080
+msgid "Skrill Digital Wallet"
+msgstr "Skrill Digital Wallet"
