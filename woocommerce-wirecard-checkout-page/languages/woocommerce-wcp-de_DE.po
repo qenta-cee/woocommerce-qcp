@@ -183,15 +183,15 @@ msgstr "giropay."
 
 #: class-woocommerce-wcp-gateway.php:226
 msgid "SOFORT banking (PIN/TAN)"
-msgstr "SOFORT Überweisung (PIN/TAN)"
+msgstr "SOFORT Überweisung"
 
 #: class-woocommerce-wcp-gateway.php:228
 msgid "SOFORT banking (PIN/TAN)."
-msgstr "SOFORT Überweisung (PIN/TAN)."
+msgstr "SOFORT Überweisung."
 
 #: class-woocommerce-wcp-gateway.php:235
 msgid "Mobile Phone Invoicing."
-msgstr "Bezahlung am Handy via paybox"
+msgstr "Bezahlung am Handy via paybox."
 
 #: class-woocommerce-wcp-gateway.php:242
 msgid "paysafecard."
@@ -386,7 +386,7 @@ msgstr "giropay"
 
 #: class-woocommerce-wcp-gateway.php:1029
 msgid "sofortueberweisung"
-msgstr "sofortueberweisung"
+msgstr "SOFORT Überweisung"
 
 #: class-woocommerce-wcp-gateway.php:1032
 msgid "Mobile Phone Invoicing"

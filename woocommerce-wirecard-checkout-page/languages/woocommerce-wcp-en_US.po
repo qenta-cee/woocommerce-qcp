@@ -181,11 +181,11 @@ msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:226
 msgid "SOFORT banking (PIN/TAN)"
-msgstr ""
+msgstr "SOFORT Banking"
 
 #: class-woocommerce-wcp-gateway.php:228
 msgid "SOFORT banking (PIN/TAN)."
-msgstr ""
+msgstr "SOFORT Banking."
 
 #: class-woocommerce-wcp-gateway.php:235
 msgid "Mobile Phone Invoicing."
@@ -384,7 +384,7 @@ msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:1029
 msgid "sofortueberweisung"
-msgstr ""
+msgstr "SOFORT Banking"
 
 #: class-woocommerce-wcp-gateway.php:1032
 msgid "Mobile Phone Invoicing"
