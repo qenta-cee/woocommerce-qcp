@@ -8,7 +8,7 @@
  *
  */
 define('WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage');
-define('WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.1.5');
+define('WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.1.6');
 define('WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame');
 define('WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction');
 define('WOOCOMMERCE_GATEWAY_WCP_INVOICE_INSTALLMENT_MIN_AGE', 18);
