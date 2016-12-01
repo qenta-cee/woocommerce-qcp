@@ -1,9 +1,8 @@
 # Wirecard Checkout Page plugin for WooCommerce
 
 [![License](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://raw.githubusercontent.com/wirecard/woocommerce-wcp/master/LICENSE)
-[![WooCommerce](https://img.shields.io/badge/WooCommerce-v2.3.13-green.svg)](https://www.woocommerce.com/)
-[![WooCommerce](https://img.shields.io/badge/WooCommerce-v2.4.7-green.svg)](https://www.woocommerce.com/)
-[![PHP v5.3](https://img.shields.io/badge/php-v5.3-yellow.svg)](http://www.php.net)
+[![WooCommerce](https://img.shields.io/badge/WooCommerce-v2.6.7-green.svg)](https://www.woocommerce.com/)
+[![PHP v5.6](https://img.shields.io/badge/php-v5.6-yellow.svg)](http://www.php.net)
 
 Wirecard Checkout Page plugin for WooCommerce. 
 
