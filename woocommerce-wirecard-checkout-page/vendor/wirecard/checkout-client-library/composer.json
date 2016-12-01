@@ -1,6 +1,5 @@
 {
     "name": "wirecard/checkout-client-library",
-    "version": "3.3.0",
     "license": "GPL-2.0",
     "type": "library",
     "description": "Wirecard Client Library for Checkout Page and Checkout Seamless",
@@ -11,7 +10,7 @@
         "docs": "https://guides.wirecard.com"
     },
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "guzzlehttp/guzzle": "^6.2",
         "mobiledetect/mobiledetectlib": "^2.8"
     },

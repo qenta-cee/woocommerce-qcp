@@ -42,11 +42,21 @@ class WirecardCEE_Stdlib_Basket_ItemTest extends PHPUnit_Framework_TestCase
 
     public function testAllFunctions()
     {
-        $this->object->setUnitPrice(10)->setTax(2)->setDescription('unittest');
-        $this->assertEquals(10, $this->object->getUnitPrice());
-        $this->assertEquals(2, $this->object->getTax());
-        $this->assertEquals('unittest', $this->object->getDescription());
+        $this->object->setUnitGrossAmount(10)
+                     ->setUnitNetAmount(8)
+                     ->setUnitTaxAmount(2)
+                     ->setUnitTaxRate(20.0)
+                     ->setDescription('unittest description')
+                     ->setName('unittest name')
+                     ->setImageUrl('http://example.com/picture.png');
+        $this->assertEquals(10, $this->object->getUnitGrossAmount());
+        $this->assertEquals(8, $this->object->getUnitNetAmount());
+        $this->assertEquals(2, $this->object->getUnitTaxAmount());
+        $this->assertEquals(20.0, $this->object->getUnitTaxRate());
+        $this->assertEquals('unittest description', $this->object->getDescription());
+        $this->assertEquals('unittest name', $this->object->getName());
         $this->assertEquals('WirecardCEETestItem', $this->object->getArticleNumber());
+        $this->assertEquals('http://example.com/picture.png', $this->object->getImageUrl());
     }
 
     public function tearDown()

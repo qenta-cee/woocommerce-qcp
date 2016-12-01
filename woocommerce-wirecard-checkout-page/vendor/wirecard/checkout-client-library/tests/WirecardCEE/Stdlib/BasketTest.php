@@ -70,7 +70,13 @@ class WirecardCEE_Stdlib_BasketTest extends PHPUnit_Framework_TestCase
 
         for ($i = 0; $i < 10; $i ++) {
             $_item = new WirecardCEE_Stdlib_Basket_Item("WirecardCEE_{$i}");
-            $_item->setUnitPrice(( $i + 1 ) * 10)->setTax(2 * ( $i + 1 ))->setDescription("UnitTesting {$i}");
+            $_item->setUnitGrossAmount(( $i + 1 ) * 10)
+                  ->setUnitNetAmount(( $i + 1 ) * 8)
+                  ->setUnitTaxAmount(( $i + 1 ) * 2)
+                  ->setUnitTaxRate(20.0)
+                  ->setDescription("UnitTesting Description {$i}")
+                  ->setName("UnitTesting Name {$i}")
+                  ->setImageUrl("http://example.com/picture.png");
             $this->object->addItem($_item);
         }
     }
@@ -89,25 +95,11 @@ class WirecardCEE_Stdlib_BasketTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->object->getItemQuantity('WirecardCEE_0'));
     }
 
-    public function testCurrency()
+    public function testGetData()
     {
-        $this->object->setCurrency('USD');
-        $this->assertEquals('USD', $this->object->getCurrency());
-    }
-
-    public function testAmount()
-    {
-        $this->assertEquals(660, $this->object->getAmount());
-    }
-
-    public function testToArray()
-    {
-        $array = $this->object->__toArray();
+        $array = $this->object->getData();
         $this->assertInternalType('array', $array);
-        $this->assertArrayHasKey(WirecardCEE_Stdlib_Basket::BASKET_AMOUNT, $array);
-        $this->assertEquals(660, $array[WirecardCEE_Stdlib_Basket::BASKET_AMOUNT]);
         $this->assertEquals(count($this->object->getItems()), $array[WirecardCEE_Stdlib_Basket::BASKET_ITEMS]);
-
     }
 
     /**

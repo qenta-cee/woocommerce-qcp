@@ -156,15 +156,17 @@ abstract class WirecardCEE_Stdlib_Return_ReturnAbstract
      */
     public function getReturned()
     {
-        // noone needs the responseFingerprintOrder and responseFingerprint in
-        // the shop.
-        if (array_key_exists('responseFingerprintOrder', $this->_returnData) && array_key_exists('responseFingerprint',
-                $this->_returnData)
-        ) {
-            unset( $this->_returnData['responseFingerprintOrder'] );
-            unset( $this->_returnData['responseFingerprint'] );
+        $ret = $this->_returnData;
+
+        // noone needs the responseFingerprintOrder and responseFingerprint in the shop.
+        if (array_key_exists('responseFingerprintOrder', $ret)) {
+            unset( $ret['responseFingerprintOrder'] );
         }
 
-        return $this->_returnData;
+        if (array_key_exists('responseFingerprint', $ret)) {
+            unset( $ret['responseFingerprint'] );
+        }
+
+        return $ret;
     }
 }

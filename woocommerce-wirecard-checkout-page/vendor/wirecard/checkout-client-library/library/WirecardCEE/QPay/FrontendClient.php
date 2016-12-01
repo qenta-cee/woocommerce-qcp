@@ -194,6 +194,13 @@ class WirecardCEE_QPay_FrontendClient extends WirecardCEE_Stdlib_Client_ClientAb
     const PLUGIN_VERSION = 'pluginVersion';
 
     /**
+     * Field name: consumerMerchantCrmId
+     *
+     * @var string
+     */
+    const CONSUMER_MERCHANT_CRM_ID = 'consumerMerchantCrmId';
+
+    /**
      * Type of the fingerprint order
      *
      * @var int
@@ -215,6 +222,11 @@ class WirecardCEE_QPay_FrontendClient extends WirecardCEE_Stdlib_Client_ClientAb
     protected $oConsumerData;
 
     /**
+     * @var WirecardCEE_Stdlib_Basket
+     */
+    protected $oBasket;
+
+    /**
      * Library name
      *
      * @staticvar string
@@ -228,7 +240,7 @@ class WirecardCEE_QPay_FrontendClient extends WirecardCEE_Stdlib_Client_ClientAb
      * @staticvar string
      * @internal
      */
-    protected static $LIBRARY_VERSION = '3.0.0';
+    protected static $LIBRARY_VERSION = '3.4.0';
 
     /**
      * Constructor
@@ -686,6 +698,20 @@ class WirecardCEE_QPay_FrontendClient extends WirecardCEE_Stdlib_Client_ClientAb
     }
 
     /**
+     * setter for the customer merchant crm id
+     * @param $userEmail
+     *
+     * @return $this
+     */
+    public function createConsumerMerchantCrmId($userEmail)
+    {
+        $this->_setField(self::CONSUMER_MERCHANT_CRM_ID, md5($userEmail));
+
+        return $this;
+    }
+
+
+    /**
      * setter for the qpay parameter orderNumber
      *
      * @param int $orderNumber
@@ -755,6 +781,18 @@ class WirecardCEE_QPay_FrontendClient extends WirecardCEE_Stdlib_Client_ClientAb
             $this->_setField($key, $value);
         }
 
+        return $this;
+    }
+
+    /**
+     * @param WirecardCEE_Stdlib_Basket $basket
+     * @return $this
+     */
+    public function setBasket(WirecardCEE_Stdlib_Basket $basket) {
+        $this->oBasket = $basket;
+        foreach($basket->getData() AS $key => $value) {
+            $this->_setField($key, $value);
+        }
         return $this;
     }
 
