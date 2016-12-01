@@ -117,30 +117,34 @@ class WirecardCEE_Stdlib_FingerprintTest extends PHPUnit_Framework_TestCase
                     'key1' => 'value1',
                     'key2' => 'value2',
                     'key3' => 'value3',
-                    'key4' => 'value4'
+                    'key4' => 'value4',
+                    'secret' => WirecardCEE_QPay_Module::getConfig()['WirecardCEEQPayConfig']['SECRET']
                 ),
                 'fingerprintOrder' => Array(
                     'key1',
                     'key2',
                     'key3',
-                    'key4'
+                    'key4',
+                    'secret'
                 ),
-                'hash'             => 'f764ead22e1dac1ba942b0b7476ea8d1e92d3dd0d17c43d5a6c79d844fb19a192d1008a92a7b06a783ca347c336ee8afd31eb693830e7a72e279b099ff5797e5'
+                'hash'             => '6c8bc309cbdf78770fd4820c12a6573c1fb6371ba86a4a34e5226dc529d70cb61cbec1af21faaf0567aeabad868acf9bf08030caec008ff2c8856bae676801e8'
             ),
             Array(
                 'values'           => Array(
                     'key1' => 'äöü',
                     'key2' => '#+ü',
                     'key3' => '///',
-                    'key4' => 'bla'
+                    'key4' => 'bla',
+                    'secret' => WirecardCEE_QPay_Module::getConfig()['WirecardCEEQPayConfig']['SECRET']
                 ),
                 'fingerprintOrder' => Array(
                     'key1',
                     'key2',
                     'key3',
-                    'key4'
+                    'key4',
+                    'secret'
                 ),
-                'hash'             => '603182eb92d4b88c492eb66af2e66177a678a11f0687d036e0d496c934bbea1640e1ef78e36756fc488cdef8bf1ba0ad22a4aeb2f29dfdb035a1020c812d6d26'
+                'hash'             => '3af32ea6d1bc69284625b6d245d84aadc6b8df0df131090e7265c5919bb76eadd0d72a63646da0d8019036c409f91b6ab9a7e6cae661ad4528d15db50b4c4678'
             )
         );
     }

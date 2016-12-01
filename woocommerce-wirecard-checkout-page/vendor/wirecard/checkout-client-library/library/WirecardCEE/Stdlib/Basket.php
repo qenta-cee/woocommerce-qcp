@@ -45,25 +45,9 @@ class WirecardCEE_Stdlib_Basket
      *
      * @var string
      */
-    const BASKET_AMOUNT = 'basketAmount';
-    const BASKET_CURRENCY = 'basketCurrency';
     const BASKET_ITEMS = 'basketItems';
     const BASKET_ITEM_PREFIX = 'basketItem';
     const QUANTITY = 'quantity';
-
-    /**
-     * Amount
-     *
-     * @var float
-     */
-    protected $_amount = 0.0;
-
-    /**
-     * Currency (default = EUR)
-     *
-     * @var string
-     */
-    protected $_currency;
 
     /**
      * Items holder
@@ -113,63 +97,35 @@ class WirecardCEE_Stdlib_Basket
     }
 
     /**
-     * Returns the basket total amount
-     *
-     * @return float
-     */
-    public function getAmount()
-    {
-        $total = 0.0;
-
-        foreach ($this->_items as $oItem) {
-            $total += ( $oItem['instance']->getUnitPrice() * $this->_getItemQuantity($oItem['instance']->getArticleNumber()) ) + $oItem['instance']->getTax();
-        }
-
-        return $total;
-    }
-
-    /**
      * Returns the basket as pre-defined array (defined by WirecardCEE)
      *
      * @return Array
      */
-    public function __toArray()
+    public function getData()
     {
         $_basketItems = $this->_items;
         $_counter     = 1;
 
-        $this->_basket[self::BASKET_AMOUNT]   = $this->getAmount();
-        $this->_basket[self::BASKET_CURRENCY] = $this->_currency;
         $this->_basket[self::BASKET_ITEMS]    = count($_basketItems);
 
         foreach ($_basketItems as $oItem) {
             $mArticleNumber = $oItem['instance']->getArticleNumber();
             $oItem          = $oItem['instance'];
 
-            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_ARTICLE_NUMBER] = $mArticleNumber;
-            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . self::QUANTITY]                                      = $this->_getItemQuantity($mArticleNumber);
-            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_UNIT_PRICE]     = $oItem->getUnitPrice();
-            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_TAX]            = $oItem->getTax();
-            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_DESCRIPTION]    = $oItem->getDescription();
+            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_ARTICLE_NUMBER]    = $mArticleNumber;
+            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . self::QUANTITY]                                         = $this->_getItemQuantity($mArticleNumber);
+            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_UNIT_GROSS_AMOUNT] = $oItem->getUnitGrossAmount();
+            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_UNIT_NET_AMOUNT]   = $oItem->getUnitNetAmount();
+            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_UNIT_TAX_AMOUNT]   = $oItem->getUnitTaxAmount();
+            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_UNIT_TAX_RATE]     = $oItem->getUnitTaxRate();
+            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_DESCRIPTION]       = $oItem->getDescription();
+            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_NAME]              = $oItem->getName();
+            $this->_basket[self::BASKET_ITEM_PREFIX . $_counter . WirecardCEE_Stdlib_Basket_Item::ITEM_IMAGE_URL]         = $oItem->getImageUrl();
 
             $_counter ++;
         }
 
         return $this->_basket;
-    }
-
-    /**
-     * Sets the basket currency
-     *
-     * @param string $sCurrency
-     *
-     * @return WirecardCEE_Stdlib_Basket
-     */
-    public function setCurrency($sCurrency)
-    {
-        $this->_currency = $sCurrency;
-
-        return $this;
     }
 
     /**

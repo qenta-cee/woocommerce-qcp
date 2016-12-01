@@ -112,12 +112,9 @@ class WirecardCEE_QPay_ToolkitClientTest extends PHPUnit_Framework_TestCase
      */
     public function testRecurPayment()
     {
-        $_customerId = 'D200050';
-        $_shopId     = 'RECUR';
-
         $object = new WirecardCEE_QPay_ToolkitClient(Array(
-            'CUSTOMER_ID'      => $_customerId,
-            'SHOP_ID'          => $_shopId,
+            'CUSTOMER_ID'      => $this->_customerId,
+            'SHOP_ID'          => $this->_shopId,
             'SECRET'           => $this->_secret,
             'LANGUAGE'         => $this->_language,
             'TOOLKIT_PASSWORD' => $this->_toolkitPassword

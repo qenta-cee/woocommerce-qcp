@@ -342,13 +342,14 @@ class WirecardCEE_QMore_BackendClient extends WirecardCEE_Stdlib_Client_ClientAb
      * @throws WirecardCEE_Stdlib_Client_Exception_InvalidResponseException
      * @return WirecardCEE_QMore_Response_Backend_Refund
      */
-    public function refund($iOrderNumber, $iAmount, $sCurrency)
+    public function refund($iOrderNumber, $iAmount, $sCurrency, $basket=null)
     {
         $this->_requestData[self::COMMAND] = self::$COMMAND_REFUND;
 
         $this->_setField(self::ORDER_NUMBER, $iOrderNumber);
         $this->_setField(self::AMOUNT, $iAmount);
         $this->_setField(self::CURRENCY, strtoupper($sCurrency));
+        $this->_setBasket($basket);
 
         $this->_fingerprintOrder->setOrder(Array(
             self::CUSTOMER_ID,
@@ -360,6 +361,7 @@ class WirecardCEE_QMore_BackendClient extends WirecardCEE_Stdlib_Client_ClientAb
             self::AMOUNT,
             self::CURRENCY
         ));
+        $this->_appendBasketFingerprintOrder($basket);
 
         return new WirecardCEE_QMore_Response_Backend_Refund($this->_send());
     }
@@ -491,13 +493,14 @@ class WirecardCEE_QMore_BackendClient extends WirecardCEE_Stdlib_Client_ClientAb
      * @throws WirecardCEE_Stdlib_Client_Exception_InvalidResponseException
      * @return WirecardCEE_QMore_Response_Backend_Deposit
      */
-    public function deposit($iOrderNumber, $iAmount, $sCurrency)
+    public function deposit($iOrderNumber, $iAmount, $sCurrency, $basket=null)
     {
         $this->_requestData[self::COMMAND] = self::$COMMAND_DEPOSIT;
 
         $this->_setField(self::ORDER_NUMBER, $iOrderNumber);
         $this->_setField(self::AMOUNT, $iAmount);
         $this->_setField(self::CURRENCY, strtoupper($sCurrency));
+        $this->_setBasket($basket);
 
         $this->_fingerprintOrder->setOrder(Array(
             self::CUSTOMER_ID,
@@ -509,6 +512,7 @@ class WirecardCEE_QMore_BackendClient extends WirecardCEE_Stdlib_Client_ClientAb
             self::AMOUNT,
             self::CURRENCY
         ));
+        $this->_appendBasketFingerprintOrder($basket);
 
         return new WirecardCEE_QMore_Response_Backend_Deposit($this->_send());
     }

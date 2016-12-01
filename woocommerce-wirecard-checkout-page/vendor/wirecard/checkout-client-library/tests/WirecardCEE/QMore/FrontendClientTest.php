@@ -54,14 +54,24 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
     private $object;
 
     /**
+     * @var array
+     */
+    protected $aExpectedRequestData;
+
+    /**
      * Prepares the environment before running a test.
      */
     protected function setUp()
     {
         parent::setUp();
-        $this->object        = new WirecardCEE_QMore_FrontendClient();
-        $this->aUserConfig   = WirecardCEE_QMore_Module::getConfig();
-        $this->aClientConfig = WirecardCEE_QMore_Module::getClientConfig();
+        $this->object               = new WirecardCEE_QMore_FrontendClient();
+        $this->aUserConfig          = WirecardCEE_QMore_Module::getConfig();
+        $this->aClientConfig        = WirecardCEE_QMore_Module::getClientConfig();
+        $this->aExpectedRequestData = array(
+            WirecardCEE_QMore_FrontendClient::CUSTOMER_ID => $this->aUserConfig['WirecardCEEQMoreConfig']['CUSTOMER_ID'],
+            WirecardCEE_QMore_FrontendClient::SHOP_ID => $this->aUserConfig['WirecardCEEQMoreConfig']['SHOP_ID'],
+            WirecardCEE_QMore_FrontendClient::LANGUAGE => $this->aUserConfig['WirecardCEEQMoreConfig']['LANGUAGE'],
+        );
     }
 
     /**
@@ -99,59 +109,24 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
     public function testSetConfirmUrl()
     {
         $confirmUrl = 'http://foo.bar.com/tests/confirm.php';
+        $this->object->setConfirmUrl($confirmUrl);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl($confirmUrl)
-                                  ->setConsumerData($consumerData)
-                                  ->initiate();
-
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::CONFIRM_URL => $confirmUrl));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     /**
-     * Tests WirecardCEE_QMore_FrontendClient->setConfirmUrl()
+     * Tests WirecardCEE_QMore_FrontendClient->setPendingUrl()
      */
     public function testSetPendingUrl()
     {
-        $confirmUrl = 'http://foo.bar.com/tests/confirm.php';
         $pendingUrl = 'http://foo.bar.com/tests/pending.php';
+        $this->object->setPendingUrl($pendingUrl);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl($confirmUrl)
-                                  ->setPendingUrl($pendingUrl)
-                                  ->setConsumerData($consumerData)
-                                  ->initiate();
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::PENDING_URL => $pendingUrl));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
 
@@ -161,28 +136,11 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
     public function testSetWindowName()
     {
         $windowName = 'window';
+        $this->object->setWindowName($windowName);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->setWindowName($windowName)
-                                  ->initiate();
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::WINDOW_NAME => $windowName));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     /**
@@ -190,30 +148,12 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
      */
     public function testSetDuplicateRequestCheck()
     {
-        $duplicateRequestCheck = true;
+        $duplicateRequestCheck = 'yes';
+        $this->object->setDuplicateRequestCheck($duplicateRequestCheck);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
-        $this->object->rand = rand(0, 9999);
-        $oResponse          = $this->object->setAmount(100)
-                                           ->setCurrency('eur')
-                                           ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                           ->setOrderDescription(__METHOD__)
-                                           ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                           ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                           ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                           ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                           ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                           ->setConsumerData($consumerData)
-                                           ->setDuplicateRequestCheck($duplicateRequestCheck)
-                                           ->initiate();
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::DUPLICATE_REQUEST_CHECK => $duplicateRequestCheck));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     /**
@@ -222,29 +162,24 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
     public function testSetCustomerStatement()
     {
         $customerStatement = 'cStatement';
+        $this->object->setCustomerStatement($customerStatement);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::CUSTOMER_STATEMENT => $customerStatement));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
+    }
 
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->setCustomerStatement($customerStatement)
-                                  ->initiate();
+    /**
+     * Tests WirecardCEE_QMore_FrontendClient->createConsumerMerchantCrmId()
+     */
+    public function testCreateConsumerMerchantCrmId()
+    {
+        $email = 'email@address.com';
+        $this->object->createConsumerMerchantCrmId($email);
 
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::CONSUMER_MERCHANT_CRM_ID => md5($email)));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     /**
@@ -253,29 +188,11 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
     public function testSetOrderReference()
     {
         $orderReference = '123333';
+        $this->object->setOrderReference($orderReference);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->setOrderReference($orderReference)
-                                  ->initiate();
-
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::ORDER_REFERENCE => $orderReference));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     /**
@@ -283,30 +200,12 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAutoDeposit()
     {
-        $autoDeposit = true;
+        $autoDeposit = 'yes';
+        $this->object->setAutoDeposit($autoDeposit);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->setAutoDeposit($autoDeposit)
-                                  ->initiate();
-
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::AUTO_DEPOSIT => $autoDeposit));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     /**
@@ -315,29 +214,11 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
     public function testSetOrderNumber()
     {
         $orderNumber = '123321';
+        $this->object->setOrderNumber($orderNumber);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->setOrderNumber($orderNumber)
-                                  ->initiate();
-
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::ORDER_NUMBER => $orderNumber));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     /**
@@ -345,29 +226,27 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
      */
     public function testSetConfirmMail()
     {
-        $confirmMail = 'ante.drnasin@wirecard.at';
+        $confirmMail = 'test@example.com';
+        $this->object->setConfirmMail($confirmMail);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::CONFIRM_MAIL => $confirmMail));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
+    }
 
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->setConfirmMail($confirmMail)
-                                  ->initiate();
+    /**
+     * Tests WirecardCEE_QMore_FrontendClient->setBasket()
+     */
+    public function testSetBasket()
+    {
+        $mock = $this->getMockBuilder('WirecardCEE_Stdlib_Basket')
+            ->getMock();
 
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $mock->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue(array()));
+
+        $this->object->setBasket($mock);
     }
 
     /**
@@ -405,7 +284,7 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
     public function testClientFailedResponse()
     {
         try {
-            $oResponse = new WirecardCEE_QMore_Response_Initiation(new stdClass());
+            new WirecardCEE_QMore_Response_Initiation(new stdClass());
         } catch (WirecardCEE_Stdlib_Exception_InvalidResponseException $e) {
             throw $e;
         }
@@ -417,29 +296,11 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
     public function testSetStorageReference()
     {
         $sStorageId  = '10763469b2b8049f6619c914e57faa19';
-        $sOrderIdent = 'phpUnit test';
+        $this->object->setStorageId($sStorageId);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->setStorageReference($sOrderIdent, $sStorageId)
-                                  ->initiate();
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::STORAGE_ID => $sStorageId));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     /**
@@ -482,17 +343,17 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
         $consumerData->setIpAddress('10.1.0.11');
         $consumerData->setUserAgent('phpUnit');
 
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->initiate();
+        $this->object->setAmount(100)
+            ->setCurrency('eur')
+            ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
+            ->setOrderDescription(__METHOD__)
+            ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
+            ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
+            ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
+            ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
+            ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
+            ->setConsumerData($consumerData)
+            ->initiate();
 
         $oResponse = $this->object->getResponse();
 
@@ -553,59 +414,23 @@ class WirecardCEE_QMore_FrontendClientTest extends PHPUnit_Framework_TestCase
      */
     public function testSetPluginVersion()
     {
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
         $sPluginVersion = $this->object->generatePluginVersion('phpunit', '1.0.0', 'phpunit', '1.0.0',
             Array('phpunit' => '3.5.15'));
+        $this->object->setPluginVersion($sPluginVersion);
 
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('eur')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::PAYPAL)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->setPluginVersion($sPluginVersion)
-                                  ->initiate();
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::PLUGIN_VERSION => $sPluginVersion));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     public function testSetFinancialInstitution()
     {
-        $sPaymentType          = 'EPS';
         $sFinancialInstitution = 'BA-CA';
+        $this->object->setFinancialInstitution($sFinancialInstitution);
 
-        $consumerData = new WirecardCEE_Stdlib_ConsumerData();
-        $consumerData->setIpAddress('10.1.0.11');
-        $consumerData->setUserAgent('phpUnit');
-
-        $oResponse = $this->object->setAmount(100)
-                                  ->setCurrency('EUR')
-                                  ->setPaymentType(WirecardCEE_QMore_PaymentType::EPS)
-                                  ->setFinancialInstitution($sFinancialInstitution)
-                                  ->setOrderDescription(__METHOD__)
-                                  ->setSuccessUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setCancelUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setFailureUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setServiceUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConfirmUrl('http://foo.bar.com/tests/confirm.php')
-                                  ->setConsumerData($consumerData)
-                                  ->setFinancialInstitution($sFinancialInstitution)
-                                  ->initiate();
-
-        $this->assertInstanceOf('WirecardCEE_QMore_Response_Initiation', $oResponse);
-        $this->assertEquals($oResponse->getStatus(), 0);
-        $this->assertEmpty($oResponse->getErrors());
-        $this->assertStringStartsWith('https://', $oResponse->getRedirectUrl());
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QMore_FrontendClient::FINANCIAL_INSTITUTION => $sFinancialInstitution));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
     }
 
     public function provider()

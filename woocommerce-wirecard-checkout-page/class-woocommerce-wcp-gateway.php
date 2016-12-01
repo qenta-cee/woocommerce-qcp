@@ -8,7 +8,7 @@
  *
  */
 define('WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage');
-define('WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.1.7');
+define('WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.2.0');
 define('WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame');
 define('WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction');
 define('WOOCOMMERCE_GATEWAY_WCP_INVOICE_INSTALLMENT_MIN_AGE', 18);
@@ -1009,6 +1009,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
                 ->setCustomerStatement($this->get_customer_statement($order))
                 ->setDuplicateRequestCheck(false)
                 ->setMaxRetries($this->get_option('max_retries'))
+                ->createConsumerMerchantCrmId($order->billing_email)
                 ->setWindowName(WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME);
 
             if (($this->get_option('auto_deposit') == 'yes')) {

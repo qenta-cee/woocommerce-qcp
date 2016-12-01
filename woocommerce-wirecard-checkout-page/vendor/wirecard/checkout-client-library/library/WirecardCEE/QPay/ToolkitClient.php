@@ -305,13 +305,14 @@ class WirecardCEE_QPay_ToolkitClient extends WirecardCEE_Stdlib_Client_ClientAbs
      * @throws WirecardCEE_Stdlib_Client_Exception_InvalidResponseException
      * @return WirecardCEE_QPay_Response_Toolkit_Refund
      */
-    public function refund($iOrderNumber, $iAmount, $sCurrency)
+    public function refund($iOrderNumber, $iAmount, $sCurrency, $basket=null)
     {
         $this->_requestData[self::COMMAND] = self::$COMMAND_REFUND;
 
         $this->_setField(self::ORDER_NUMBER, $iOrderNumber);
         $this->_setField(self::AMOUNT, $iAmount);
         $this->_setField(self::CURRENCY, strtoupper($sCurrency));
+        $this->_setBasket($basket);
 
         $this->_fingerprintOrder->setOrder(Array(
             self::CUSTOMER_ID,
@@ -324,6 +325,7 @@ class WirecardCEE_QPay_ToolkitClient extends WirecardCEE_Stdlib_Client_ClientAbs
             self::AMOUNT,
             self::CURRENCY
         ));
+        $this->_appendBasketFingerprintOrder($basket);
 
         return new WirecardCEE_QPay_Response_Toolkit_Refund($this->_send());
     }
@@ -460,13 +462,14 @@ class WirecardCEE_QPay_ToolkitClient extends WirecardCEE_Stdlib_Client_ClientAbs
      * @throws WirecardCEE_Stdlib_Client_Exception_InvalidResponseException
      * @return WirecardCEE_QPay_Response_Toolkit_Deposit
      */
-    public function deposit($iOrderNumber, $iAmount, $sCurrency)
+    public function deposit($iOrderNumber, $iAmount, $sCurrency, $basket=null)
     {
         $this->_requestData[self::COMMAND] = self::$COMMAND_DEPOSIT;
 
         $this->_setField(self::ORDER_NUMBER, $iOrderNumber);
         $this->_setField(self::AMOUNT, $iAmount);
         $this->_setField(self::CURRENCY, strtoupper($sCurrency));
+        $this->_setBasket($basket);
 
         $this->_fingerprintOrder->setOrder(Array(
             self::CUSTOMER_ID,
@@ -479,6 +482,7 @@ class WirecardCEE_QPay_ToolkitClient extends WirecardCEE_Stdlib_Client_ClientAbs
             self::AMOUNT,
             self::CURRENCY
         ));
+        $this->_appendBasketFingerprintOrder($basket);
 
         return new WirecardCEE_QPay_Response_Toolkit_Deposit($this->_send());
     }

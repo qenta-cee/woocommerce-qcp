@@ -55,21 +55,14 @@ class WirecardCEE_QPay_Response_Toolkit_RefundTest extends PHPUnit_Framework_Tes
     protected function setUp()
     {
         parent::setUp();
-        $customerId      = $this->_customerId;
-        $shopId          = $this->_shopId;
-        $secret          = $this->_secret;
-        $language        = $this->_language;
-        $toolkitPassword = $this->_toolkitPassword;
 
-        $oToolkitClient = new WirecardCEE_QPay_ToolkitClient(Array(
-            'CUSTOMER_ID'      => $customerId,
-            'SHOP_ID'          => $shopId,
-            'SECRET'           => $secret,
-            'LANGUAGE'         => $language,
-            'TOOLKIT_PASSWORD' => $toolkitPassword
+        $this->object = new WirecardCEE_QPay_ToolkitClient(Array(
+            'CUSTOMER_ID'      => $this->_customerId,
+            'SHOP_ID'          => $this->_shopId,
+            'SECRET'           => $this->_secret,
+            'LANGUAGE'         => $this->_language,
+            'TOOLKIT_PASSWORD' => $this->_toolkitPassword
         ));
-
-        $this->object = $oToolkitClient->refund($this->_orderNumber, $this->_amount, $this->_currency);
     }
 
     /**
@@ -77,7 +70,8 @@ class WirecardCEE_QPay_Response_Toolkit_RefundTest extends PHPUnit_Framework_Tes
      */
     public function testGetStatus()
     {
-        $this->assertEquals($this->object->getStatus(), 0);
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency);
+        $this->assertEquals($response->getStatus(), 0);
     }
 
     /**
@@ -85,7 +79,8 @@ class WirecardCEE_QPay_Response_Toolkit_RefundTest extends PHPUnit_Framework_Tes
      */
     public function testGetErrors()
     {
-        $this->assertEmpty($this->object->getError());
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency);
+        $this->assertEmpty($response->getError());
     }
 
     /**
@@ -93,8 +88,19 @@ class WirecardCEE_QPay_Response_Toolkit_RefundTest extends PHPUnit_Framework_Tes
      */
     public function testGetCreditNumber()
     {
-        $this->assertInternalType('string', $this->object->getCreditNumber());
-        $this->assertNotEquals('', $this->object->getCreditNumber());
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency);
+        $this->assertInternalType('string', $response->getCreditNumber());
+        $this->assertNotEquals('', $response->getCreditNumber());
+    }
+
+    /**
+     * Test basket data
+     */
+    public function testWithBasketData()
+    {
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency, $this->getValidBasket());
+        $this->assertInternalType('string', $response->getCreditNumber());
+        $this->assertNotEquals('', $response->getCreditNumber());
     }
 
     /**
@@ -102,7 +108,8 @@ class WirecardCEE_QPay_Response_Toolkit_RefundTest extends PHPUnit_Framework_Tes
      */
     public function testHasNotFailed()
     {
-        $this->assertFalse($this->object->hasFailed());
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency);
+        $this->assertFalse($response->hasFailed());
     }
 
     /**
@@ -112,6 +119,28 @@ class WirecardCEE_QPay_Response_Toolkit_RefundTest extends PHPUnit_Framework_Tes
     {
         $this->object = null;
         parent::tearDown();
+    }
+
+    /**
+     * Creates a valid shopping basket.
+     *
+     * @return WirecardCEE_Stdlib_Basket
+     */
+    private function getValidBasket()
+    {
+        $basketItem = new WirecardCEE_Stdlib_Basket_Item('WirecardCEETestItem');
+        $basketItem->setUnitGrossAmount(10)
+            ->setUnitNetAmount(8)
+            ->setUnitTaxAmount(2)
+            ->setUnitTaxRate(20.0)
+            ->setDescription('unittest description')
+            ->setName('unittest name')
+            ->setImageUrl('http://example.com/picture.png');
+
+        $basket = new WirecardCEE_Stdlib_Basket();
+        $basket->addItem($basketItem);
+
+        return $basket;
     }
 }
 

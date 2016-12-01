@@ -144,6 +144,13 @@ class WirecardCEE_QMore_FrontendClient extends WirecardCEE_Stdlib_Client_ClientA
     const PLUGIN_VERSION = 'pluginVersion';
 
     /**
+     * Field name: customerMerchantCrmId
+     *
+     * @var string
+     */
+    const CONSUMER_MERCHANT_CRM_ID = 'consumerMerchantCrmId';
+
+    /**
      * Field name: financialInstitution
      *
      * @var string
@@ -156,6 +163,13 @@ class WirecardCEE_QMore_FrontendClient extends WirecardCEE_Stdlib_Client_ClientA
      * @var WirecardCEE_Stdlib_ConsumerData
      */
     protected $oConsumerData;
+
+    /**
+     * Shopping basket data
+     *
+     * @var WirecardCEE_Stdlib_Basket
+     */
+    protected $oBasket;
 
     /**
      * Internal response holder
@@ -178,7 +192,7 @@ class WirecardCEE_QMore_FrontendClient extends WirecardCEE_Stdlib_Client_ClientA
      * @staticvar string
      * @internal
      */
-    protected static $LIBRARY_VERSION = '3.1.0';
+    protected static $LIBRARY_VERSION = '3.4.0';
 
     /**
      *
@@ -618,6 +632,18 @@ class WirecardCEE_QMore_FrontendClient extends WirecardCEE_Stdlib_Client_ClientA
     }
 
     /**
+     * @param WirecardCEE_Stdlib_Basket $basket
+     * @return $this
+     */
+    public function setBasket(WirecardCEE_Stdlib_Basket $basket) {
+        $this->oBasket = $basket;
+        foreach($basket->getData() AS $key => $value) {
+            $this->_setField($key, $value);
+        }
+        return $this;
+    }
+
+    /**
      * setter for dataStorage reference data ONLY IN QMORE
      *
      * @param string $orderIdent
@@ -669,6 +695,18 @@ class WirecardCEE_QMore_FrontendClient extends WirecardCEE_Stdlib_Client_ClientA
     {
         $this->_setField(self::PLUGIN_VERSION, $sPluginVersion);
 
+        return $this;
+    }
+
+    /**
+     * setter for the customer merchant crm id
+     * @param $userEmail
+     *
+     * @return $this
+     */
+    public function createConsumerMerchantCrmId($userEmail)
+    {
+        $this->_setField(self::CONSUMER_MERCHANT_CRM_ID, md5($userEmail));
         return $this;
     }
 

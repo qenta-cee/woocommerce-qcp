@@ -447,6 +447,48 @@ abstract class WirecardCEE_Stdlib_Client_ClientAbstract
         return (bool) ( isset( $this->_requestData[$sFieldname] ) && !empty( $this->_requestData[$sFieldname] ) );
     }
 
+    /**
+     * Sets shopping basket data to _requestData
+     *
+     * @param WirecardCEE_Stdlib_Basket $basket
+     */
+    protected function _setBasket($basket)
+    {
+        if($basket == null) {
+            return;
+        }
+
+        foreach($basket->getData() AS $key => $value) {
+            $this->_setField($key, $value);
+        }
+    }
+
+    /**
+     * Appends basket to fingerprint order
+     *
+     * @param WirecardCEE_Stdlib_Basket $basket
+     */
+    protected function _appendBasketFingerprintOrder($basket)
+    {
+        if($basket == null) {
+            return;
+        }
+
+        $data = $basket->getData();
+        $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEMS;
+        for ($i = 1; $i <= (int)$data[WirecardCEE_Stdlib_Basket::BASKET_ITEMS]; $i++) {
+            $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEM_PREFIX . $i . WirecardCEE_Stdlib_Basket_Item::ITEM_ARTICLE_NUMBER;
+            $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEM_PREFIX . $i . WirecardCEE_Stdlib_Basket_Item::ITEM_QUANTITY;
+            $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEM_PREFIX . $i . WirecardCEE_Stdlib_Basket_Item::ITEM_DESCRIPTION;
+            $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEM_PREFIX . $i . WirecardCEE_Stdlib_Basket_Item::ITEM_NAME;
+            $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEM_PREFIX . $i . WirecardCEE_Stdlib_Basket_Item::ITEM_IMAGE_URL;
+            $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEM_PREFIX . $i . WirecardCEE_Stdlib_Basket_Item::ITEM_UNIT_GROSS_AMOUNT;
+            $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEM_PREFIX . $i . WirecardCEE_Stdlib_Basket_Item::ITEM_UNIT_NET_AMOUNT;
+            $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEM_PREFIX . $i . WirecardCEE_Stdlib_Basket_Item::ITEM_UNIT_TAX_AMOUNT;
+            $this->_fingerprintOrder[] = WirecardCEE_Stdlib_Basket::BASKET_ITEM_PREFIX . $i . WirecardCEE_Stdlib_Basket_Item::ITEM_UNIT_TAX_RATE;
+        }
+    }
+
     protected function _composeCustomerStatement($paymenttype, $prefix = null, $uniqString = null)
     {
         if ($prefix === null) {

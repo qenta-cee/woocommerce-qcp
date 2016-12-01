@@ -119,7 +119,7 @@ abstract class WirecardCEE_Stdlib_Response_ResponseAbstract
      */
     public function hasFailed()
     {
-        return (bool) ( $this->getStatus() == self::STATE_FAILURE );
+        return (bool) ( $this->getStatus() >= self::STATE_FAILURE );
     }
 
     /**

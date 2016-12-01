@@ -37,8 +37,8 @@ class WirecardCEE_QMore_Response_Backend_RecurPaymentTest extends PHPUnit_Framew
 {
 
     protected $_secret = 'B8AKTPWBRMNBV455FG6M2DANE99WU2';
-    protected $_customerId = 'D200050';
-    protected $_shopId = 'RECUR';
+    protected $_customerId = 'D200001';
+    protected $_shopId = 'seamless';
     protected $_language = 'en';
     protected $_toolkitPassword = 'jcv45z';
     protected $_sourceOrderNumber = '23473341';

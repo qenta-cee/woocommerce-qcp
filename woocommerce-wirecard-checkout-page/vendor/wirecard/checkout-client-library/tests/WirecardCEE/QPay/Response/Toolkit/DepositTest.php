@@ -58,21 +58,14 @@ class WirecardCEE_QPay_Response_Toolkit_DepositTest extends PHPUnit_Framework_Te
     protected function setUp()
     {
         parent::setUp();
-        $customerId      = $this->_customerId;
-        $shopId          = $this->_shopId;
-        $secret          = $this->_secret;
-        $language        = $this->_language;
-        $toolkitPassword = $this->_toolkitPassword;
 
-        $oToolkitClient = new WirecardCEE_QPay_ToolkitClient(Array(
-            'CUSTOMER_ID'      => $customerId,
-            'SHOP_ID'          => $shopId,
-            'SECRET'           => $secret,
-            'LANGUAGE'         => $language,
-            'TOOLKIT_PASSWORD' => $toolkitPassword
+        $this->object = new WirecardCEE_QPay_ToolkitClient(Array(
+            'CUSTOMER_ID'      => $this->_customerId,
+            'SHOP_ID'          => $this->_shopId,
+            'SECRET'           => $this->_secret,
+            'LANGUAGE'         => $this->_language,
+            'TOOLKIT_PASSWORD' => $this->_toolkitPassword
         ));
-
-        $this->object = $oToolkitClient->deposit($this->_orderNumber, 100, 'eur');
     }
 
     /**
@@ -80,7 +73,8 @@ class WirecardCEE_QPay_Response_Toolkit_DepositTest extends PHPUnit_Framework_Te
      */
     public function testGetStatus()
     {
-        $this->assertEquals($this->object->getStatus(), 0);
+        $response = $this->object->deposit($this->_orderNumber, 100, 'eur');
+        $this->assertEquals($response->getStatus(), 0);
     }
 
     /**
@@ -88,21 +82,32 @@ class WirecardCEE_QPay_Response_Toolkit_DepositTest extends PHPUnit_Framework_Te
      */
     public function testGetErrors()
     {
-        $this->assertEmpty($this->object->getError());
+        $response = $this->object->deposit($this->_orderNumber, 100, 'eur');
+        $this->assertEmpty($response->getError());
     }
-
 
     /**
      * Test hasFailed()
      */
     public function testHasFailed()
     {
-        $this->assertFalse($this->object->hasFailed());
+        $response = $this->object->deposit($this->_orderNumber, 100, 'eur');
+        $this->assertFalse($response->hasFailed());
     }
 
     public function testGetPaymentNumber()
     {
-        $this->assertEquals($this->_orderNumber, $this->object->getPaymentNumber());
+        $response = $this->object->deposit($this->_orderNumber, 100, 'eur');
+        $this->assertEquals($this->_orderNumber, $response->getPaymentNumber());
+    }
+
+    /**
+     * Test basket data
+     */
+    public function testWithBasketData()
+    {
+        $response = $this->object->deposit($this->_orderNumber, 100, 'eur', $this->getValidBasket());
+        $this->assertEquals($this->_orderNumber, $response->getPaymentNumber());
     }
 
     /**
@@ -113,6 +118,28 @@ class WirecardCEE_QPay_Response_Toolkit_DepositTest extends PHPUnit_Framework_Te
         $this->object = null;
 
         parent::tearDown();
+    }
+
+    /**
+     * Creates a valid shopping basket.
+     *
+     * @return WirecardCEE_Stdlib_Basket
+     */
+    private function getValidBasket()
+    {
+        $basketItem = new WirecardCEE_Stdlib_Basket_Item('WirecardCEETestItem');
+        $basketItem->setUnitGrossAmount(10)
+            ->setUnitNetAmount(8)
+            ->setUnitTaxAmount(2)
+            ->setUnitTaxRate(20.0)
+            ->setDescription('unittest description')
+            ->setName('unittest name')
+            ->setImageUrl('http://example.com/picture.png');
+
+        $basket = new WirecardCEE_Stdlib_Basket();
+        $basket->addItem($basketItem);
+
+        return $basket;
     }
 }
 

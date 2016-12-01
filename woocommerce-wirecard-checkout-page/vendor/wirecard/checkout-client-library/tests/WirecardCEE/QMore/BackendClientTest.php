@@ -174,19 +174,17 @@ class WirecardCEE_QMore_BackendClientTest extends PHPUnit_Framework_TestCase
 
     public function testRecurPayment()
     {
-        $pluginVersion = WirecardCEE_QMore_FrontendClient::generatePluginVersion('InitiationTest', '0.0.0',
-            'defaultInstance', '0.0.0');
-        $object        = new WirecardCEE_QMore_BackendClient(
+        $object = new WirecardCEE_QMore_BackendClient(
             Array(
                 'WirecardCEEQMoreConfig' => Array(
-                    'CUSTOMER_ID' => 'D200050',
-                    'SHOP_ID'     => 'RECUR',
+                    'CUSTOMER_ID' => 'D200001',
+                    'SHOP_ID'     => 'seamless',
                     'SECRET'      => 'B8AKTPWBRMNBV455FG6M2DANE99WU2',
                     'LANGUAGE'    => 'en',
                     'PASSWORD'    => 'jcv45z'
                 )
             ));
-        $oResponse     = $object->recurPayment('23473341', '1,2', 'EUR', __METHOD__, '', false);
+        $oResponse = $object->recurPayment('23473341', '1,2', 'EUR', __METHOD__, '', false);
         $this->assertInstanceOf('WirecardCEE_QMore_Response_Backend_RecurPayment', $oResponse);
         $this->assertNotEquals('', $oResponse->getOrderNumber());
         $this->assertEquals($oResponse->getStatus(), 0);
