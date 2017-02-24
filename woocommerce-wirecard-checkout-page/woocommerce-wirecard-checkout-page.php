@@ -50,7 +50,12 @@ register_uninstall_hook( __FILE__, 'woocommerce_uninstall_wirecard_checkout_page
 
 add_action( 'plugins_loaded', 'woocommerce_init_wirecard_checkout_page' );
 
+add_action( 'wp_ajax_saveWcpPaymentMethod', 'save_selected_payment_method');
 
+function save_selected_payment_method() {
+    if( isset($_POST['code']) )
+        WC()->session->selected_wcp_payment = $_POST['code'];
+}
 
 function woocommerce_install_wirecard_checkout_page()
 {
