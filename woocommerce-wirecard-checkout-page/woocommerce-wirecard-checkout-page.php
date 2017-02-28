@@ -6,7 +6,7 @@
 Plugin Name: Wirecard Checkout Page
 Plugin URI: http://www.wirecard.at/integration/plugins/
 Description: Wirecard CEE is a popular payment service provider (PSP) and has connections with over 20 national and international currencies.
-Version: 1.2.0
+Version: 1.2.1
 Author: Wirecard Central Eastern Europe
 Author URI: http://www.wirecard.at/
 License: Proprietary
@@ -50,7 +50,12 @@ register_uninstall_hook( __FILE__, 'woocommerce_uninstall_wirecard_checkout_page
 
 add_action( 'plugins_loaded', 'woocommerce_init_wirecard_checkout_page' );
 
+add_action( 'wp_ajax_saveWcpPaymentMethod', 'save_selected_payment_method');
 
+function save_selected_payment_method() {
+    if( isset($_POST['code']) )
+        WC()->session->selected_wcp_payment = $_POST['code'];
+}
 
 function woocommerce_install_wirecard_checkout_page()
 {

@@ -8,7 +8,7 @@
  *
  */
 define('WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage');
-define('WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.2.0');
+define('WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.2.1');
 define('WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame');
 define('WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction');
 define('WOOCOMMERCE_GATEWAY_WCP_INVOICE_INSTALLMENT_MIN_AGE', 18);
@@ -751,15 +751,17 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
             <div
                 id="wcp-payment-method-<?php echo $type->code ?>-wrap"
                 class="wcp-payment-method-wrap">
-              <input
-                  id="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"
-                  type="radio"
-                  value="<?php echo $type->code ?>"
-                  name="payment_method_wirecard_checkout_page_type">
-              <label
-                  for="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"><?php echo $type->label ?></label>
+                <input
+                    id="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"
+                    type="radio"
+                    onclick="jQuery.post('<?=WC()->ajax_url()?>',{action:'saveWcpPaymentMethod',code:'<?=$type->code?>'});"
+                    <?=WC()->session->selected_wcp_payment==$type->code?'checked="checked"':''?>
+                    value="<?php echo $type->code ?>"
+                    name="payment_method_wirecard_checkout_page_type">
+                <label
+                    for="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"><?php echo $type->label ?></label>
             </div>
-        <?php
+            <?php
         }
     }
 
