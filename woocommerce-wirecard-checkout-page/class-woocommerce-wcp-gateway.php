@@ -546,7 +546,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
 
             // do iframe breakout, if needed and not already done
             if ($this->use_iframe && !array_key_exists('redirected', $_REQUEST)) {
-                $url = add_query_arg('wc-api', 'WC_Gateway_WCP', site_url('/', is_ssl() ? 'https' : 'http'));
+                $url = add_query_arg('wc-api', 'WC_Gateway_WCP', home_url('/', is_ssl() ? 'https' : 'http'));
                 wc_get_template(
                     'templates/iframebreakout.php',
                     array(
@@ -985,7 +985,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
                 $this->set_consumer_information($order, $consumerData);
             }
 
-            $returnUrl = add_query_arg('wc-api', 'WC_Gateway_WCP', site_url('/', is_ssl() ? 'https' : 'http'));
+            $returnUrl = add_query_arg('wc-api', 'WC_Gateway_WCP', home_url('/', is_ssl() ? 'https' : 'http'));
 
             $version = WirecardCEE_QPay_FrontendClient::generatePluginVersion(
                 $this->get_vendor(),
