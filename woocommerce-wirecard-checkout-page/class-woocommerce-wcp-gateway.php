@@ -583,7 +583,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
         }
         $order_id = $_REQUEST['wooOrderId'];
         $order = new WC_Order($order_id);
-        if (!$order->id) {
+        if (!$order->get_id()) {
             wc_add_notice(__('Panic: Order-Id missing', 'woocommerce-wcp'), 'error');
             return $redirectUrl;
         }
@@ -631,14 +631,14 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
         }
         $order_id = $_REQUEST['wooOrderId'];
         $order = new WC_Order($order_id);
-        if (!$order->id) {
-            $message = "order with id `$order->id` not found";
+        if (!$order->get_id()) {
+            $message = "order with id `$order->get_id()` not found";
             $this->log($message);
             return WirecardCEE_QPay_ReturnFactory::generateConfirmResponseString($message);
         }
 
         if($order->get_status() == "processing" || $order->get_status() == "completed") {
-            $message = "cannot change the order with id `$order->id`";
+            $message = "cannot change the order with id `$order->get_id()`";
             $this->log($message);
             return WirecardCEE_QPay_ReturnFactory::generateConfirmResponseString($message);
         }
@@ -649,7 +649,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
         }
         $str = trim($str);
 
-        update_post_meta($order->id, 'wcp_data', $str);
+        update_post_meta($order->get_id(), 'wcp_data', $str);
 
         $message = null;
         try {
@@ -663,12 +663,12 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
             /**
              * @var $return WirecardCEE_Stdlib_Return_ReturnAbstract
              */
-            update_post_meta($order->id, 'wcp_payment_state', $return->getPaymentState());
+            update_post_meta($order->get_id(), 'wcp_payment_state', $return->getPaymentState());
 
             switch ($return->getPaymentState()) {
                 case WirecardCEE_QPay_ReturnFactory::STATE_SUCCESS:
-                    update_post_meta($order->id, 'wcp_gateway_reference_number', $return->getGatewayReferenceNumber());
-                    update_post_meta($order->id, 'wcp_order_number', $return->getOrderNumber());
+                    update_post_meta($order->get_id(), 'wcp_gateway_reference_number', $return->getGatewayReferenceNumber());
+                    update_post_meta($order->get_id(), 'wcp_order_number', $return->getOrderNumber());
                     $order->payment_complete();
                     break;
 
@@ -723,7 +723,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
     function thankyou_page_text($order_id)
     {
         $order = new WC_Order($order_id);
-        if ($order->status == 'on-hold') {
+        if ($order->get_status() == 'on-hold') {
             printf(
                 '<p>%s</p>',
                 __(
@@ -956,7 +956,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
      */
     protected function initiate_payment($order, $paymenttype)
     {
-        if(isset(WC()->session->wirecard_checkout_page_redirect_url) && WC()->session->wirecard_checkout_page_redirect_url['id'] == $order->id) {
+        if(isset(WC()->session->wirecard_checkout_page_redirect_url) && WC()->session->wirecard_checkout_page_redirect_url['id'] == $order->get_id()) {
             return WC()->session->wirecard_checkout_page_redirect_url['url'];
         }
 
@@ -1011,14 +1011,14 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
                 ->setCustomerStatement($this->get_customer_statement($order))
                 ->setDuplicateRequestCheck(false)
                 ->setMaxRetries($this->get_option('max_retries'))
-                ->createConsumerMerchantCrmId($order->billing_email)
+                ->createConsumerMerchantCrmId($order->get_billing_email())
                 ->setWindowName(WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME);
 
             if (($this->get_option('auto_deposit') == 'yes')) {
                 $client->setAutoDeposit((bool)($this->get_option('auto_deposit') == 'yes'));
             }
 
-            $client->wooOrderId = $order->id;
+            $client->wooOrderId = $order->get_id();
             $response = $client->initiate();
 
             if ($response->hasFailed()) {
@@ -1032,7 +1032,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
             throw ($e);
         }
 
-        WC()->session->wirecard_checkout_page_redirect_url = array('id' => $order->id, 'url' => $response->getRedirectUrl());
+        WC()->session->wirecard_checkout_page_redirect_url = array('id' => $order->get_id(), 'url' => $response->getRedirectUrl());
         return $response->getRedirectUrl();
     }
 
@@ -1048,37 +1048,37 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
             $consumerData->setBirthDate($this->customer_birthday);
         }
 
-        $consumerData->setEmail($order->billing_email);
+        $consumerData->setEmail($order->get_billing_email());
 
         $billingAddress = new WirecardCEE_Stdlib_ConsumerData_Address(WirecardCEE_Stdlib_ConsumerData_Address::TYPE_BILLING);
 
-        $countryCode = $order->billing_country;
+        $countryCode = $order->get_billing_country();
 
-        $billingAddress->setFirstname($order->billing_first_name)
-            ->setLastname($order->billing_last_name)
-            ->setAddress1($order->billing_address_1)
-            ->setAddress2($order->billing_address_2)
-            ->setCity($order->billing_city)
-            ->setZipCode($order->billing_postcode)
+        $billingAddress->setFirstname($order->get_billing_first_name())
+            ->setLastname($order->get_billing_last_name())
+            ->setAddress1($order->get_billing_address_1())
+            ->setAddress2($order->get_billing_address_2())
+            ->setCity($order->get_billing_city())
+            ->setZipCode($order->get_billing_postcode())
             ->setCountry($countryCode)
-            ->setPhone($order->billing_phone);
+            ->setPhone($order->get_billing_phone());
 
         // for US/CA woocommerce sets the statecode (2 chars), for other countries its empty
-        $billingAddress->setState($order->billing_state);
+        $billingAddress->setState($order->get_billing_state());
 
         $shippingAddress = new WirecardCEE_Stdlib_ConsumerData_Address(WirecardCEE_Stdlib_ConsumerData_Address::TYPE_SHIPPING);
 
-        $countryCode = $order->shipping_country;
+        $countryCode = $order->get_shipping_country();
 
-        $shippingAddress->setFirstname($order->shipping_first_name)
-            ->setLastname($order->shipping_last_name)
-            ->setAddress1($order->shipping_address_1)
-            ->setAddress2($order->shipping_address_2)
-            ->setCity($order->shipping_city)
-            ->setZipCode($order->shipping_postcode)
+        $shippingAddress->setFirstname($order->get_shipping_first_name())
+            ->setLastname($order->get_shipping_last_name())
+            ->setAddress1($order->get_shipping_address_1())
+            ->setAddress2($order->get_shipping_address_2())
+            ->setCity($order->get_shipping_city())
+            ->setZipCode($order->get_shipping_postcode())
             ->setCountry($countryCode);
 
-        $shippingAddress->setState($order->billing_state);
+        $shippingAddress->setState($order->get_billing_state());
 
         $consumerData->addAddressInformation($billingAddress)->addAddressInformation($shippingAddress);
     }
@@ -1193,7 +1193,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
      */
     protected function get_order_description($order)
     {
-        return sprintf('user_id:%s order_id:%s', $order->user_id, $order->id);
+        return sprintf('user_id:%s order_id:%s', $order->get_user_id(), $order->get_id());
     }
 
     /**
