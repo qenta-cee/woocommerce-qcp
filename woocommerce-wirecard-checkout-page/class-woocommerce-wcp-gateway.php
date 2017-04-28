@@ -8,7 +8,7 @@
  *
  */
 define('WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage');
-define('WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.2.1');
+define('WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.2.2');
 define('WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame');
 define('WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction');
 define('WOOCOMMERCE_GATEWAY_WCP_INVOICE_INSTALLMENT_MIN_AGE', 18);
@@ -493,10 +493,10 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
 
             $page_url = version_compare(WC()->version, '2.1.0', '<')
                 ? get_permalink(wc_get_page_id('pay'))
-                : WC_Order::get_checkout_payment_url( true );
+                : $order->get_checkout_payment_url( true );
 
-            $page_url = add_query_arg('key',$order->order_key, $page_url);
-            $page_url = add_query_arg('order', $order_id, $page_url);
+            $page_url = add_query_arg('key',$order->get_order_key(), $page_url);
+            $page_url = add_query_arg('order-pay', $order_id, $page_url);
 
             return array(
                 'result' => 'success',
