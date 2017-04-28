@@ -574,7 +574,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
      */
     function return_request()
     {
-        $this->log('return_request:' . print_r($_REQUEST, true));
+        $this->log('return_request:' . print_r($_REQUEST, true), 'notice');
 
         $redirectUrl = $this->get_return_url();
         if (!isset($_REQUEST['wooOrderId']) || !strlen($_REQUEST['wooOrderId'])) {
@@ -597,7 +597,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
             case WirecardCEE_QPay_ReturnFactory::STATE_CANCEL:
                 wc_add_notice(__('Payment has been cancelled.', 'woocommerce-wcp'), 'error');
                 unset(WC()->session->wirecard_checkout_page_redirect_url);
-                return $order->get_checkout_payment_url();
+                return $order->get_cancel_endpoint();
 
             case WirecardCEE_QPay_ReturnFactory::STATE_FAILURE:
                 if (array_key_exists('consumerMessage', $_REQUEST)) {
@@ -605,7 +605,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
                 } else {
                     wc_add_notice(__('Payment has failed.', 'woocommerce-wcp'), 'error');
                 }
-                return $order->get_checkout_payment_url();
+                return $order->get_cancel_endpoint();
 
             default:
                 break;
@@ -621,25 +621,25 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
      */
     function confirm_request()
     {
-        $this->log('confirm_request:' . print_r($_REQUEST, true));
+        $this->log('confirm_request:' . print_r($_REQUEST, true), 'notice');
 
         $message = null;
         if (!isset($_REQUEST['wooOrderId']) || !strlen($_REQUEST['wooOrderId'])) {
             $message = 'order-id missing';
-            $this->log($message);
+            $this->log($message, 'error');
             return WirecardCEE_QPay_ReturnFactory::generateConfirmResponseString($message);
         }
         $order_id = $_REQUEST['wooOrderId'];
         $order = new WC_Order($order_id);
         if (!$order->get_id()) {
             $message = "order with id `$order->get_id()` not found";
-            $this->log($message);
+            $this->log($message, 'error');
             return WirecardCEE_QPay_ReturnFactory::generateConfirmResponseString($message);
         }
 
         if($order->get_status() == "processing" || $order->get_status() == "completed") {
             $message = "cannot change the order with id `$order->get_id()`";
-            $this->log($message);
+            $this->log($message, 'error');
             return WirecardCEE_QPay_ReturnFactory::generateConfirmResponseString($message);
         }
 
@@ -693,22 +693,23 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
                     /**
                      * @var $return WirecardCEE_QPay_Return_Failure
                      */
-                    $this->log(
-                        $return->getErrors()
-                            ->getConsumerMessage()
-                    );
-                    $order->update_status(
-                        'failed',
-                        $return->getErrors()
-                            ->getConsumerMessage()
-                    );
+					$str_errors = '';
+	                foreach ( $return->getErrors() as $error ) {
+		                $errors[] = $error->getConsumerMessage();
+		                wc_add_notice( __( "Request failed! Error: {$error->getConsumerMessage()}",
+		                                   'woocommerce-wcp' ),
+		                               'error' );
+		                $this->log($error->getConsumerMessage() , 'error');
+		                $str_errors += $error->getConsumerMessage();
+	                }
+	                $order->update_status( 'failed', $str_errors );
                     break;
 
                 default:
                     break;
             }
         } catch (Exception $e) {
-            $this->log(__FUNCTION__ . $e->getMessage());
+            $this->log(__FUNCTION__ . $e->getMessage(), 'error');
             $order->update_status('failed', $e->getMessage());
             $message = $e->getMessage();
         }
@@ -855,38 +856,38 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
      */
     function check_paymenttype_invoice()
     {
-        $fields = array(
-            'address',
-            'address_2',
-            'city',
-            'country',
-            'postcode',
-            'state'
-        );
-        foreach ($fields as $f) {
-            $m1 = "get_$f";
-            $m2 = "get_shipping_$f";
-            if (call_user_func(
-                    array(
-                        WC()->customer,
-                        $m1
-                    )
-                ) != call_user_func(
-                    array(
-                        WC()->customer,
-                        $m2
-                    )
-                )
-            ) {
-                return false;
-            }
-        }
+	    $customer = new WC_Customer( get_current_user_id() );
+
+	    // this shipping address can be empty
+	    $shipping_address             = new stdClass();
+	    $shipping_address->first_name = $customer->get_shipping_first_name();
+	    $shipping_address->last_name  = $customer->get_shipping_last_name();
+	    $shipping_address->company    = $customer->get_shipping_company();
+	    $shipping_address->address_1  = $customer->get_shipping_address_1();
+	    $shipping_address->address_2  = $customer->get_shipping_address_2();
+	    $shipping_address->city       = $customer->get_shipping_city();
+	    $shipping_address->postcode   = $customer->get_shipping_postcode();
+	    $shipping_address->country    = $customer->get_shipping_country();
+
+	    // this is the first address to be filled, it can't be empty
+	    $billing_address             = new stdClass();
+	    $billing_address->first_name = $customer->get_billing_first_name();
+	    $billing_address->last_name  = $customer->get_billing_last_name();
+	    $billing_address->company    = $customer->get_billing_company();
+	    $billing_address->address_1  = $customer->get_billing_address_1();
+	    $billing_address->address_2  = $customer->get_billing_address_2();
+	    $billing_address->city       = $customer->get_billing_city();
+	    $billing_address->postcode   = $customer->get_billing_postcode();
+	    $billing_address->country    = $customer->get_billing_country();
 
         if (get_woocommerce_currency() != 'EUR') {
             return false;
         }
 
-        $total = WC()->cart->total;
+	    $cart = new WC_Cart();
+	    $cart->get_cart_from_session();
+
+        $total = $cart->total;
         if ((int)$this->get_option('invoice_min_amount') && (int)$this->get_option('invoice_min_amount') > $total) {
             return false;
         }
@@ -895,8 +896,31 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
             return false;
         }
 
-        return true;
+	    if ( $this->address_empty( $shipping_address ) ) {
+		    $shipping_address = $billing_address;
+	    }
+	    return true;
     }
+
+
+	/**
+	 * Basic check if address is empty
+	 *
+	 * @since 1.2.2
+	 * @param $address
+	 *
+	 * @return bool
+	 */
+	function address_empty( $address ) {
+
+		foreach ( $address as $key => $value ) {
+			if ( ! empty( $value ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 
     /**
      * Check whether installment is allowed or not
@@ -905,45 +929,49 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
      */
     function check_paymenttype_installment()
     {
-        $fields = array(
-            'address',
-            'address_2',
-            'city',
-            'country',
-            'postcode',
-            'state'
-        );
-        foreach ($fields as $f) {
-            $m1 = "get_$f";
-            $m2 = "get_shipping_$f";
-            if (call_user_func(
-                    array(
-                        WC()->customer,
-                        $m1
-                    )
-                ) != call_user_func(
-                    array(
-                        WC()->customer,
-                        $m2
-                    )
-                )
-            ) {
-                return false;
-            }
-        }
+	    $customer = new WC_Customer( get_current_user_id() );
 
-        if (get_woocommerce_currency() != 'EUR') {
-            return false;
-        }
+	    // this shipping address can be empty
+	    $shipping_address             = new stdClass();
+	    $shipping_address->first_name = $customer->get_shipping_first_name();
+	    $shipping_address->last_name  = $customer->get_shipping_last_name();
+	    $shipping_address->company    = $customer->get_shipping_company();
+	    $shipping_address->address_1  = $customer->get_shipping_address_1();
+	    $shipping_address->address_2  = $customer->get_shipping_address_2();
+	    $shipping_address->city       = $customer->get_shipping_city();
+	    $shipping_address->postcode   = $customer->get_shipping_postcode();
+	    $shipping_address->country    = $customer->get_shipping_country();
 
-        $total = WC()->cart->total;
-        if ((int)$this->get_option('installment_min_amount') && (int)$this->get_option('installment_min_amount') > $total) {
-            return false;
-        }
+	    // this is the first address to be filled, it can't be empty
+	    $billing_address             = new stdClass();
+	    $billing_address->first_name = $customer->get_billing_first_name();
+	    $billing_address->last_name  = $customer->get_billing_last_name();
+	    $billing_address->company    = $customer->get_billing_company();
+	    $billing_address->address_1  = $customer->get_billing_address_1();
+	    $billing_address->address_2  = $customer->get_billing_address_2();
+	    $billing_address->city       = $customer->get_billing_city();
+	    $billing_address->postcode   = $customer->get_billing_postcode();
+	    $billing_address->country    = $customer->get_billing_country();
 
-        if ((int)$this->get_option('installment_max_amount') && (int)$this->get_option('installment_max_amount') < $total) {
-            return false;
-        }
+	    if (get_woocommerce_currency() != 'EUR') {
+		    return false;
+	    }
+
+	    $cart = new WC_Cart();
+	    $cart->get_cart_from_session();
+
+	    $total = $cart->total;
+	    if ((int)$this->get_option('installment_min_amount') && (int)$this->get_option('installment_min_amount') > $total) {
+		    return false;
+	    }
+
+	    if ((int)$this->get_option('installment_max_amount') && (int)$this->get_option('installment_max_amount') < $total) {
+		    return false;
+	    }
+
+	    if ( $this->address_empty( $shipping_address ) ) {
+		    $shipping_address = $billing_address;
+	    }
 
         return true;
     }
@@ -1224,13 +1252,13 @@ class WC_Gateway_WCP extends WC_Payment_Gateway
      * @param
      *            $str
      */
-    protected function log($str)
+    protected function log($str, $level = 'notice')
     {
         if ($this->debug) {
           if ( empty( $this->log ) ) {
             $this->log = new WC_Logger();
           }
-          $this->log->add( 'paypal', $str );
+          $this->log->log($level, 'WirecardCheckoutPage: ' .$str );
         }
     }
 }
