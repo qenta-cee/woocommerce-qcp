@@ -862,6 +862,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$customer = $woocommerce->customer;
 
 		$fields = array(
+			'first_name',
+			'last_name',
 			'address',
 			'address_2',
 			'city',
@@ -932,6 +934,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$customer = $woocommerce->customer;
 
 		$fields = array(
+			'first_name',
+			'last_name',
 			'address',
 			'address_2',
 			'city',
