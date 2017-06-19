@@ -112,7 +112,19 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	function admin_options() {
 		?>
 		<h3><?php _e( 'Wirecard Checkout Page', 'woocommerce-wcp' ); ?></h3>
-		<p><?php _e( 'Payment via Wirecard Checkout Page', 'woocommerce-wcp' ); ?></p>
+		<div class="woo-wcs-settings-header-wrapper" style="min-width: 200px; max-width: 800px;">
+			<img src="<?= plugins_url( 'woocommerce-wirecard-checkout-page/assets/images/wirecard-logo.png' ) ?>">
+			<p style="text-transform: uppercase;"><?= __( 'Wirecard - Your Full Service Payment Provider - Comprehensive solutions from one single source',
+					'woocommerce-wcp' ) ?></p>
+
+			<p><?= __( 'Wirecard is one of the world´s leading providers of outsourcing and white label solutions for electronic payment transactions.',
+					'woocommerce-wcp' ) ?></p>
+
+			<p><?= __( 'As independent provider of payment solutions, we accompany our customers along the entire business development. Our payment solutions are perfectly tailored to suit e-Commerce requirements and have made	us Austria´s leading payment service provider. Customization, competence, and commitment.',
+					'woocommerce-wcp' ) ?></p>
+
+		</div>
+		<hr/>
 		<table class="form-table">
 			<?php
 			// Generate the HTML For the settings form.
@@ -691,7 +703,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$consumerData = new WirecardCEE_Stdlib_ConsumerData();
 			$consumerData->setUserAgent( $_SERVER['HTTP_USER_AGENT'] )->setIpAddress( $_SERVER['REMOTE_ADDR'] );
 
-			if ( $this->get_option( 'send_additional_data' ) == 'yes' || in_array(
+			//@TODO check shipping and billing
+			if ( $this->get_option( 'send_consumer_shipping' ) == 'yes' || in_array(
 					$paymenttype,
 					Array(
 						WirecardCEE_QPay_PaymentType::INVOICE,
