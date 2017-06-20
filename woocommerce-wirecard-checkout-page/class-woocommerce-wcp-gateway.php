@@ -7,6 +7,8 @@
  *  - Wrapped payment type in div
  *
  */
+require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-config.php' );
+
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.0' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame' );
@@ -19,6 +21,15 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @var $log WC_Logger
 	 */
 	protected $log;
+
+	/**
+	 * Config Class
+	 *
+	 * @since 2.2.0
+	 * @access protected
+	 * @var WC_Gateway_WCP_Config
+	 */
+	protected $_config;
 
 	/**
 	 * @var $customer_birthday DateTime
@@ -40,6 +51,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		// Load the settings.
 		$this->init_settings();
+
+		$this->_config = new WC_Gateway_WCP_Config($this->settings);
 
 		$this->title       = 'Wirecard Checkout Page'; // frontend title
 		$this->description = 'Wirecard description to payment maybe picture?'; // frontend description
@@ -691,13 +704,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$paymenttype = strtoupper( $paymenttype );
 		try {
-
-			$client = new WirecardCEE_QPay_FrontendClient( array(
-				                                               'CUSTOMER_ID' => $this->get_option( 'customer_id' ),
-				                                               'SHOP_ID'     => $this->get_option( 'shop_id' ),
-				                                               'SECRET'      => $this->get_option( 'secret' ),
-				                                               'LANGUAGE'    => $this->get_language_code()
-			                                               ) );
+		    $config = $this->_config->get_client_config();
+			$client = new WirecardCEE_QPay_FrontendClient( $config );
 
 			// consumer data (IP and User aget) are mandatory!
 			$consumerData = new WirecardCEE_Stdlib_ConsumerData();
@@ -750,7 +758,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 			$client->wooOrderId = $order->get_id();
 			$response           = $client->initiate();
-
 			if ( $response->hasFailed() ) {
 				wc_add_notice(
 					__( "Response failed! Error: {$response->getError()->getMessage()}", 'woocommerce-wcp' ),
