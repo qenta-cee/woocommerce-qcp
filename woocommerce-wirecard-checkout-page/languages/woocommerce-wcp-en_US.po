@@ -151,115 +151,6 @@ msgstr ""
 msgid "Display Text on the Wirecard Checkout Page."
 msgstr ""
 
-#: class-woocommerce-wcp-gateway.php:179
-msgid "Payment is choosen on the Wirecard Checkout Page."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:186
-msgid "Credit Card."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:193
-msgid "Credit Card mobile-, tele-order."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:200
-msgid "Maestro SecureCode."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:207
-msgid "eps Online Bank Transfer."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:214
-msgid "iDEAL."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:221
-msgid "giropay."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:226
-msgid "SOFORT banking (PIN/TAN)"
-msgstr "SOFORT Banking"
-
-#: class-woocommerce-wcp-gateway.php:228
-msgid "SOFORT banking (PIN/TAN)."
-msgstr "SOFORT Banking."
-
-#: class-woocommerce-wcp-gateway.php:235
-msgid "Mobile Phone Invoicing."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:242
-msgid "paysafecard."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:249
-msgid "@QUICK."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:256
-msgid "PayPal."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:263
-msgid "Direct Debit."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:270
-msgid "CLICK2PAY."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:277
-msgid "Invoice."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:282
-#: class-woocommerce-wcp-gateway.php:1053
-msgid "Installment"
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:284
-msgid "Installment."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:291
-msgid "Bancontact/Mister Cash."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:298
-msgid "Przelewy24."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:305
-msgid "moneta.ru."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:312
-msgid "POLi."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:319
-msgid "eKonto."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:326
-msgid "InstantBank."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:333
-msgid "mpass."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:340
-msgid "Skrill Direct."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:347
-msgid "Skrill Digital Wallet."
-msgstr ""
-
 #: class-woocommerce-wcp-gateway.php:352
 msgid "Invoice minimum amount"
 msgstr ""
@@ -389,6 +280,10 @@ msgstr "giropay"
 
 #: class-woocommerce-wcp-gateway.php:226
 msgid "sofort"
+msgstr "SOFORT Banking"
+
+#: class-woocommerce-wcp-gateway.php:226
+msgid "sofortueberweisung"
 msgstr "SOFORT Banking"
 
 #: class-woocommerce-wcp-gateway.php:235

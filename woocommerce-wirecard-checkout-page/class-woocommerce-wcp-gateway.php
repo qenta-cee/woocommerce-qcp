@@ -176,13 +176,13 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$order = new WC_Order( $order_id );
 
-		if ( ! isset( $_REQUEST['payment_method_wirecard_checkout_page_type'] ) ) {
+		if ( ! isset( $_POST['wcp_payment_method'] ) ) {
 			wc_add_notice( __( 'Please select a payment type.', 'woocommerce-wcp' ), 'error' );
 
 			return false;
 		}
 
-		$paymenttype = $_REQUEST['payment_method_wirecard_checkout_page_type'];
+		$paymenttype = $_POST['wcp_payment_method'];
 		if ( ! $this->is_paymenttype_enabled( $paymenttype ) ) {
 			wc_add_notice( __( 'Payment type is not available, please select another payment type.',
 			                   'woocommerce-wcp' ), 'error' );
@@ -475,26 +475,40 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return void
 	 */
 	function payment_fields() {
-		if ( $description = $this->get_description() ) {
-			echo wpautop( wptexturize( $description ) );
-		}
-
+		?>
+        <input id="payment_method_wcp" type="hidden" value="woocommerce_wirecard_checkout_page"
+               name="wcp_payment_method"/>
+        <script type="text/javascript">
+            function changeWCPPayment(code) {
+                var changer = document.getElementById('payment_method_wcp');
+                changer.value = code;
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="<?= WOOCOMMERCE_GATEWAY_WCP_URL ?>assets/styles/payment.css">
+		<?php
 		foreach ( $this->get_enabled_paymenttypes() as $type ) {
 			?>
-			<div
-				id="wcp-payment-method-<?php echo $type->code ?>-wrap"
-				class="wcp-payment-method-wrap">
-				<input
-					id="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"
-					type="radio"
-					onclick="jQuery.post('<?= WC()->ajax_url() ?>',{action:'saveWcpPaymentMethod',code:'<?= $type->code ?>'});"
-					<?= WC()->session->selected_wcp_payment == $type->code ? 'checked="checked"' : '' ?>
-					value="<?php echo $type->code ?>"
-					name="payment_method_wirecard_checkout_page_type">
-				<label
-					for="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"><?php echo $type->label ?></label>
-			</div>
+            </div></li>
+        <li class="wc_payment_method payment_method_wirecard_checkout_page_<?php echo $type->code ?>">
+            <input
+                    id="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"
+                    type="radio"
+                    class="input-radio"
+                    value="wirecard_checkout_page"
+                    onclick="changeWCPPayment('<?php echo $type->code ?>');"
+                    name="payment_method"
+                    data-order_button_text>
+            <label for="payment_method_wirecard_checkout_page_<?php echo $type->code ?>">
+				<?php
+				echo $type->label;
+				echo "<img src='{$this->_config->get_payment_icon($type->code)}' alt='Wirecard {$type->label}'>";
+				?>
+            </label>
+            <div>
 			<?php
+			if ( $type->payment_fields ) {
+				echo $type->payment_fields;
+			}
 		}
 	}
 

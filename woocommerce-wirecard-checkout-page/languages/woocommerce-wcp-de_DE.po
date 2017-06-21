@@ -282,6 +282,10 @@ msgstr "giropay"
 msgid "sofort"
 msgstr "SOFORT Überweisung"
 
+#: class-woocommerce-wcp-gateway.php:226
+msgid "sofortueberweisung"
+msgstr "SOFORT Überweisung"
+
 #: class-woocommerce-wcp-gateway.php:235
 msgid "pbx"
 msgstr "paybox"
@@ -306,7 +310,6 @@ msgstr "SEPA Lastschrift"
 msgid "invoice"
 msgstr "Kauf auf Rechnung"
 
-#: class-woocommerce-wcp-gateway.php:282
 #: class-woocommerce-wcp-gateway.php:1053
 msgid "installment"
 msgstr "Kauf auf Raten"
