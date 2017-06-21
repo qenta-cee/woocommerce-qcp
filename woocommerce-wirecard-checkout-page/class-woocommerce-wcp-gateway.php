@@ -8,6 +8,7 @@
  *
  */
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-config.php' );
+require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.0' );
@@ -32,6 +33,15 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	protected $_config;
 
 	/**
+     * Payments Class
+     *
+     * @since 2.2.0
+     * @access protected
+	 * @var WC_Gateway_WCP_Payments
+	 */
+	protected $_payments;
+
+	/**
 	 * @var $customer_birthday DateTime
 	 */
 	protected $customer_birthday;
@@ -53,6 +63,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$this->init_settings();
 
 		$this->_config = new WC_Gateway_WCP_Config($this->settings);
+		$this->_payments = new WC_Gateway_WCP_Payments($this->settings);
 
 		$this->title       = 'Wirecard Checkout Page'; // frontend title
 		$this->description = 'Wirecard description to payment maybe picture?'; // frontend description
@@ -175,12 +186,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		global $woocommerce;
 
 		$order = new WC_Order( $order_id );
-
-		if ( ! isset( $_POST['wcp_payment_method'] ) ) {
-			wc_add_notice( __( 'Please select a payment type.', 'woocommerce-wcp' ), 'error' );
-
-			return false;
-		}
 
 		$paymenttype = $_POST['wcp_payment_method'];
 		if ( ! $this->is_paymenttype_enabled( $paymenttype ) ) {
@@ -501,14 +506,12 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
             <label for="payment_method_wirecard_checkout_page_<?php echo $type->code ?>">
 				<?php
 				echo $type->label;
-				echo "<img src='{$this->_config->get_payment_icon($type->code)}' alt='Wirecard {$type->label}'>";
+				echo "<img src='{$this->_payments->get_payment_icon($type->code)}' alt='Wirecard {$type->label}'>";
 				?>
             </label>
-            <div>
+            <div class="payment_box payment_method_wirecard_checkout_page_<?= ( $this->_payments->has_payment_fields($type->code) ) ? $type->code : "" ?>" style="display:none;">
 			<?php
-			if ( $type->payment_fields ) {
-				echo $type->payment_fields;
-			}
+            echo $this->_payments->get_payment_fields($type->code);
 		}
 	}
 
@@ -554,7 +557,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 					$type        = new stdClass();
 					$type->code  = $parts[1];
 					$type->label = $this->get_paymenttype_name( $type->code );
-					$method_name = 'check_paymenttype_' . $type->code;
+					/*$method_name = 'check_paymenttype_' . $type->code;
 
 					if ( method_exists( $this, $method_name ) ) {
 						if ( ! call_user_func(
@@ -566,7 +569,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 						) {
 							continue;
 						}
-					}
+					}*/
 					$types[] = $type;
 				}
 			}
@@ -598,7 +601,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 *
 	 * @return bool
 	 */
-	function check_paymenttype_invoice() {
+	/*function check_paymenttype_invoice() {
 		global $woocommerce;
 		$customer = $woocommerce->customer;
 
@@ -642,7 +645,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		}
 
 		return true;
-	}
+	}*/
 
 
 	/**
@@ -670,7 +673,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 *
 	 * @return bool
 	 */
-	function check_paymenttype_installment() {
+	/*function check_paymenttype_installment() {
 		global $woocommerce;
 		$customer = $woocommerce->customer;
 
@@ -714,7 +717,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		}
 
 		return true;
-	}
+	}*/
 
 	/**
 	 * @param $order

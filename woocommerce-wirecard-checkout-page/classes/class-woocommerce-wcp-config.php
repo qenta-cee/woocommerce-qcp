@@ -129,17 +129,4 @@ class WC_Gateway_WCP_Config {
 
 		return $parts[0];
 	}
-
-	/**
-	 * Returns url to payment method logo
-	 *
-	 * @since 2.2.0
-	 *
-	 * @param $payment_code
-	 *
-	 * @return string
-	 */
-	public function get_payment_icon( $payment_code ) {
-		return WOOCOMMERCE_GATEWAY_WCP_URL . "assets/images/" . $payment_code . ".png";
-	}
 }

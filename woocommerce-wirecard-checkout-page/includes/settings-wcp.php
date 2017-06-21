@@ -265,6 +265,17 @@ return array(
 		'default' => 'no',
 		'label'   => __( 'Enable/Disable', 'woocommerce-wcp' )
 	),
+	'payolution_terms' => array(
+		'title' => __('payolution terms', 'woocommerce-wcp'),
+		'type' => 'checkbox',
+		'default' => 'no',
+		'label' => __('Enable/Disable', 'woocommerce-wcp')
+	),
+	'payolution_mid' => array(
+		'title' => __('payolution mID', 'woocommerce-wcp'),
+		'type' => 'text',
+		'default' => ''
+	),
 	'additional_settings_end' => array(
 		'title' => '<hr/>',
 		'type' => 'title'
