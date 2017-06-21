@@ -41,11 +41,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 */
 	protected $_payments;
 
-	/**
-	 * @var $customer_birthday DateTime
-	 */
-	protected $customer_birthday;
-
 	function __construct() {
 		$this->id                 = 'wirecard_checkout_page';
 		$this->icon               = WOOCOMMERCE_GATEWAY_WCP_URL . 'assets/images/wirecard.png';
@@ -104,15 +99,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			array(
 				$this,
 				'dispatch_callback'
-			)
-		);
-
-		// custom birthday field
-		add_filter(
-			'woocommerce_billing_fields',
-			array(
-				$this,
-				'custom_fields'
 			)
 		);
 	}
@@ -195,32 +181,10 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			return false;
 		}
 
-		// check customers age for invoice and installment
-		// make it here, because we have no birthday in earlier checkout steps
-		if ( $paymenttype == 'invoice' || $paymenttype == 'installment' ) {
-			if ( ! isset( $_POST['billing_birthday'] ) || ! strlen( $_POST['billing_birthday'] ) ) {
-				wc_add_notice( __( 'Please fill out the birthday field.', 'woocommerce-wcp' ), 'error' );
-
-				return false;
-			}
-
-			try {
-				// remember this, needed later
-				$this->customer_birthday = new \DateTime( $_POST['billing_birthday'] );
-			} catch ( Exception $e ) {
-				wc_add_notice( __( 'Birthday field is invalid.', 'woocommerce-wcp' ), 'error' );
-
-				return false;
-			}
-
-			$diff        = $this->customer_birthday->diff( new DateTime() );
-			$customerAge = $diff->format( '%y' );
-			if ( $customerAge < WOOCOMMERCE_GATEWAY_WCP_INVOICE_INSTALLMENT_MIN_AGE ) {
-				wc_add_notice( __( 'You are not allowed to use this payment type.', 'woocommerce-wcp' ), 'error' );
-
-				return false;
-			}
-		}
+		$birthday = null;
+		if (isset($_POST['wcp_birthday'])) {
+		    $birthday = $_POST['wcp_birthday'];
+        }
 
 		if ( $this->use_iframe ) {
 			WC()->session->wirecard_checkout_page_type = $paymenttype;
@@ -237,7 +201,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				'redirect' => $page_url
 			);
 		} else {
-			$redirectUrl = $this->initiate_payment( $order, $paymenttype );
+			$redirectUrl = $this->initiate_payment( $order, $paymenttype, $birthday );
 			if ( ! $redirectUrl ) {
 				return;
 			}
@@ -258,7 +222,11 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	function payment_page( $order_id ) {
 		$order = new WC_Order( $order_id );
 
-		$iframeUrl = $this->initiate_payment( $order, WC()->session->wirecard_checkout_page_type );
+		$birthday = null;
+		if (isset($_POST['wcp_birthday'])) {
+			$birthday = $_POST['wcp_birthday'];
+		}
+		$iframeUrl = $this->initiate_payment( $order, WC()->session->wirecard_checkout_page_type, $birthday );
 		?>
 		<iframe src="<?php echo $iframeUrl ?>"
 		        name="<?php echo WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME ?>" width="100%"
@@ -516,28 +484,23 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Filter hook, add custom field to the checkout, needed for invoice and installment
-	 *
-	 * @param
-	 *            $address_fields
-	 *
-	 * @return mixed
+     * Basic validation for payment methods
+     *
+     * @since 2.2.0
+     *
+	 * @return bool|void
 	 */
-	function custom_fields( $address_fields ) {
-		$address_fields['billing_birthday'] = array(
-			'label'       => __( 'Birthday', 'woocommerce-wcp' ),
-			'placeholder' => 'DD.MM.YYYY',
-			'required'    => 0,
-			'class'       => array(
-				'form-row-wide'
-			),
-			'validate'    => array(
-				'date'
-			),
-			'clear'       => 1
-		);
+	public function validate_fields() {
+		$args         = $this->get_post_data();
+		$payment_type = $args['wcp_payment_method'];
+		$validation   = $this->_payments->validate_payment( $payment_type, $args );
+		if ( $validation === true ) {
+			return true;
+		} else {
+			wc_add_notice( $validation, 'error' );
 
-		return $address_fields;
+			return;
+		}
 	}
 
 	/*
@@ -726,7 +689,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 * @throws Exception
 	 */
-	protected function initiate_payment( $order, $paymenttype ) {
+	protected function initiate_payment( $order, $paymenttype, $birthday ) {
 		if ( isset( WC()->session->wirecard_checkout_page_redirect_url ) && WC()->session->wirecard_checkout_page_redirect_url['id'] == $order->get_id() ) {
 			return WC()->session->wirecard_checkout_page_redirect_url['url'];
 		}
@@ -749,9 +712,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 					)
 				)
 			) {
-				$this->set_consumer_information( $order, $consumerData );
+				$this->set_consumer_information( $order, $consumerData, $birthday );
 			}
-
 			$returnUrl = add_query_arg( 'wc-api', 'WC_Gateway_WCP', home_url( '/', is_ssl() ? 'https' : 'http' ) );
 
 			$version = WirecardCEE_QPay_FrontendClient::generatePluginVersion(
@@ -812,9 +774,10 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @param WC_Order $order
 	 * @param WirecardCEE_Stdlib_ConsumerData $consumerData
 	 */
-	protected function set_consumer_information( $order, WirecardCEE_Stdlib_ConsumerData $consumerData ) {
-		if ( $this->customer_birthday !== null ) {
-			$consumerData->setBirthDate( $this->customer_birthday );
+	protected function set_consumer_information( $order, WirecardCEE_Stdlib_ConsumerData $consumerData, $birthday ) {
+		if ( $birthday !== null ) {
+			$date = DateTime::createFromFormat( 'Y-m-d', $birthday );
+			$consumerData->setBirthDate( $date );
 		}
 
 		$consumerData->setEmail( $order->get_billing_email() );

@@ -74,9 +74,9 @@ class WC_Gateway_WCP_Payments {
 	}
 
 	/**
-	 * returns true because the payment method has input fields
+	 * Returns true if the payment method needs form fields
 	 *
-	 * @since 1.0.0
+	 * @since 2.2.0
 	 *
 	 * @return bool
 	 */
@@ -92,65 +92,58 @@ class WC_Gateway_WCP_Payments {
 		}
 	}
 
+	/**
+	 * Prints form fields for specific payment methods
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param $payment_code
+	 *
+	 * @return string|void
+	 */
 	public function get_payment_fields( $payment_code ) {
-		switch ($payment_code) {
+		switch ( $payment_code ) {
 			case 'invoice':
 			case 'installment':
-			$html = "<fieldset class='wc-invoice-installment-form wc-payment-form'>";
-			$html .= '';
+				$today = date( 'Y' ) . "-" . date( 'm' ) . "-" . date( 'd' );
+				$html  = "<fieldset class='wc-invoice-installment-form wc-payment-form'>";
+				$html  .= '';
 
-			// account owner field
-			$html .= "<p class='form-row'>";
-			$html .= "<label>" . __( 'Date of Birth:',
-					'woocommerce-wcp' ) . "</label>";
-			$html .= "<select name='dob_day' class=''>";
+				// account owner field
+				$html .= "<p class='form-row'>";
+				$html .= "<label>" . __( 'Date of Birth:', 'woocommerce-wcp' ) . "</label>";
+				$html .= "<input type='date' name='wcp_birthday' value='" . $today . "' class='form-control' />";
+				$html .= "</p>";
 
-			for ( $day = 31; $day > 0; $day -- ) {
-				$html .= "<option value='$day'> $day </option>";
-			}
+				if ( ( $this->_settings['payolution_terms'] == 'yes' && $this->_settings['invoice_provider'] == 'payolution' && $payment_code == 'invoice' ) ||
+				     ( $this->_settings['payolution_terms'] == 'yes' && $this->_settings['installment_provider'] == 'payolution' && $payment_code == 'installment' )
+				) {
 
-			$html .= "</select>";
+					$payolution_mid = urlencode( base64_encode( $this->_settings['payolution_mid'] ) );
 
-			$html .= "<select name='dob_month' class=''>";
-			for ( $month = 12; $month > 0; $month -- ) {
-				$html .= "<option value='$month'> $month </option>";
-			}
-			$html .= "</select>";
+					$consent_link = __( 'consent', 'woocommerce-wcp' );
 
-			$html .= "<select name='dob_year' class=''>";
-			for ( $year = date( "Y" ); $year > 1920; $year -- ) {
-				$html .= "<option value='$year'> $year </option>";
-			}
-			$html .= "</select>";
-			$html .= "</p>";
+					if ( strlen( $this->_settings['payolution_mid'] ) > 5 ) {
+						$consent_link = sprintf( '<a href="https://payment.payolution.com/payolution-payment/infoport/dataprivacyconsent?mId=%s" target="_blank">%s</a>',
+							$payolution_mid,
+							__( 'consent', 'woocommerce-wcp' ) );
+					}
 
+					$html .= "<p class='form-row'>";
 
-			if ( ($this->_settings['payolution_terms'] && $this->_settings['invoice_provider'] == 'payolution') ||
-			     ($this->_settings['payolution_terms'] && $this->_settings['installment_provider'] == 'payolution')) {
+					$html .= "<label><input type='checkbox' name='consent'>"
+					         . __( 'I agree that the data which are necessary for the liquidation of purchase on account and which are used to complete the identity and credit check are transmitted to payolution. My ',
+							'woocommerce-wcp' )
+					         . $consent_link
+					         . __( ' can be revoked at any time with effect for the future.',
+							'woocommerce-wcp' ) . "</label>";
 
-				$payolution_mid = urlencode( base64_encode( $this->_settings['payolution_mid'] ) );
-
-				$consent_link = __( 'consent', 'woocommerce-wcp' );
-
-				if ( strlen( $this->_settings['payolution_mid'] ) > 5 ) {
-					$consent_link = sprintf( '<a href="https://payment.payolution.com/payolution-payment/infoport/dataprivacyconsent?mId=%s" target="_blank">%s</a>',
-						$payolution_mid,
-						__( 'consent', 'woocommerce-wcp' ) );
+					$html .= "</p>";
 				}
 
-				$html .= "<p class='form-row'>";
+				$html .= "</fieldset>";
 
-				$html .= "<label><input type='checkbox' name='consent'>"
-				         . __( 'I agree that the data which are necessary for the liquidation of purchase on account and which are used to complete the identity and credit check are transmitted to payolution. My ', 'woocommerce-wcp' )
-				         . $consent_link
-				         . __(' can be revoked at any time with effect for the future.', 'woocommerce-wcp' ) . "</label>";
-
-				$html .= "</p>";
-			}
-
-			$html .= "</fieldset>";
-
-			return $html;
+				return $html;
 				break;
 			case 'eps':
 				$html = '<fieldset  class="wc-eps-form wc-payment-form">';
@@ -194,6 +187,41 @@ class WC_Gateway_WCP_Payments {
 				break;
 			default:
 				return;
+		}
+	}
+
+	/**
+	 * Validate payment methods with form fields
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param $payment_code
+	 * @param $data
+	 *
+	 * @return bool|string
+	 */
+	public function validate_payment( $payment_code, $data ) {
+		switch ( $payment_code ) {
+			case 'invoice':
+			case 'installment':
+				$max_date = ( date( 'Y' ) - 18 ) . "-" . date( 'm' ) . "-" . date( 'd' );
+				$errors   = [];
+
+				if ( $this->_settings['payolution_terms'] == 'yes' && $data['consent'] != 'on' ) {
+					$errors[] = "&bull; " . __( 'Please accept the consent terms!', 'woocommerce-wcp' );
+				}
+				if ( $data['wcp_birthday'] > $max_date ) {
+					$errors[] = "&bull; " . __( 'You have to be 18 years or older to use this payment.',
+							'woocommerce-wcp' );
+				}
+
+				return count( $errors ) == 0 ? true : join( "<br>", $errors );
+			case 'eps':
+				return true;
+			case 'idl':
+				return true;
+			default:
+				return true;
 		}
 	}
 }
