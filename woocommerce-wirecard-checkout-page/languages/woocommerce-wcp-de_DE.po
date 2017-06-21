@@ -247,23 +247,31 @@ msgstr "Geburtstag"
 
 ###############PAYMENTTYPES#################
 #: class-woocommerce-wcp-gateway.php:186
-msgid "Credit Card"
+msgid "select"
+msgstr "Select"
+
+#: class-woocommerce-wcp-gateway.php:186
+msgid "ccard"
 msgstr "Kreditkarte"
 
+#: class-woocommerce-wcp-gateway.php:186
+msgid "masterpass"
+msgstr "Masterpass"
+
 #: class-woocommerce-wcp-gateway.php:193
-msgid "Creditcard Mail Order / Telephone Order"
+msgid "ccard-moto"
 msgstr "Kreditkarte - Post / Telefonbestellung"
 
 #: class-woocommerce-wcp-gateway.php:200
-msgid "Maestro SecureCode"
+msgid "maestro"
 msgstr "Maestro SecureCode"
 
 #: class-woocommerce-wcp-gateway.php:207
-msgid "eps Online Bank Transfer"
+msgid "eps"
 msgstr "eps Online-Überweisung"
 
 #: class-woocommerce-wcp-gateway.php:214
-msgid "iDEAL"
+msgid "idl"
 msgstr "iDEAL"
 
 #: class-woocommerce-wcp-gateway.php:221
@@ -271,66 +279,62 @@ msgid "giropay"
 msgstr "giropay"
 
 #: class-woocommerce-wcp-gateway.php:226
-msgid "SOFORT banking"
+msgid "sofort"
 msgstr "SOFORT Überweisung"
 
 #: class-woocommerce-wcp-gateway.php:235
-msgid "paybox"
+msgid "pbx"
 msgstr "paybox"
 
 #: class-woocommerce-wcp-gateway.php:242
-msgid "paysafecard"
+msgid "psc"
 msgstr "paysafecard"
 
 #: class-woocommerce-wcp-gateway.php:249
-msgid "@QUICK"
+msgid "quick"
 msgstr "@QUICK"
 
 #: class-woocommerce-wcp-gateway.php:256
-msgid "PayPal"
+msgid "paypal"
 msgstr "PayPal"
 
 #: class-woocommerce-wcp-gateway.php:263
-msgid "SEPA Direct Debit"
+msgid "sepa"
 msgstr "SEPA Lastschrift"
 
 #: class-woocommerce-wcp-gateway.php:277
-msgid "Invoice"
+msgid "invoice"
 msgstr "Kauf auf Rechnung"
 
 #: class-woocommerce-wcp-gateway.php:282
 #: class-woocommerce-wcp-gateway.php:1053
-msgid "Installment"
+msgid "installment"
 msgstr "Kauf auf Raten"
 
 #: class-woocommerce-wcp-gateway.php:291
-msgid "Bancontact"
+msgid "bancontact_mistercash"
 msgstr "Bancontact"
 
 #: class-woocommerce-wcp-gateway.php:298
-msgid "Przelewy24"
+msgid "przelewy24"
 msgstr "Przelewy24"
 
 #: class-woocommerce-wcp-gateway.php:305
-msgid "moneta.ru"
+msgid "moneta"
 msgstr "moneta.ru"
 
 #: class-woocommerce-wcp-gateway.php:312
-msgid "POLi"
+msgid "poli"
 msgstr "POLi"
 
 #: class-woocommerce-wcp-gateway.php:319
-msgid "eKonto"
+msgid "ekonto"
 msgstr "eKonto"
 
-#: class-woocommerce-wcp-gateway.php:333
-msgid "mpass"
-msgstr "mpass"
-
 #: class-woocommerce-wcp-gateway.php:347
-msgid "Skrill Digital Wallet"
+msgid "skrillwallet"
 msgstr "Skrill Digital Wallet"
 
 #: class-woocommerce-wcp-gateway.php:350
-msgid "Trustly"
+msgid "trustly"
 msgstr "Trustly"

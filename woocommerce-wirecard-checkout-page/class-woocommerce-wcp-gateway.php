@@ -113,6 +113,18 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return void
 	 */
 	function init_form_fields() {
+		$countries = WC()->countries->countries;
+		$this->countries = array();
+		$this->countries['all'] = __('Select all', 'woocommerce-wcp');
+		if ( ! empty( $countries ) ) {
+			foreach ( $countries as $key => $val ) {
+			    $this->countries[$key] = $val;
+			}
+		}
+		$this->currency_code_options = get_woocommerce_currencies();
+		foreach ( $this->currency_code_options as $code => $name ) {
+			$this->currency_code_options[ $code ] = $name . ' (' . get_woocommerce_currency_symbol( $code ) . ')';
+		}
 		$this->form_fields = include('includes/settings-wcp.php');
 	}
 
@@ -833,84 +845,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string void
 	 */
 	protected function get_paymenttype_name( $code ) {
-		switch ( $code ) {
-			case 'select':
-				return __( 'Select', 'woocommerce-wcp' );
-
-			case 'ccard':
-				return __( 'Credit Card', 'woocommerce-wcp' );
-
-			case 'ccard-moto':
-				return __( 'Credit Card MoTo', 'woocommerce-wcp' );
-
-			case 'maestro':
-				return __( 'Maestro', 'woocommerce-wcp' );
-
-			case 'eps':
-				return __( 'eps Online Bank Transfer', 'woocommerce-wcp' );
-			case 'idl':
-				return __( 'iDEAL', 'woocommerce-wcp' );
-
-			case 'giropay':
-				return __( 'giropay', 'woocommerce-wcp' );
-
-			case 'sofortueberweisung':
-				return __( 'sofortueberweisung', 'woocommerce-wcp' );
-
-			case 'pbx':
-				return __( 'Mobile Phone Invoicing', 'woocommerce-wcp' );
-
-			case 'psc':
-				return __( 'paysafecard', 'woocommerce-wcp' );
-
-			case 'quick':
-				return __( '@QUICK', 'woocommerce-wcp' );
-
-			case 'paypal':
-				return __( 'PayPal', 'woocommerce-wcp' );
-
-			case 'elv':
-				return __( 'SEPA Direct Debit', 'woocommerce-wcp' );
-
-			case 'c2p':
-				return __( 'CLICK2PAY', 'woocommerce-wcp' );
-
-			case 'invoice':
-				return __( 'Invoice', 'woocommerce-wcp' );
-
-			case 'installment':
-				return __( 'Installment', 'woocommerce-wcp' );
-
-			case 'bancontact_mistercash':
-				return __( 'Bancontact/Mister Cash', 'woocommerce-wcp' );
-
-			case 'przelewy24':
-				return __( 'Przelewy24', 'woocommerce-wcp' );
-
-			case 'moneta':
-				return __( 'moneta.ru', 'woocommerce-wcp' );
-
-			case 'poli':
-				return __( 'POLi', 'woocommerce-wcp' );
-
-			case 'ekonto':
-				return __( 'eKonto', 'woocommerce-wcp' );
-
-			case 'instantbank':
-				return __( 'Trustly', 'woocommerce-wcp' );
-
-			case 'mpass':
-				return __( 'mpass', 'woocommerce-wcp' );
-
-			case 'skrilldirect':
-				return __( 'Skrill Direct', 'woocommerce-wcp' );
-
-			case 'skrillwallet':
-				return __( 'Skrill Digital Wallet', 'woocommerce-wcp' );
-
-			default:
-				return $code;
-		}
+		return __( $code, 'woocommerce-wcp' );
 	}
 
 	/**
