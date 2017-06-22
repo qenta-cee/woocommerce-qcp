@@ -674,6 +674,13 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				$client->setAutoDeposit( (bool) ( $this->get_option( 'auto_deposit' ) == 'yes' ) );
 			}
 
+			if ( $this->get_option( 'send_basket_data' ) == 'yes' ||
+			     ( $paymenttype == 'invoice' && $this->get_option( 'invoice_provider' ) != 'payolution' ) ||
+			     ( $paymenttype == 'installment' && $this->get_option( 'installment_provider' ) != 'payolution' )
+			) {
+				$client->setBasket( $this->get_shopping_basket() );
+			}
+
 			$client->wooOrderId = $order->get_id();
 			$response           = $client->initiate();
 			if ( $response->hasFailed() ) {
@@ -699,13 +706,14 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
      * Get billing/shipping address
      *
      * @since 2.2.0
+     * @access protected
      *
 	 * @param $order
 	 * @param string $address
 	 *
 	 * @return WirecardCEE_Stdlib_ConsumerData_Address
 	 */
-	private function get_consumer_data( $order, $address = 'billing' ) {
+	protected function get_consumer_data( $order, $address = 'billing' ) {
 		$consumer_address = 'billing';
 		$type             = WirecardCEE_Stdlib_ConsumerData_Address::TYPE_BILLING;
 		$cart             = new WC_Cart();
@@ -747,6 +755,68 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				return $billing_address;
 		}
 
+	}
+
+	/**
+	 * Generate shopping basket
+	 *
+	 * @since 2.2.0
+     * @access protected
+	 * @return WirecardCEE_Stdlib_Basket
+	 */
+	protected function get_shopping_basket() {
+		global $woocommerce;
+
+		$cart = $woocommerce->cart;
+		$basket = new WirecardCEE_Stdlib_Basket();
+
+		foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+			$article_nr = $cart_item['product_id'];
+			if ( $cart_item['data']->get_sku() != '' ) {
+				$article_nr = $cart_item['data']->get_sku();
+			}
+
+			$attachment_ids = $cart_item['data']->get_gallery_image_ids();
+			foreach ( $attachment_ids as $attachment_id ) {
+				$image_url = wp_get_attachment_image_url( $attachment_id );
+			}
+
+			$item            = new WirecardCEE_Stdlib_Basket_Item( $article_nr );
+			$item_net_amount = $cart_item['line_total'];
+			$item_tax_amount = $cart_item['line_tax'];
+			$item_quantity   = $cart_item['quantity'];
+
+			// Calculate amounts per unit
+			$item_unit_net_amount   = $item_net_amount / $item_quantity;
+			$item_unit_tax_amount   = $item_tax_amount / $item_quantity;
+			$item_unit_gross_amount = wc_format_decimal( $item_unit_net_amount + $item_unit_tax_amount,
+				wc_get_price_decimals() );
+
+			$item->setUnitGrossAmount( $item_unit_gross_amount )
+			     ->setUnitNetAmount( wc_format_decimal( $item_unit_net_amount, wc_get_price_decimals() ) )
+			     ->setUnitTaxAmount( wc_format_decimal( $item_unit_tax_amount, wc_get_price_decimals() ) )
+			     ->setUnitTaxRate( number_format( ( $item_unit_tax_amount / $item_unit_net_amount ), 2, '.', '' ) )
+			     ->setDescription( substr( strip_tags( $cart_item['data']->get_short_description() ), 0, 127 ) )
+			     ->setName( substr( strip_tags( $cart_item['data']->get_name() ), 0, 127 ) )
+			     ->setImageUrl( isset( $image_url ) ? $image_url : '' );
+
+			$basket->addItem( $item, $item_quantity );
+		}
+
+		// Add shipping to the basket
+		if ( isset( $cart->shipping_total ) && $cart->shipping_total > 0 ) {
+			$item = new WirecardCEE_Stdlib_Basket_Item( 'shipping' );
+			$item->setUnitGrossAmount( wc_format_decimal( $cart->shipping_total + $cart->shipping_tax_total,
+				wc_get_price_decimals() ) )
+			     ->setUnitNetAmount( wc_format_decimal( $cart->shipping_total, wc_get_price_decimals() ) )
+			     ->setUnitTaxAmount( wc_format_decimal( $cart->shipping_tax_total, wc_get_price_decimals() ) )
+			     ->setUnitTaxRate( number_format( ( $cart->shipping_tax_total / $cart->shipping_total ), 2, '.', '' ) )
+			     ->setName( 'Shipping' )
+			     ->setDescription( 'Shipping' );
+			$basket->addItem( $item );
+		}
+
+		return $basket;
 	}
 
 	/**
