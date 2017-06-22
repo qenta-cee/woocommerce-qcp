@@ -147,6 +147,15 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		</div>
 		<hr/>
+        <style>
+            .form-table td {
+                padding:0px;
+            }
+            .form-table th {
+                padding:0px;
+            }
+
+        </style>
 		<table class="form-table">
 			<?php
 			// Generate the HTML For the settings form.

@@ -217,6 +217,21 @@ return array(
 		'description' => __( 'Display Text on the Wirecard Checkout Page.', 'woocommerce-wcp' ),
 		'desc_tip'    => false
 	),
+	'payolution_mid' => array(
+		'title' => __('payolution mID', 'woocommerce-wcp'),
+		'type' => 'text',
+		'default' => '',
+		'description' => __( 'Your payolution merchant ID, non-base64-encoded.', 'woocommerce-wcp' ),
+		'desc_tip' => false
+	),
+	'payolution_terms' => array(
+		'title' => __('payolution terms', 'woocommerce-wcp'),
+		'type' => 'checkbox',
+		'default' => 'no',
+		'description' => sprintf( __( 'Consumer must accept payolution terms during the checkout process. <a href="%s">More information</a>', 'woocommerce-wcp'), 'https://guides.wirecard.at/payment_methods:invoice:payolution' ),
+		'desc_tip' => false,
+		'label' => __('Enable/Disable', 'woocommerce-wcp')
+	),
 	'debug'                    => array(
 		'type'    => 'checkbox',
 		'default' => 'no',
@@ -264,17 +279,6 @@ return array(
 		'title'   => __( 'Iframe', 'woocommerce-wcp' ),
 		'default' => 'no',
 		'label'   => __( 'Enable/Disable', 'woocommerce-wcp' )
-	),
-	'payolution_terms' => array(
-		'title' => __('payolution terms', 'woocommerce-wcp'),
-		'type' => 'checkbox',
-		'default' => 'no',
-		'label' => __('Enable/Disable', 'woocommerce-wcp')
-	),
-	'payolution_mid' => array(
-		'title' => __('payolution mID', 'woocommerce-wcp'),
-		'type' => 'text',
-		'default' => ''
 	),
 	'additional_settings_end' => array(
 		'title' => '<hr/>',
