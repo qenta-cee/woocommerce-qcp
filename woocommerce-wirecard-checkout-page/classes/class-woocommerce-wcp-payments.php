@@ -207,7 +207,7 @@ class WC_Gateway_WCP_Payments {
 				$max_date = ( date( 'Y' ) - 18 ) . "-" . date( 'm' ) . "-" . date( 'd' );
 				$errors   = [];
 
-				if ( $this->_settings['payolution_terms'] == 'yes' && $data['consent'] != 'on' ) {
+				if ( $this->_settings['payolution_terms'] == 'yes' && $data['consent'] != 'on' && $this->_settings[$payment_code.'_provider'] == 'payolution' ) {
 					$errors[] = "&bull; " . __( 'Please accept the consent terms!', 'woocommerce-wcp' );
 				}
 				if ( $data['wcp_birthday'] > $max_date ) {

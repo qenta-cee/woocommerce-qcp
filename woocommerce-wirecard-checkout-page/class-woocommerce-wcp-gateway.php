@@ -661,12 +661,16 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			       ->setImageUrl( $this->get_option( 'image_url' ) )
 			       ->setConsumerData( $consumerData )
 			       ->setDisplayText( $this->get_option( 'display_text' ) )
-			       ->setCustomerStatement( $this->get_customer_statement( $order ) )
+			       ->setOrderReference( $this->get_order_reference( $order ) )
+			       ->setCustomerStatement( $this->get_customer_statement( $order, $paymenttype ) )
 			       ->setDuplicateRequestCheck( false )
 			       ->setMaxRetries( $this->get_option( 'max_retries' ) )
 			       ->createConsumerMerchantCrmId( $order->get_billing_email() )
 			       ->setWindowName( WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME );
 
+			if ( $paymenttype == WirecardCEE_QPay_PaymentType::MASTERPASS ) {
+				$client->setShippingProfile( 'NO_SHIPPING' );
+			}
 			if ( $financial_inst !== null ) {
 				$client->setFinancialInstitution( $financial_inst );
 			}
@@ -675,8 +679,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			}
 
 			if ( $this->get_option( 'send_basket_data' ) == 'yes' ||
-			     ( $paymenttype == 'invoice' && $this->get_option( 'invoice_provider' ) != 'payolution' ) ||
-			     ( $paymenttype == 'installment' && $this->get_option( 'installment_provider' ) != 'payolution' )
+			     ( $paymenttype == WirecardCEE_QPay_PaymentType::INVOICE && $this->get_option( 'invoice_provider' ) != 'payolution' ) ||
+			     ( $paymenttype == WirecardCEE_QPay_PaymentType::INSTALLMENT && $this->get_option( 'installment_provider' ) != 'payolution' )
 			) {
 				$client->setBasket( $this->get_shopping_basket() );
 			}
@@ -850,17 +854,39 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	protected function get_order_description( $order ) {
-		return sprintf( 'user_id:%s order_id:%s', $order->get_user_id(), $order->get_id() );
+		return sprintf( '%s %s %s', $order->get_billing_email(), $order->get_billing_first_name(),
+			$order->get_billing_last_name() );
 	}
 
 	/**
+	 * Generate order reference
 	 *
 	 * @param $order WC_Order
 	 *
+	 * @since 2.2.0
 	 * @return string
 	 */
-	protected function get_customer_statement( $order ) {
-		return sprintf( '%s #%06s', $this->get_vendor(), $order->get_order_number() );
+	protected function get_order_reference( $order ) {
+		return sprintf( '%010s', substr( $order->get_id(), - 10 ) );
+	}
+
+	/**
+	 * Generate customer statement
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param $order
+	 * @param $payment_type
+	 *
+	 * @return string
+	 */
+	protected function get_customer_statement( $order, $payment_type ) {
+		$shop_name = sprintf( '%9s', substr( get_bloginfo( 'name' ), - 9 ) );
+		$order_reference = $this->get_order_reference( $order );
+		if ( $payment_type == WirecardCEE_QMore_PaymentType::POLI ) {
+			return $shop_name;
+		}
+		return $shop_name . ' ' . $order_reference;
 	}
 
 	/**
