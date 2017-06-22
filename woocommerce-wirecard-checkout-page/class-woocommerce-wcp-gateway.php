@@ -619,17 +619,25 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$consumerData = new WirecardCEE_Stdlib_ConsumerData();
 			$consumerData->setUserAgent( $_SERVER['HTTP_USER_AGENT'] )->setIpAddress( $_SERVER['REMOTE_ADDR'] );
 
-			//@TODO check shipping and billing
-			if ( $this->get_option( 'send_consumer_shipping' ) == 'yes' || in_array(
-					$paymenttype,
-					Array(
-						WirecardCEE_QPay_PaymentType::INVOICE,
-						WirecardCEE_QPay_PaymentType::INSTALLMENT
-					)
-				)
-			) {
-				$this->set_consumer_information( $order, $consumerData, $birthday );
+			if ( $birthday !== null ) {
+				$date = DateTime::createFromFormat( 'Y-m-d', $birthday );
+				$consumerData->setBirthDate( $date );
 			}
+			$consumerData->setEmail( $order->get_billing_email() );
+
+			if ( $this->get_option( 'send_consumer_shipping' ) == 'yes' ||
+			     in_array( $paymenttype,
+				     Array( WirecardCEE_QPay_PaymentType::INVOICE, WirecardCEE_QPay_PaymentType::INSTALLMENT ) )
+			) {
+				$consumerData->addAddressInformation( $this->get_consumer_data( $order, 'shipping' ) );
+			}
+			if ( $this->get_option( 'send_consumer_billing' ) == 'yes' ||
+			     in_array( $paymenttype,
+				     Array( WirecardCEE_QPay_PaymentType::INVOICE, WirecardCEE_QPay_PaymentType::INSTALLMENT ) )
+			) {
+				$consumerData->addAddressInformation( $this->get_consumer_data( $order, 'billing' ) );
+			}
+
 			$returnUrl = add_query_arg( 'wc-api', 'WC_Gateway_WCP', home_url( '/', is_ssl() ? 'https' : 'http' ) );
 
 			$version = WirecardCEE_QPay_FrontendClient::generatePluginVersion(
@@ -688,51 +696,57 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Fill additional consumer information
+     * Get billing/shipping address
+     *
+     * @since 2.2.0
+     *
+	 * @param $order
+	 * @param string $address
 	 *
-	 * @param WC_Order $order
-	 * @param WirecardCEE_Stdlib_ConsumerData $consumerData
+	 * @return WirecardCEE_Stdlib_ConsumerData_Address
 	 */
-	protected function set_consumer_information( $order, WirecardCEE_Stdlib_ConsumerData $consumerData, $birthday ) {
-		if ( $birthday !== null ) {
-			$date = DateTime::createFromFormat( 'Y-m-d', $birthday );
-			$consumerData->setBirthDate( $date );
-		}
-
-		$consumerData->setEmail( $order->get_billing_email() );
-
-		$billingAddress = new WirecardCEE_Stdlib_ConsumerData_Address( WirecardCEE_Stdlib_ConsumerData_Address::TYPE_BILLING );
-
-		$billingAddress->setFirstname( $order->get_billing_first_name() )
-		               ->setLastname( $order->get_billing_last_name() )
-		               ->setAddress1( $order->get_billing_address_1() )
-		               ->setAddress2( $order->get_billing_address_2() )
-		               ->setCity( $order->get_billing_city() )
-		               ->setZipCode( $order->get_billing_postcode() )
-		               ->setCountry( $order->get_billing_country() )
-		               ->setPhone( $order->get_billing_phone() )
-		               ->setState( $order->get_billing_state() );
-
-		$cart = new WC_Cart();
+	private function get_consumer_data( $order, $address = 'billing' ) {
+		$consumer_address = 'billing';
+		$type             = WirecardCEE_Stdlib_ConsumerData_Address::TYPE_BILLING;
+		$cart             = new WC_Cart();
 		$cart->get_cart_from_session();
 
 		//check if shipping address is different
-		if ( $cart->needs_shipping_address() ) {
-			$shippingAddress = new WirecardCEE_Stdlib_ConsumerData_Address( WirecardCEE_Stdlib_ConsumerData_Address::TYPE_SHIPPING );
+		if ( $cart->needs_shipping_address() && $address == 'shipping' ) {
+			$consumer_address = 'shipping';
+			$type             = WirecardCEE_Stdlib_ConsumerData_Address::TYPE_SHIPPING;
+		}
+		switch ( $consumer_address ) {
+			case 'shipping':
+				$shippingAddress = new WirecardCEE_Stdlib_ConsumerData_Address( $type );
 
-			$shippingAddress->setFirstname( $order->get_shipping_first_name() )
-			                ->setLastname( $order->get_shipping_last_name() )
-			                ->setAddress1( $order->get_shipping_address_1() )
-			                ->setAddress2( $order->get_shipping_address_2() )
-			                ->setCity( $order->get_shipping_city() )
-			                ->setZipCode( $order->get_shipping_postcode() )
-			                ->setCountry( $order->get_shipping_country() )
-			                ->setState( $order->get_shipping_state() );
-		} else {
-			$shippingAddress = $billingAddress;
+				$shippingAddress->setFirstname( $order->get_shipping_first_name() )
+				                ->setLastname( $order->get_shipping_last_name() )
+				                ->setAddress1( $order->get_shipping_address_1() )
+				                ->setAddress2( $order->get_shipping_address_2() )
+				                ->setCity( $order->get_shipping_city() )
+				                ->setZipCode( $order->get_shipping_postcode() )
+				                ->setCountry( $order->get_shipping_country() )
+				                ->setState( $order->get_shipping_state() );
+
+				return $shippingAddress;
+			case 'billing':
+			default:
+				$billing_address = new WirecardCEE_Stdlib_ConsumerData_Address( $type );
+
+				$billing_address->setFirstname( $order->get_billing_first_name() )
+				                ->setLastname( $order->get_billing_last_name() )
+				                ->setAddress1( $order->get_billing_address_1() )
+				                ->setAddress2( $order->get_billing_address_2() )
+				                ->setCity( $order->get_billing_city() )
+				                ->setZipCode( $order->get_billing_postcode() )
+				                ->setCountry( $order->get_billing_country() )
+				                ->setPhone( $order->get_billing_phone() )
+				                ->setState( $order->get_billing_state() );
+
+				return $billing_address;
 		}
 
-		$consumerData->addAddressInformation( $billingAddress )->addAddressInformation( $shippingAddress );
 	}
 
 	/**
