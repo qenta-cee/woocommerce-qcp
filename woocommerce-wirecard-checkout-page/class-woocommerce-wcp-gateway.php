@@ -191,9 +191,16 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		}
 
 		$birthday = null;
-		if (isset($_POST['wcp_birthday'])) {
-		    $birthday = $_POST['wcp_birthday'];
-        }
+		if ( isset( $_POST['wcp_birthday'] ) ) {
+			$birthday = $_POST['wcp_birthday'];
+		}
+		$financial_inst = null;
+		if ( $paymenttype == 'eps' ) {
+			$financial_inst = $_POST['wcp_eps_financialInstitution'];
+		}
+		if ( $paymenttype == 'idl' ) {
+			$financial_inst = $_POST['wcp_idl_financialInstitution'];
+		}
 
 		if ( $this->use_iframe ) {
 			WC()->session->wirecard_checkout_page_type = $paymenttype;
@@ -210,7 +217,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				'redirect' => $page_url
 			);
 		} else {
-			$redirectUrl = $this->initiate_payment( $order, $paymenttype, $birthday );
+			$redirectUrl = $this->initiate_payment( $order, $paymenttype, $birthday, $financial_inst );
 			if ( ! $redirectUrl ) {
 				return;
 			}
@@ -232,10 +239,19 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$order = new WC_Order( $order_id );
 
 		$birthday = null;
-		if (isset($_POST['wcp_birthday'])) {
+		if ( isset( $_POST['wcp_birthday'] ) ) {
 			$birthday = $_POST['wcp_birthday'];
 		}
-		$iframeUrl = $this->initiate_payment( $order, WC()->session->wirecard_checkout_page_type, $birthday );
+		$financial_inst = null;
+		if ( WC()->session->wirecard_checkout_page_type == 'eps' ) {
+			$financial_inst = $_POST['wcp_eps_financialInstitution'];
+		}
+		if ( WC()->session->wirecard_checkout_page_type == 'idl' ) {
+			$financial_inst = $_POST['wcp_idl_financialInstitution'];
+		}
+
+		$iframeUrl = $this->initiate_payment( $order, WC()->session->wirecard_checkout_page_type, $birthday,
+			$financial_inst );
 		?>
 		<iframe src="<?php echo $iframeUrl ?>"
 		        name="<?php echo WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME ?>" width="100%"
@@ -589,7 +605,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 * @throws Exception
 	 */
-	protected function initiate_payment( $order, $paymenttype, $birthday ) {
+	protected function initiate_payment( $order, $paymenttype, $birthday, $financial_inst ) {
 		if ( isset( WC()->session->wirecard_checkout_page_redirect_url ) && WC()->session->wirecard_checkout_page_redirect_url['id'] == $order->get_id() ) {
 			return WC()->session->wirecard_checkout_page_redirect_url['url'];
 		}
@@ -643,6 +659,9 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			       ->createConsumerMerchantCrmId( $order->get_billing_email() )
 			       ->setWindowName( WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME );
 
+			if ( $financial_inst !== null ) {
+				$client->setFinancialInstitution( $financial_inst );
+			}
 			if ( ( $this->get_option( 'auto_deposit' ) == 'yes' ) ) {
 				$client->setAutoDeposit( (bool) ( $this->get_option( 'auto_deposit' ) == 'yes' ) );
 			}

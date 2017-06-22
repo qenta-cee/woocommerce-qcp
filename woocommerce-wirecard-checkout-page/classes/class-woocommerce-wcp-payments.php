@@ -217,9 +217,18 @@ class WC_Gateway_WCP_Payments {
 
 				return count( $errors ) == 0 ? true : join( "<br>", $errors );
 			case 'eps':
-				return true;
+				$errors = [];
+				if ( $data['wcp_eps_financialInstitution'] == '' ) {
+					$errors[] = "&bull; " . __( 'Financial institution must not be empty.', 'woocommerce-wcp' );
+				}
+
+				return count( $errors ) == 0 ? true : join( "<br>", $errors );
 			case 'idl':
-				return true;
+				if ( $data['wcp_idl_financialInstitution'] == '' ) {
+					$errors[] = "&bull; " . __( 'Financial institution must not be empty.', 'woocommerce-wcp' );
+				}
+
+				return count( $errors ) == 0 ? true : join( "<br>", $errors );
 			default:
 				return true;
 		}
