@@ -224,4 +224,182 @@ class WC_Gateway_WCP_Payments {
 				return true;
 		}
 	}
+
+	/**
+	 * Basic risk check for specific payment methods
+	 *
+	 * @since 2.2.0
+	 *
+	 * @return boolean
+	 */
+	public function get_risk( $payment_code ) {
+		switch ( $payment_code ) {
+			case 'invoice':
+				return $this->is_available_invoice();
+			case 'installment':
+				return $this->is_available_installment();
+			default:
+				return true;
+		}
+	}
+
+	/**
+	 * Risk management for invoice
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 *
+	 * @return bool
+	 */
+	private function is_available_invoice() {
+		global $woocommerce;
+		$customer = $woocommerce->customer;
+
+		// if the currency isn't allowed
+		if ( ! is_array( $this->_settings['invoice_currencies'] ) || ! in_array( get_woocommerce_currency(),
+				$this->_settings['invoice_currencies'] )
+		) {
+			return false;
+		}
+		$cart = new WC_Cart();
+		$cart->get_cart_from_session();
+		// if cart total is smaller than set limit
+		if ( $cart->total <= floatval( $this->_settings['invoice_min_amount'] ) ) {
+			return false;
+		}
+		// if cart total is greater than set limit
+		if ( floatval( $this->_settings['invoice_max_amount'] ) != 0 && $cart->total >= floatval( $this->_settings['invoice_max_amount'] ) ) {
+			return false;
+		}
+
+		foreach ( $cart->get_cart() as $hash => $item ) {
+			$product = new WC_Product( $item['product_id'] );
+			// if the product is in the "digital goods" category, do not show invoice as payment method
+			if ( $product->is_downloadable() || $product->is_virtual() ) {
+				return false;
+			}
+		}
+
+		// check if shipping country is allowed
+		if ( ! in_array( $customer->get_shipping_country(),
+				$this->_settings['invoice_shipping_countries'] ) && ! empty( $customer->get_shipping_country() )
+		) {
+			return false;
+		}
+		// check if billing country is allowed
+		if ( ! in_array( $customer->get_billing_country(),
+				$this->_settings['invoice_billing_countries'] ) && ! empty( $customer->get_billing_country() )
+		) {
+			return false;
+		}
+
+		if ( $this->_settings['invoice_provider'] == 'payolution' && $this->_settings['invoice_shipping'] == 'yes' ) {
+			return $this->compare_billing_shipping_address();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Risk management for installment
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 *
+	 * @return bool
+	 */
+	private function is_available_installment() {
+		global $woocommerce;
+		$customer = $woocommerce->customer;
+
+		// if the currency isn't allowed
+		if ( ! is_array( $this->_settings['installment_currencies'] ) || ! in_array( get_woocommerce_currency(),
+				$this->_settings['installment_currencies'] )
+		) {
+			return false;
+		}
+		$cart = new WC_Cart();
+		$cart->get_cart_from_session();
+		// if cart total is smaller than set limit
+		if ( $cart->total <= floatval( $this->_settings['installment_min_amount'] ) ) {
+			return false;
+		}
+		// if cart total is greater than set limit
+		if ( floatval( $this->_settings['installment_max_amount'] ) != 0 && $cart->total >= floatval( $this->_settings['installment_max_amount'] ) ) {
+			return false;
+		}
+
+		foreach ( $cart->get_cart() as $hash => $item ) {
+			$product = new WC_Product( $item['product_id'] );
+			// if the product is in the "digital goods" category, do not show invoice as payment method
+			if ( $product->is_downloadable() || $product->is_virtual() ) {
+				return false;
+			}
+		}
+
+		// check if shipping country is allowed
+		if ( ! in_array( $customer->get_shipping_country(),
+				$this->_settings['installment_shipping_countries'] ) && ! empty( $customer->get_shipping_country() )
+		) {
+			return false;
+		}
+		// check if billing country is allowed
+		if ( ! in_array( $customer->get_billing_country(),
+				$this->_settings['installment_billing_countries'] ) && ! empty( $customer->get_billing_country() )
+		) {
+			return false;
+		}
+
+		if ( $this->_settings['installment_provider'] == 'payolution' && $this->_settings['installment_shipping'] == 'yes' ) {
+			return $this->compare_billing_shipping_address();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Compares billing and shipping address returns false if they aren't identical
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 *
+	 * @return bool
+	 */
+	private function compare_billing_shipping_address() {
+		global $woocommerce;
+		$customer = $woocommerce->customer;
+		$fields   = array(
+			'first_name',
+			'last_name',
+			'address_1',
+			'address_2',
+			'city',
+			'country',
+			'postcode',
+			'state'
+		);
+		foreach ( $fields as $f ) {
+			$m1 = "get_billing_$f";
+			$m2 = "get_shipping_$f";
+
+			$f1 = call_user_func(
+				array(
+					$customer,
+					$m1
+				)
+			);
+
+			$f2 = call_user_func(
+				array(
+					$customer,
+					$m2
+				)
+			);
+			if ( $f1 != $f2 && ! empty( $f2 ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }

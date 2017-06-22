@@ -327,7 +327,7 @@ return array(
 		'title' => __('Accepted currencies', 'woocommerce-wcp'),
 		'type' => 'multiselect',
 		'class' => 'wc-enhanced-select',
-		'default' => 'EUR',
+		'default' => array('EUR'),
 		'options' => $this->currency_code_options
 	),
 	'invoice_min_amount'       => array(
@@ -386,7 +386,7 @@ return array(
 		'title' => __('Accepted currencies', 'woocommerce-wcp'),
 		'type' => 'multiselect',
 		'class' => 'wc-enhanced-select',
-		'default' => 'EUR',
+		'default' => array('EUR'),
 		'options' => $this->currency_code_options
 	),
 	'installment_min_amount'   => array(

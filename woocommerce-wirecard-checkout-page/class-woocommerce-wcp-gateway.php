@@ -64,7 +64,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$this->description = 'Wirecard description to payment maybe picture?'; // frontend description
 		$this->debug       = $this->settings['debug'] == 'yes';
 		$this->use_iframe  = $this->get_option( 'use_iframe' ) == 'yes';
-		$this->enabled = count( $this->get_enabled_paymenttypes() ) > 0 ? "yes" : "no";
+		$this->enabled = count( $this->get_enabled_paymenttypes(false ) ) > 0 ? "yes" : "no";
 
 		// Hooks
 		add_action(
@@ -118,8 +118,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			    $this->countries[$key] = $val;
 			}
 		}
-		$this->currency_code_options = get_woocommerce_currencies();
-		foreach ( $this->currency_code_options as $code => $name ) {
+		$this->currency_code_options = array();
+		foreach ( get_woocommerce_currencies() as $code => $name ) {
 			$this->currency_code_options[ $code ] = $name . ' (' . get_woocommerce_currency_symbol( $code ) . ')';
 		}
 		$this->form_fields = include('includes/settings-wcp.php');
@@ -521,7 +521,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 *
 	 * @return array
 	 */
-	protected function get_enabled_paymenttypes() {
+	protected function get_enabled_paymenttypes($is_on_payment = true) {
 		$types = array();
 		foreach ( $this->settings as $k => $v ) {
 			if ( preg_match( '/^pt_(.+)$/', $k, $parts ) ) {
@@ -529,19 +529,13 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 					$type        = new stdClass();
 					$type->code  = $parts[1];
 					$type->label = $this->get_paymenttype_name( $type->code );
-					/*$method_name = 'check_paymenttype_' . $type->code;
 
-					if ( method_exists( $this, $method_name ) ) {
-						if ( ! call_user_func(
-							array(
-								$this,
-								$method_name
-							)
-						)
-						) {
+					if ( method_exists( $this->_payments, 'get_risk' ) && $is_on_payment ) {
+						$riskvalue = $this->_payments->get_risk( $type->code );
+						if ( ! $riskvalue ) {
 							continue;
 						}
-					}*/
+					}
 					$types[] = $type;
 				}
 			}
@@ -569,58 +563,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Check whether invoice is allowed or not
-	 *
-	 * @return bool
-	 */
-	/*function check_paymenttype_invoice() {
-		global $woocommerce;
-		$customer = $woocommerce->customer;
-
-		$fields = array(
-			'first_name',
-			'last_name',
-			'address',
-			'address_2',
-			'city',
-			'country',
-			'postcode',
-			'state'
-		);
-
-		foreach ( $fields as $field ) {
-			$billing  = "get_billing_$field";
-			$shipping = "get_shipping_$field";
-
-			$billing_value  = call_user_func( array( $customer, $billing ) );
-			$shipping_value = call_user_func( array( $customer, $shipping ) );
-
-			if ( $billing_value != $shipping_value ) {
-				return false;
-			}
-		}
-
-		if ( get_woocommerce_currency() != 'EUR' ) {
-			return false;
-		}
-
-		$cart = new WC_Cart();
-		$cart->get_cart_from_session();
-
-		$total = $cart->total;
-		if ( (int) $this->get_option( 'invoice_min_amount' ) && (int) $this->get_option( 'invoice_min_amount' ) > $total ) {
-			return false;
-		}
-
-		if ( (int) $this->get_option( 'invoice_max_amount' ) && (int) $this->get_option( 'invoice_max_amount' ) < $total ) {
-			return false;
-		}
-
-		return true;
-	}*/
-
-
-	/**
 	 * Basic check if address is empty
 	 *
 	 * @since 1.2.2
@@ -639,57 +581,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		return true;
 	}
-
-	/**
-	 * Check whether installment is allowed or not
-	 *
-	 * @return bool
-	 */
-	/*function check_paymenttype_installment() {
-		global $woocommerce;
-		$customer = $woocommerce->customer;
-
-		$fields = array(
-			'first_name',
-			'last_name',
-			'address',
-			'address_2',
-			'city',
-			'country',
-			'postcode',
-			'state'
-		);
-
-		foreach ( $fields as $field ) {
-			$billing  = "get_billing_$field";
-			$shipping = "get_shipping_$field";
-
-			$billing_value  = call_user_func( array( $customer, $billing ) );
-			$shipping_value = call_user_func( array( $customer, $shipping ) );
-
-			if ( $billing_value != $shipping_value ) {
-				return false;
-			}
-		}
-
-		if ( get_woocommerce_currency() != 'EUR' ) {
-			return false;
-		}
-
-		$cart = new WC_Cart();
-		$cart->get_cart_from_session();
-
-		$total = $cart->total;
-		if ( (int) $this->get_option( 'installment_min_amount' ) && (int) $this->get_option( 'installment_min_amount' ) > $total ) {
-			return false;
-		}
-
-		if ( (int) $this->get_option( 'installment_max_amount' ) && (int) $this->get_option( 'installment_max_amount' ) < $total ) {
-			return false;
-		}
-
-		return true;
-	}*/
 
 	/**
 	 * @param $order
