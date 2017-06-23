@@ -110,7 +110,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	function init_form_fields() {
 		$countries = WC()->countries->countries;
 		$this->countries = array();
-		$this->countries['all'] = __('Select all', 'woocommerce-wcp');
 		if ( ! empty( $countries ) ) {
 			foreach ( $countries as $key => $val ) {
 			    $this->countries[$key] = $val;
