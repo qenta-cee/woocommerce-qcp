@@ -129,4 +129,14 @@ class WC_Gateway_WCP_Config {
 
 		return $parts[0];
 	}
+
+	/**
+	 * Return configured secret
+	 *
+	 * @return string
+	 */
+	public function get_secret() {
+		$config = $this->get_client_config();
+		return $config['SECRET'];
+	}
 }

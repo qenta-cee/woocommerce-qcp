@@ -17,171 +17,323 @@ msgstr "Wirecard Checkout Page"
 
 #: class-woocommerce-wcp-gateway.php:39
 msgid ""
-"Wirecard CEE is a popular payment service provider (PSP) and has connections "
+"Wirecard is a popular payment service provider (PSP) and has connections "
 "with over 20 national and international currencies. "
 msgstr ""
-"Wirecard CEE Österreichs marktführender Payment-Service-Provider (PSP) und hat Anbindungen an über 20 nationale und internationale Zahlungsmittel."
-"Wirecard CEE ist Teil des Wirecard-Konzerns und Kompetenzzentrum für Österreich und die CEE-Märkte (Central and Eastern Europe)."
+"Wirecard Österreichs marktführender Payment-Service-Provider (PSP) und hat Anbindungen an über 20 nationale und internationale Zahlungsmittel."
 
-#: class-woocommerce-wcp-gateway.php:79
+#: settings-wcp.php:1
 msgid "Enable/Disable"
-msgstr "Aktiviern/Deaktivieren"
-
-#: class-woocommerce-wcp-gateway.php:81
-msgid "Enable Wirecard Checkout Page"
-msgstr "Wirecard Checkout Page aktivieren"
-
-#: class-woocommerce-wcp-gateway.php:85
-msgid "Title"
-msgstr "Titel"
-
-#: class-woocommerce-wcp-gateway.php:87
-msgid "This controls the title which the user sees during checkout."
-msgstr "Legt den Titel fest, den der Kunde während des Checkout sieht."
+msgstr "Aktivieren/Deaktivieren"
 
 #: class-woocommerce-wcp-gateway.php:88
 msgid "Wirecard"
 msgstr "Wirecard"
 
-#: class-woocommerce-wcp-gateway.php:92
-msgid "Description"
-msgstr "Beschreibung"
+############# Config ###########################
 
-#: class-woocommerce-wcp-gateway.php:94
-msgid "This controls the description which the user sees during checkout."
-msgstr "Legt die Beschreibung fest, die der Kunde während des Checkout sieht."
+######## access data ########
+#: settings-wcp.php:11
+msgid "Access data"
+msgstr "Zugangsdaten"
 
-#: class-woocommerce-wcp-gateway.php:95
-msgid "Pay via Wirecard Checkout Page"
-msgstr "Bezahlung via Wirecard Checkout Page"
+#: settings-wcp.php:13
+msgid "Enter access data for using Wirecard Checkout Page."
+msgstr "Geben Sie ihre Zugangsdaten ein um Wirecard Checkout Page zu nutzen."
 
-#: class-woocommerce-wcp-gateway.php:101
-msgid "Debug Log"
-msgstr "Protokolldatei"
+#: settings-wcp.php:16
+msgid "Configuration"
+msgstr "Konfiguration"
 
-#: class-woocommerce-wcp-gateway.php:102
-msgid "Log Wirecard Checkout Page events."
-msgstr "Wirecard Checkout Page Ereignisse werden in eine Logdatei geschrieben."
+#: settings-wcp.php:19
+msgid "For integration, select predefined configuration settings or 'Production' for live systems"
+msgstr "Zum Testen der Integration eine vordefinierte Konfiguration auswählen. Für Produktivsysteme "Production" auswählen."
 
-#: class-woocommerce-wcp-gateway.php:106
-msgid "Customer Id"
-msgstr "Kundennummer"
+#: settings-wcp.php:31
+msgid "Customer ID"
+msgstr "Customer ID"
 
-#: class-woocommerce-wcp-gateway.php:109
-msgid "Wirecard CEE Customer Id."
-msgstr "Wirecard CEE Kundennummer"
+#: settings-wcp.php:34
+msgid "Customer number you received from Wirecard (customerId, i.e. D2#####). <a href="%s">More information</a>"
+msgstr "Ihre Wirecard-Kundennummer (customerId, im Format D2#####). <a href="%s">Weitere Informationen</a>"
 
-#: class-woocommerce-wcp-gateway.php:113
-msgid "Shop Id"
-msgstr "Shop Id"
+#: settings-wcp.php:39
+msgid "Shop ID"
+msgstr "Shop ID"
 
-#: class-woocommerce-wcp-gateway.php:116
-msgid "Wirecard CEE Shop Id."
-msgstr "Wirecard CEE Shop Id."
+#: settings-wcp.php:42
+msgid "Shop identifier in case of more than one shop. <a href="%s">More information</a>"
+msgstr "Shop-Kennung bei mehreren Onlineshops. <a href="%s">Weitere Informationen</a>"
 
-#: class-woocommerce-wcp-gateway.php:120
+#: settings-wcp.php:47
 msgid "Secret"
 msgstr "Secret"
 
-#: class-woocommerce-wcp-gateway.php:123
-msgid "Wirecard CEE Secret."
-msgstr "Preshared Key zur Signierung der übertragenen Parameter"
+#: settings-wcp.php:50
+msgid "String which you received from Wirecard for signing and validating data to prove their authenticity. <a href="%s">More information</a>"
+msgstr "Geheime Zeichenfolge, die Sie von Wirecard erhalten haben, zum Signieren und Validieren von Daten zur Prüfung der Authentizität. <a href="%s">Weitere Informationen</a>"
 
-#: class-woocommerce-wcp-gateway.php:127
-msgid "Service Url"
-msgstr "Service Url"
+#: settings-wcp.php:55
+msgid "URL to contact page"
+msgstr "URL zur Kontakt-Seite"
 
-#: class-woocommerce-wcp-gateway.php:130
-msgid ""
-"Backlink on the Wirecard Checkout Page to your shop, usualy links to contact "
-"or imprint page."
-msgstr "URL Ihrer Kontakt-/Impressumsseite."
+#: settings-wcp.php:58
+msgid "URL to web page containing your contact information (imprint)."
+msgstr "URL der Kontakt-Seite (Impressum) des Onlineshops."
 
-#: class-woocommerce-wcp-gateway.php:134
-msgid "Image Url"
-msgstr "Bild Url"
+######## payment methods ########
 
-#: class-woocommerce-wcp-gateway.php:137
-msgid ""
-"Image Url for displaying an image on the Wirecard Checkout Page (95x65 "
-"pixels preferred)."
+#: settings-wcp.php:69
+msgid "Payment methods"
+msgstr "Zahlungsmittel"
+
+#: settings-wcp.php:72
+msgid "Enable your desired payment methods."
+msgstr "Aktivieren Sie ihre gewünschten Zahlungsmittel."
+
+#: settings-wcp.php:76
+msgid "select"
+msgstr "Select"
+
+#: settings-wcp.php:81
+msgid "ccard"
+msgstr "Kreditkarte"
+
+#: settings-wcp.php:86
+msgid "masterpass"
+msgstr "Masterpass"
+
+#: settings-wcp.php:91
+msgid "ccard-moto"
+msgstr "Kreditkarte - Post / Telefonbestellung"
+
+#: settings-wcp.php:96
+msgid "maestro"
+msgstr "Maestro SecureCode"
+
+#: settings-wcp.php:101
+msgid "eps"
+msgstr "eps Online-Überweisung"
+
+#: settings-wcp.php:106
+msgid "idl"
+msgstr "iDEAL"
+
+#: settings-wcp.php:111
+msgid "giropay"
+msgstr "giropay"
+
+#: settings-wcp.php:116
+msgid "sofort"
+msgstr "SOFORT Überweisung"
+
+#: settings-wcp.php:116
+msgid "sofortueberweisung"
+msgstr "SOFORT Überweisung"
+
+#: settings-wcp.php:121
+msgid "pbx"
+msgstr "paybox"
+
+#: settings-wcp.php:126
+msgid "psc"
+msgstr "paysafecard"
+
+#: settings-wcp.php:131
+msgid "quick"
+msgstr "@QUICK"
+
+#: settings-wcp.php:136
+msgid "paypal"
+msgstr "PayPal"
+
+#: settings-wcp.php:141
+msgid "sepa"
+msgstr "SEPA Lastschrift"
+
+#: settings-wcp.php:146
+msgid "invoice"
+msgstr "Kauf auf Rechnung"
+
+#: settings-wcp.php:151
+msgid "installment"
+msgstr "Kauf auf Raten"
+
+#: settings-wcp.php:156
+msgid "bancontact_mistercash"
+msgstr "Bancontact"
+
+#: settings-wcp.php:161
+msgid "przelewy24"
+msgstr "Przelewy24"
+
+#: settings-wcp.php:166
+msgid "moneta"
+msgstr "moneta.ru"
+
+#: settings-wcp.php:171
+msgid "poli"
+msgstr "POLi"
+
+#: settings-wcp.php:176
+msgid "ekonto"
+msgstr "eKonto"
+
+#: settings-wcp.php:181
+msgid "skrillwallet"
+msgstr "Skrill Digital Wallet"
+
+#: settings-wcp.php:186
+msgid "trustly"
+msgstr "Trustly"
+
+######## additional settings ########
+
+#: settings-wcp.php:194
+msgid "Additional settings"
+msgstr "Zusätzliche Einstellungen"
+
+#: settings-wcp.php:198
+msgid "URL to image on payment page"
+msgstr "Bild URL auf der Bezahlseite"
+
+#: settings-wcp.php:202
+msgid "Image Url for displaying an image on the Wirecard Checkout Page (95x65 pixels preferred)."
 msgstr "Url zu Ihrem Logo auf der Bezahlseite (vorzugsweise 95x65 Pixel)."
 
-#: class-woocommerce-wcp-gateway.php:141
+#: settings-wcp.php:208
 msgid "Max. retries"
 msgstr "Max. Versuche"
 
-#: class-woocommerce-wcp-gateway.php:144
+#: settings-wcp.php:211
 msgid "Maximal number of payment retries."
 msgstr "Anzahl der maximalen Zahlungsversuche."
 
-#: class-woocommerce-wcp-gateway.php:149
-msgid "Enable auto deposit"
-msgstr "Autom. abbuchen"
-
-#: class-woocommerce-wcp-gateway.php:151
-msgid "Auto deposit."
-msgstr "Automatisches Abbuchen der Zahlung."
-
-#: class-woocommerce-wcp-gateway.php:156
-msgid "Send additional data"
-msgstr "Detaillierte Kundendaten senden"
-
-#: class-woocommerce-wcp-gateway.php:158
-msgid "Send additional customer information."
-msgstr "Detaillierte Kundendaten senden"
-
-#: class-woocommerce-wcp-gateway.php:163
-msgid "Use Iframe"
-msgstr "IFrame verwenden"
-
-#: class-woocommerce-wcp-gateway.php:165
-msgid "Use Iframe."
-msgstr "Bezahlfenster wird in einem Iframe geöffnet."
-
-#: class-woocommerce-wcp-gateway.php:169
+#: settings-wcp.php:215
 msgid "Display text"
 msgstr "Text auf der Bezahlseite"
 
-#: class-woocommerce-wcp-gateway.php:171
+#: settings-wcp.php:217
 msgid "Display Text on the Wirecard Checkout Page."
 msgstr "Text, der dem Kunden zu den Bestelldaten angezeigt wird"
 
-#: class-woocommerce-wcp-gateway.php:179
-msgid "Payment is choosen on the Wirecard Checkout Page."
-msgstr "Die Zahlungsart wird auf der Wirecard Checkout Page ausgewählt."
+#: settings-wcp.php:221
+msgid "payolution mID"
+msgstr "payolution mID"
 
-#: class-woocommerce-wcp-gateway.php:352
-msgid "Invoice minimum amount"
-msgstr "Min. Bestellsumme für Rechnung"
+#: settings-wcp.php:224
+msgid "Your payolution merchant ID, non-base64-encoded."
+msgstr "payolution-Händler-ID, Nicht base64 kodiert."
 
-#: class-woocommerce-wcp-gateway.php:354
-msgid "Invoice minimum amount."
-msgstr "Min. Bestellsumme für Rechnung."
+#: settings-wcp.php:228
+msgid "payoltuion terms"
+msgstr "payolution Nutzungsbedingungen"
 
-#: class-woocommerce-wcp-gateway.php:359
-msgid "Invoice maximum amount"
-msgstr "Max. Bestellsumme für Rechnung"
+#: settings-wcp.php:231
+msgid "Consumer must accept payolution terms during the checkout process. <a href="%s">More information</a>"
+msgstr "Kunden müssen die Nutzungsbedingungen von payolution während des Bezahlprozesses akzeptieren. <a href=\"%s\">Weitere Informationen</a>"
 
-#: class-woocommerce-wcp-gateway.php:361
-msgid "Invoice maximum amount."
-msgstr "Max. Bestellsumme für Rechnung."
+#: settings-wcp.php:238
+msgid "Debug Log"
+msgstr "Protokolldatei"
 
-#: class-woocommerce-wcp-gateway.php:366
-msgid "Installment minimum amount"
-msgstr "Min. Bestellsumme für Ratenzahlung."
+#: settings-wcp.php:239
+msgid "Log Wirecard Checkout Page events."
+msgstr "Wirecard Checkout Page Ereignisse werden in eine WC Logdatei geschrieben."
 
-#: class-woocommerce-wcp-gateway.php:368
-msgid "Installment minimum amount."
-msgstr "Min. Bestellsumme für Ratenzahlung."
+#: settings-wcp.php:245
+msgid "Automated deposit"
+msgstr "Automatisches abbuchen"
 
-#: class-woocommerce-wcp-gateway.php:373
-msgid "Installment maximum amount"
-msgstr "Max. Bestellsumme für Ratenzahlung"
+#: settings-wcp.php:247
+msgid "Enabling an automated deposit of payments. Please contact our sales teams to activate this feature. <a href=\"%s\">More information</a>"
+msgstr "Automatisches Abbuchen der Zahlungen. Bitte kontaktieren Sie unsere Sales-Teams um dieses Feature freizuschalten. <a href=\"%s\">Weitere Informationen</a>"
 
-#: class-woocommerce-wcp-gateway.php:375
-msgid "Installment maximum amount."
-msgstr "Max. Bestellsumme für Ratenzahlung."
+#: settings-wcp.php:254
+msgid "Forward consumer shipping data"
+msgstr "Versanddaten des Konsumenten mitsenden"
+
+#: settings-wcp.php:256
+msgid "Forwarding shipping data about your consumer to the respective financial service provider."
+msgstr "Weiterleitung der Versanddaten des Kunden an den Finanzdienstleister."
+
+#: settings-wcp.php:263
+msgid "Forward consumer billing data"
+msgstr "Verrechnungsdaten des Konsumenten mitsenden"
+
+#: settings-wcp.php:265
+msgid "Forwarding billing data about your consumer to the respective financial service provider."
+msgstr "Weiterleitung der Verrechnungsdaten des Kunden an den Finanzdienstleister."
+
+#: settings-wcp.php:272
+msgid "Forward basket data"
+msgstr "Warenkorbdaten des Konsumenten mitsenden"
+
+#: settings-wcp.php:274
+msgid "Forwarding basket data about your consumer to the respective financial service provider."
+msgstr "Weiterleitung des Warenkorbs des Kunden an den Finanzdienstleister."
+
+#: settings-wcp.php:281
+msgid "Use Iframe"
+msgstr "IFrame verwenden"
+
+######## Invoice settings ########
+
+#: settings-wcp.php:290
+msgid "Invoice settings"
+msgstr "Einstellungen für Kauf auf Rechnung"
+
+#: settings-wcp.php:294
+msgid "Invoice Provider"
+msgstr "Provider für Kauf auf Rechnung"
+
+#: settings-wcp.php:297
+msgid "Choose your invoice provider."
+msgstr "Wählen Sie einen Kauf auf Rechnung Provider aus."
+
+#: settings-wcp.php:307
+msgid "Billing/shipping address must be identical"
+msgstr "Rechnungsadresse und Versandadresse müssen übereinstimmen"
+
+#: settings-wcp.php:310
+msgid "Only applicable for payolution"
+msgstr "Nur einstellbar für payolution"
+
+#: settings-wcp.php:315
+msgid "Allowed billing countries"
+msgstr "Erlaubte Länder für Rechnungsadresse"
+
+#: settings-wcp.php:322
+msgid "Allowed shipping countries"
+msgstr "Erlaubte Länder für Versandadresse"
+
+#: settings-wcp.php:329
+msgid "Accepted currencies"
+msgstr "Akzeptierte Währungen"
+
+#: settings-wcp.php:337
+msgid "Minimum amount"
+msgstr "Mindestbetrag"
+
+#: settings-wcp.php:342
+msgid "Maximum amount"
+msgstr "Höchstbetrag"
+
+######## Installment settings ########
+
+#: settings-wcp.php:290
+msgid "Installment settings"
+msgstr "Einstellungen für Kauf auf Raten"
+
+#: settings-wcp.php:294
+msgid "Installment Provider"
+msgstr "Provider für Kauf auf Raten"
+
+#: settings-wcp.php:297
+msgid "Choose your installment provider."
+msgstr "Wählen Sie einen Kauf auf Raten Provider aus."
+
+#################### FRONTEND ######################
 
 #: class-woocommerce-wcp-gateway.php:419
 msgid "Please select a payment type."
@@ -242,102 +394,38 @@ msgid ""
 msgstr "Ihre Bestellung wir verarbeitet, sobald wir die Bestätigung Ihres Bankinstitutes erhalten haben"
 
 #: class-woocommerce-wcp-gateway.php:726
-msgid "Birthday"
-msgstr "Geburtstag"
+msgid "Date of Birth:"
+msgstr "Geburtsdatum:"
 
-###############PAYMENTTYPES#################
-#: class-woocommerce-wcp-gateway.php:186
-msgid "select"
-msgstr "Select"
+#: class-woocommerce-wcp-payments.php:135
+msgid "I agree that the data which are necessary for the liquidation of purchase on account and which are used to complete the identity and credit check are transmitted to payolution. My "
+msgstr "Mit der Übermittlung jener Daten an payolution, die für die Abwicklung von Zahlungen mit Kauf auf Rechnung und die Identitäts- und Bonitätsprüfung erforderlich sind, bin ich einverstanden. Meine "
 
-#: class-woocommerce-wcp-gateway.php:186
-msgid "ccard"
-msgstr "Kreditkarte"
+#: class-woocommerce-wcp-payments.php:129
+msgid "consent"
+msgstr "Einwilligung"
 
-#: class-woocommerce-wcp-gateway.php:186
-msgid "masterpass"
-msgstr "Masterpass"
+#: class-woocommerce-wcp-payments.php:138
+msgid " can be revoked at any time with effect for the future."
+msgstr " kann ich jederzeit mit Wirkung für die Zukunft widerrufen."
 
-#: class-woocommerce-wcp-gateway.php:193
-msgid "ccard-moto"
-msgstr "Kreditkarte - Post / Telefonbestellung"
+#: class-woocommerce-wcp-payments.php:153
+msgid "Financial institution:"
+msgstr "Finanzinstitut:"
 
-#: class-woocommerce-wcp-gateway.php:200
-msgid "maestro"
-msgstr "Maestro SecureCode"
+#: class-woocommerce-wcp-payments.php:156
+msgid "Choose your bank"
+msgstr "Wählen Sie Ihre Bank"
 
-#: class-woocommerce-wcp-gateway.php:207
-msgid "eps"
-msgstr "eps Online-Überweisung"
+#: class-woocommerce-wcp-payments.php:211
+msgid "Please accept the consent terms!"
+msgstr "Bitten akzeptieren Sie die Nutzungsbedingungen!"
 
-#: class-woocommerce-wcp-gateway.php:214
-msgid "idl"
-msgstr "iDEAL"
+#: class-woocommerce-wcp-payments.php:214
+msgid "You have to be 18 years or older to use this payment."
+msgstr "Sie müssen mindestens 18 Jahre alt sein um dieses Zahlungsmittel zu nutzen."
 
-#: class-woocommerce-wcp-gateway.php:221
-msgid "giropay"
-msgstr "giropay"
+#: class-woocommerce-wcp-payments.php:222
+msgid "Financial institution must not be empty."
+msgstr "Bitte wählen Sie ein Finanzistitut aus."
 
-#: class-woocommerce-wcp-gateway.php:226
-msgid "sofort"
-msgstr "SOFORT Überweisung"
-
-#: class-woocommerce-wcp-gateway.php:226
-msgid "sofortueberweisung"
-msgstr "SOFORT Überweisung"
-
-#: class-woocommerce-wcp-gateway.php:235
-msgid "pbx"
-msgstr "paybox"
-
-#: class-woocommerce-wcp-gateway.php:242
-msgid "psc"
-msgstr "paysafecard"
-
-#: class-woocommerce-wcp-gateway.php:249
-msgid "quick"
-msgstr "@QUICK"
-
-#: class-woocommerce-wcp-gateway.php:256
-msgid "paypal"
-msgstr "PayPal"
-
-#: class-woocommerce-wcp-gateway.php:263
-msgid "sepa"
-msgstr "SEPA Lastschrift"
-
-#: class-woocommerce-wcp-gateway.php:277
-msgid "invoice"
-msgstr "Kauf auf Rechnung"
-
-#: class-woocommerce-wcp-gateway.php:1053
-msgid "installment"
-msgstr "Kauf auf Raten"
-
-#: class-woocommerce-wcp-gateway.php:291
-msgid "bancontact_mistercash"
-msgstr "Bancontact"
-
-#: class-woocommerce-wcp-gateway.php:298
-msgid "przelewy24"
-msgstr "Przelewy24"
-
-#: class-woocommerce-wcp-gateway.php:305
-msgid "moneta"
-msgstr "moneta.ru"
-
-#: class-woocommerce-wcp-gateway.php:312
-msgid "poli"
-msgstr "POLi"
-
-#: class-woocommerce-wcp-gateway.php:319
-msgid "ekonto"
-msgstr "eKonto"
-
-#: class-woocommerce-wcp-gateway.php:347
-msgid "skrillwallet"
-msgstr "Skrill Digital Wallet"
-
-#: class-woocommerce-wcp-gateway.php:350
-msgid "trustly"
-msgstr "Trustly"

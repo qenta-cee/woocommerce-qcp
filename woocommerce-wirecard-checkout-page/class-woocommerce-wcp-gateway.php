@@ -14,7 +14,6 @@ define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.0' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_INVOICE_INSTALLMENT_MIN_AGE', 18 );
 
 class WC_Gateway_WCP extends WC_Payment_Gateway {
 
@@ -44,10 +43,10 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	function __construct() {
 		$this->id                 = 'wirecard_checkout_page';
 		$this->icon               = WOOCOMMERCE_GATEWAY_WCP_URL . 'assets/images/wirecard.png';
-		$this->has_fields         = false;
+		$this->has_fields         = true;
 		$this->method_title       = __( 'Wirecard Checkout Page', 'woocommerce-wcp' );
 		$this->method_description = __(
-			"Wirecard CEE is a popular payment service provider (PSP) and has connections with over 20 national and international currencies. ",
+			"Wirecard is a popular payment service provider (PSP) and has connections with over 20 national and international currencies. ",
 			'woocommerce-wcp'
 		);
 
@@ -61,7 +60,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$this->_payments = new WC_Gateway_WCP_Payments($this->settings);
 
 		$this->title       = 'Wirecard Checkout Page'; // frontend title
-		$this->description = 'Wirecard description to payment maybe picture?'; // frontend description
 		$this->debug       = $this->settings['debug'] == 'yes';
 		$this->use_iframe  = $this->get_option( 'use_iframe' ) == 'yes';
 		$this->enabled = count( $this->get_enabled_paymenttypes(false ) ) > 0 ? "yes" : "no";
@@ -298,7 +296,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function return_request() {
-		$this->log( 'return_request:' . print_r( $_REQUEST, true ), 'notice' );
+		$this->log( 'return_request:' . print_r( $_REQUEST, true ), 'info' );
 
 		$redirectUrl = $this->get_return_url();
 		if ( ! isset( $_REQUEST['wooOrderId'] ) || ! strlen( $_REQUEST['wooOrderId'] ) ) {
@@ -348,7 +346,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function confirm_request() {
-		$this->log( 'confirm_request:' . print_r( $_REQUEST, true ), 'notice' );
+		$this->log( 'confirm_request:' . print_r( $_REQUEST, true ), 'info' );
 
 		$message = null;
 		if ( ! isset( $_REQUEST['wooOrderId'] ) || ! strlen( $_REQUEST['wooOrderId'] ) ) {
@@ -383,7 +381,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$message = null;
 		try {
-			$return = WirecardCEE_QPay_ReturnFactory::getInstance( $_POST, $this->get_option( 'secret' ) );
+			$return = WirecardCEE_QPay_ReturnFactory::getInstance( $_POST, $this->_config->get_secret() );
 			if ( ! $return->validate() ) {
 				$message = __( 'Validation error: invalid response', 'woocommerce-wcp' );
 				$order->update_status( 'failed', $message );
@@ -472,7 +470,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @access public
 	 * @return void
 	 */
-	function payment_fields() {
+	public function payment_fields() {
 		?>
         <input id="payment_method_wcp" type="hidden" value="woocommerce_wirecard_checkout_page"
                name="wcp_payment_method"/>
@@ -528,10 +526,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		}
 	}
 
-	/*
-	 * Protected Methods
-	 */
-
 	/**
 	 * List of enables paymenttypes
 	 *
@@ -576,26 +570,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Basic check if address is empty
-	 *
-	 * @since 1.2.2
-	 *
-	 * @param $address
-	 *
-	 * @return bool
-	 */
-	function address_empty( $address ) {
-
-		foreach ( $address as $key => $value ) {
-			if ( ! empty( $value ) ) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	/**
@@ -905,12 +879,12 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @param
 	 *            $str
 	 */
-	protected function log( $str, $level = 'notice' ) {
-		if ( $this->debug ) {
+	protected function log( $str, $level = 'info' ) {
+		if ( $this->get_option('debug') == 'yes' ) {
 			if ( empty( $this->log ) ) {
 				$this->log = new WC_Logger();
 			}
-			$this->log->log( $level, 'WirecardCheckoutPage: ' . $str );
+			$this->log->$level( 'WirecardCheckoutPage: ' . $str );
 		}
 	}
 }

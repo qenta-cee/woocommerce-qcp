@@ -195,7 +195,7 @@ return array(
 		'type'  => 'title',
 	),
 	'image_url'                => array(
-		'title'       => __( 'Image Url', 'woocommerce-wcp' ),
+		'title'       => __( 'URL to image on payment page', 'woocommerce-wcp' ),
 		'type'        => 'text',
 		'default'     => '',
 		'description' => __(
@@ -236,6 +236,8 @@ return array(
 		'type'    => 'checkbox',
 		'default' => 'no',
 		'title'   => __( 'Debug Log', 'woocommerce-wcp' ),
+		'description' => __( 'Log Wirecard Checkout Page events.', 'woocommerce-wcp' ),
+		'desc_tip' => false,
 		'label'   => __( 'Enable/Disable', 'woocommerce-wcp' )
 	),
 	'auto_deposit'             => array(
@@ -276,7 +278,7 @@ return array(
 	),
 	'use_iframe'               => array(
 		'type'    => 'checkbox',
-		'title'   => __( 'Iframe', 'woocommerce-wcp' ),
+		'title'   => __( 'Use Iframe', 'woocommerce-wcp' ),
 		'default' => 'no',
 		'label'   => __( 'Enable/Disable', 'woocommerce-wcp' )
 	),
@@ -396,7 +398,7 @@ return array(
 	),
 	'installment_max_amount'   => array(
 		'type'        => 'text',
-		'title'       => __( 'Installment maximum amount', 'woocommerce-wcp' ),
+		'title'       => __( 'Maximum amount', 'woocommerce-wcp' ),
 		'default'     => '3500'
 	)
 );

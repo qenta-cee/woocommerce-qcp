@@ -11,7 +11,7 @@
     },
     "require": {
         "php": "~5.5.0|~5.6.0|~7.0.0",
-        "wirecard/checkout-client-library": "3.3.0"
+        "wirecard/checkout-client-library": "*"
     },
     "config": {
         "vendor-dir":"woocommerce-wirecard-checkout-page/vendor"

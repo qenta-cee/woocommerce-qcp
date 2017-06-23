@@ -5,9 +5,9 @@
 /*
 Plugin Name: Wirecard Checkout Page
 Plugin URI: http://www.wirecard.at/integration/plugins/
-Description: Wirecard CEE is a popular payment service provider (PSP) and has connections with over 20 national and international currencies.
-Version: 1.2.2
-Author: Wirecard Central Eastern Europe
+Description: Wirecard is a popular payment service provider (PSP) and has connections with over 20 national and international currencies.
+Version: 1.3.0
+Author: Wirecard
 Author URI: http://www.wirecard.at/
 License: Proprietary
 */
