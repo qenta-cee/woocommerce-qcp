@@ -25,17 +25,17 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	/**
 	 * Config Class
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 * @access protected
 	 * @var WC_Gateway_WCP_Config
 	 */
 	protected $_config;
 
 	/**
-     * Payments Class
-     *
-     * @since 2.2.0
-     * @access protected
+	 * Payments Class
+	 *
+	 * @since 1.3.0
+	 * @access protected
 	 * @var WC_Gateway_WCP_Payments
 	 */
 	protected $_payments;
@@ -55,6 +55,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		// Load the settings.
 		$this->init_settings();
+		$this->remove_old_payments();
 
 		$this->_config = new WC_Gateway_WCP_Config($this->settings);
 		$this->_payments = new WC_Gateway_WCP_Payments($this->settings);
@@ -112,7 +113,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$this->countries = array();
 		if ( ! empty( $countries ) ) {
 			foreach ( $countries as $key => $val ) {
-			    $this->countries[$key] = $val;
+				$this->countries[$key] = $val;
 			}
 		}
 		$this->currency_code_options = array();
@@ -130,20 +131,20 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 */
 	function admin_options() {
 		?>
-		<h3><?php _e( 'Wirecard Checkout Page', 'woocommerce-wcp' ); ?></h3>
-		<div class="woo-wcs-settings-header-wrapper" style="min-width: 200px; max-width: 800px;">
-			<img src="<?= plugins_url( 'woocommerce-wirecard-checkout-page/assets/images/wirecard-logo.png' ) ?>">
-			<p style="text-transform: uppercase;"><?= __( 'Wirecard - Your Full Service Payment Provider - Comprehensive solutions from one single source',
+        <h3><?php _e( 'Wirecard Checkout Page', 'woocommerce-wcp' ); ?></h3>
+        <div class="woo-wcs-settings-header-wrapper" style="min-width: 200px; max-width: 800px;">
+            <img src="<?= plugins_url( 'woocommerce-wirecard-checkout-page/assets/images/wirecard-logo.png' ) ?>">
+            <p style="text-transform: uppercase;"><?= __( 'Wirecard - Your Full Service Payment Provider - Comprehensive solutions from one single source',
 					'woocommerce-wcp' ) ?></p>
 
-			<p><?= __( 'Wirecard is one of the world´s leading providers of outsourcing and white label solutions for electronic payment transactions.',
+            <p><?= __( 'Wirecard is one of the world´s leading providers of outsourcing and white label solutions for electronic payment transactions.',
 					'woocommerce-wcp' ) ?></p>
 
-			<p><?= __( 'As independent provider of payment solutions, we accompany our customers along the entire business development. Our payment solutions are perfectly tailored to suit e-Commerce requirements and have made	us Austria´s leading payment service provider. Customization, competence, and commitment.',
+            <p><?= __( 'As independent provider of payment solutions, we accompany our customers along the entire business development. Our payment solutions are perfectly tailored to suit e-Commerce requirements and have made	us Austria´s leading payment service provider. Customization, competence, and commitment.',
 					'woocommerce-wcp' ) ?></p>
 
-		</div>
-		<hr/>
+        </div>
+        <hr/>
         <style>
             .form-table td {
                 padding:0px;
@@ -153,12 +154,12 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
             }
 
         </style>
-		<table class="form-table">
+        <table class="form-table">
 			<?php
 			// Generate the HTML For the settings form.
 			$this->generate_settings_html();
 			?>
-		</table>
+        </table>
 		<?php
 	}
 
@@ -182,7 +183,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$paymenttype = $_POST['wcp_payment_method'];
 		if ( ! $this->is_paymenttype_enabled( $paymenttype ) ) {
 			wc_add_notice( __( 'Payment type is not available, please select another payment type.',
-			                   'woocommerce-wcp' ), 'error' );
+				'woocommerce-wcp' ), 'error' );
 
 			return false;
 		}
@@ -250,11 +251,11 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$iframeUrl = $this->initiate_payment( $order, WC()->session->wirecard_checkout_page_type, $birthday,
 			$financial_inst );
 		?>
-		<iframe src="<?php echo $iframeUrl ?>"
-		        name="<?php echo WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME ?>" width="100%"
-		        height="700px" border="0" frameborder="0">
-			<p>Your browser does not support iframes.</p>
-		</iframe>
+        <iframe src="<?php echo $iframeUrl ?>"
+                name="<?php echo WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME ?>" width="100%"
+                height="700px" border="0" frameborder="0">
+            <p>Your browser does not support iframes.</p>
+        </iframe>
 		<?php
 	}
 
@@ -396,7 +397,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			switch ( $return->getPaymentState() ) {
 				case WirecardCEE_QPay_ReturnFactory::STATE_SUCCESS:
 					update_post_meta( $order->get_id(), 'wcp_gateway_reference_number',
-					                  $return->getGatewayReferenceNumber() );
+						$return->getGatewayReferenceNumber() );
 					update_post_meta( $order->get_id(), 'wcp_order_number', $return->getOrderNumber() );
 					$order->payment_complete();
 					break;
@@ -426,8 +427,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 					foreach ( $return->getErrors() as $error ) {
 						$errors[] = $error->getConsumerMessage();
 						wc_add_notice( __( "Request failed! Error: {$error->getConsumerMessage()}",
-						                   'woocommerce-wcp' ),
-						               'error' );
+							'woocommerce-wcp' ),
+							'error' );
 						$this->log( $error->getConsumerMessage(), 'error' );
 						$str_errors += $error->getConsumerMessage();
 					}
@@ -499,17 +500,17 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				echo "<img src='{$this->_payments->get_payment_icon($type->code)}' alt='Wirecard {$type->label}'>";
 				?>
             </label>
-            <div class="payment_box payment_method_wirecard_checkout_page_<?= ( $this->_payments->has_payment_fields($type->code) ) ? $type->code : "" ?>" style="display:none;">
+        <div class="payment_box payment_method_wirecard_checkout_page_<?= ( $this->_payments->has_payment_fields($type->code) ) ? $type->code : "" ?>" style="display:none;">
 			<?php
-            echo $this->_payments->get_payment_fields($type->code);
+			echo $this->_payments->get_payment_fields($type->code);
 		}
 	}
 
 	/**
-     * Basic validation for payment methods
-     *
-     * @since 2.2.0
-     *
+	 * Basic validation for payment methods
+	 *
+	 * @since 1.3.0
+	 *
 	 * @return bool|void
 	 */
 	public function validate_fields() {
@@ -585,7 +586,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$paymenttype = strtoupper( $paymenttype );
 		try {
-		    $config = $this->_config->get_client_config();
+			$config = $this->_config->get_client_config();
 			$client = new WirecardCEE_QPay_FrontendClient( $config );
 
 			// consumer data (IP and User aget) are mandatory!
@@ -680,11 +681,11 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	}
 
 	/**
-     * Get billing/shipping address
-     *
-     * @since 2.2.0
-     * @access protected
-     *
+	 * Get billing/shipping address
+	 *
+	 * @since 1.3.0
+	 * @access protected
+	 *
 	 * @param $order
 	 * @param string $address
 	 *
@@ -737,8 +738,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	/**
 	 * Generate shopping basket
 	 *
-	 * @since 2.2.0
-     * @access protected
+	 * @since 1.3.0
+	 * @access protected
 	 * @return WirecardCEE_Stdlib_Basket
 	 */
 	protected function get_shopping_basket() {
@@ -836,7 +837,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 *
 	 * @param $order WC_Order
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 * @return string
 	 */
 	protected function get_order_reference( $order ) {
@@ -846,7 +847,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	/**
 	 * Generate customer statement
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 *
 	 * @param $order
 	 * @param $payment_type
@@ -885,5 +886,33 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			}
 			$this->log->$level( 'WirecardCheckoutPage: ' . $str );
 		}
+	}
+
+	/**
+	 * Remove deprecated payment methods from database
+	 *
+	 * @since 1.3.0
+	 * @access protected
+	 */
+	protected function remove_old_payments() {
+		global $wpdb;
+
+		$options      = $wpdb->get_var( "SELECT option_value FROM {$wpdb->prefix}options WHERE option_name='woocommerce_wirecard_checkout_page_settings';" );
+		$option_array = unserialize( $options );
+
+		foreach ( $option_array as $k => $v ) {
+			switch ( $k ) {
+				case 'pt_skrilldirect':
+				case 'pt_elv':
+				case 'pt_c2p':
+				case 'pt_instantbank':
+				case 'pt_mpass':
+					unset( $option_array[ $k ] );
+					break;
+			}
+		}
+		$options = serialize( $option_array );
+		$wpdb->update( $wpdb->prefix . 'options', array( 'option_value' => $options ),
+			array( 'option_name' => 'woocommerce_wirecard_checkout_page_settings' ) );
 	}
 }

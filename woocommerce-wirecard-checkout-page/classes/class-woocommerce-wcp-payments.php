@@ -36,14 +36,14 @@
  *
  * Handles payment fields and pre-checks for special paymentmethods
  *
- * @since 2.2.0
+ * @since 1.3.0
  */
 class WC_Gateway_WCP_Payments {
 
 	/**
 	 * Payment gateway settings
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 * @access protected
 	 * @var array
 	 */
@@ -52,7 +52,7 @@ class WC_Gateway_WCP_Payments {
 	/**
 	 * WC_Gateway_WCP_Payments constructor.
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 *
 	 * @param $gateway_settings
 	 */
@@ -63,7 +63,7 @@ class WC_Gateway_WCP_Payments {
 	/**
 	 * Returns url to payment method logo
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 *
 	 * @param $payment_code
 	 *
@@ -76,7 +76,7 @@ class WC_Gateway_WCP_Payments {
 	/**
 	 * Returns true if the payment method needs form fields
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 *
 	 * @return bool
 	 */
@@ -95,7 +95,7 @@ class WC_Gateway_WCP_Payments {
 	/**
 	 * Prints form fields for specific payment methods
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 *
 	 * @param $payment_code
 	 *
@@ -193,7 +193,7 @@ class WC_Gateway_WCP_Payments {
 	/**
 	 * Validate payment methods with form fields
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 *
 	 * @param $payment_code
 	 * @param $data
@@ -237,7 +237,7 @@ class WC_Gateway_WCP_Payments {
 	/**
 	 * Basic risk check for specific payment methods
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 *
 	 * @return boolean
 	 */
@@ -255,7 +255,7 @@ class WC_Gateway_WCP_Payments {
 	/**
 	 * Risk management for invoice
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 * @access private
 	 *
 	 * @return bool
@@ -312,7 +312,7 @@ class WC_Gateway_WCP_Payments {
 	/**
 	 * Risk management for installment
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 * @access private
 	 *
 	 * @return bool
@@ -369,7 +369,7 @@ class WC_Gateway_WCP_Payments {
 	/**
 	 * Compares billing and shipping address returns false if they aren't identical
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 * @access private
 	 *
 	 * @return bool

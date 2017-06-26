@@ -50,6 +50,7 @@ abstract class WirecardCEE_Stdlib_PaymentTypeAbstract
     const INSTALLMENT = 'INSTALLMENT';
     const INVOICE = 'INVOICE';
     const MAESTRO = 'MAESTRO';
+    const MASTERPASS = 'MASTERPASS';
     const MONETA = 'MONETA';
     const MPASS = 'MPASS';
     const P24 = 'PRZELEWY24';
@@ -77,33 +78,37 @@ abstract class WirecardCEE_Stdlib_PaymentTypeAbstract
      * @todo would be nice to get this values directly from the server so the data is in sync
      */
     protected static $_eps_financial_institutions = Array(
+        'ARZ|AB'        => 'Apothekerbank',
         'ARZ|AAB'       => 'Austrian Anadi Bank AG',
-        'BA-CA'         => 'Bank Austria Creditanstalt',
-        'BB-Racon'      => 'Bank Burgenland',
-        'ARZ|BD'        => 'bankdirekt.at AG',
         'ARZ|BAF'       => '&Auml;rztebank',
-        'ARZ|BCS'       => 'Bankhaus Carl Sp&auml;ngler &amp; Co. AG',
-        'ARZ|BSS'       => 'Bankhaus Schelhammer &amp; Schattera AG',
-        'Bawag|B'       => 'BAWAG',
-        'ARZ|VB'        => 'Die &ouml;sterreichischen Volksbanken',
-        'Bawag|E'       => 'easybank',
+        'BA-CA'         => 'Bank Austria',
+        'ARZ|BCS'       => 'Bankhaus Carl Sp&auml;ngler & Co. AG',
+        'ARZ|BSS'       => 'Bankhaus Schelhammer & Schattera AG',
+        'Bawag|BG'       => 'BAWAG P.S.K. AG',
+        'ARZ|BKS'       => 'BKS Bank AG',
+        'ARZ|BKB'       => 'Br&uuml;ll Kallmus Bank AG',
+        'ARZ|BTV'       => 'BTV VIER L&Auml;NDER BANK',
+        'ARZ|CBGG'      => 'Capital Bank Grawe Gruppe AG',
+        'ARZ|VB'        => 'Volksbank Gruppe',
+        'ARZ|DB'        => 'Dolomitenbank',
+        'Bawag|EB'       => 'Easybank AG',
         'Spardat|EBS'   => 'Erste Bank und Sparkassen',
-        'ARZ|GB'        => 'G&auml;rtnerbank',
-        'ARZ|HAA'       => 'Hypo Alpe-Adria-Bank AG, HYPO Alpe-Adria-Bank International AG',
-        'ARZ|HI'        => 'Hypo Investmentbank AG',
+        'ARZ|HAA'       => 'Hypo Alpe-Adria-Bank International AG',
+        'ARZ|VLH'       => 'Hypo Landesbank Vorarlberg',
+        'ARZ|HI'        => 'HYPO NOE Gruppe Bank AG',
+        'ARZ|NLH'       => 'HYPO NOE Landesbank AG',
+        'Hypo-Racon|O'  => 'Hypo Ober&ouml;sterreich',
+        'Hypo-Racon|S'  => 'Hypo Salzburg',
+        'Hypo-Racon|St' => 'Hypo Steiermark',
         'ARZ|HTB'       => 'Hypo Tirol Bank AG',
+        'BB-Racon'      => 'HYPO-BANK BURGENLAND Aktiengesellschaft',
         'ARZ|IB'        => 'Immo-Bank',
-        'ARZ|IKB'       => 'Investkredit Bank AG',
-        'ARZ|NLH'       => 'Nieder&ouml;sterreichische Landes-Hypothekenbank AG',
-        'ARZ|AB'        => '&Ouml;sterreichische Apothekerbank',
-        'ARZ|PB'        => 'PRIVAT BANK AG',
-        'Bawag|P'       => 'PSK Bank',
-        'Racon'         => 'Raiffeisen Bank',
+        'ARZ|OB'        => 'Oberbank AG',
+        'Racon'         => 'Raiffeisen Bankengruppe &Ouml;sterreich',
         'ARZ|SB'        => 'Schoellerbank AG',
-        'Bawag|S'       => 'Sparda Bank',
-        'ARZ|SBL'       => 'Sparda-Bank Linz',
-        'ARZ|SBVI'      => 'Sparda-Bank Villach/Innsbruck',
-        'ARZ|VLH'       => 'Vorarlberger Landes- und Hypothekerbank AG',
+        'Bawag|SBW'       => 'Sparda Bank Wien',
+        'ARZ|SBA'       => 'SPARDA-BANK AUSTRIA',
+        'ARZ|VKB'       => 'Volkskreditbank AG',
         'ARZ|VRB'       => 'VR-Bank Braunau'
     );
 
@@ -115,15 +120,16 @@ abstract class WirecardCEE_Stdlib_PaymentTypeAbstract
      * @todo would be nice to get this values directly from the server so the data is in sync
      */
     protected static $_idl_financial_institutions = Array(
-        'ABNAMROBANK' => 'ABN AMRO Bank',
-        'ASNBANK'     => 'ASN Bank',
-        'INGBANK'     => 'ING',
-        'KNAB'        => 'Knab',
-        'RABOBANK'    => 'Rabobank',
-        'SNSBANK'     => 'SNS Bank',
-        'REGIOBANK'   => 'Regio Bank',
-        'TRIODOSBANK' => 'Triodos Bank',
-        'VANLANSCHOT' => 'Van Lanschot Bankiers'
+        'ABNAMROBANK' =>'ABN AMRO Bank',
+        'ASNBANK'     =>'ASN Bank',
+        'BUNQ'        =>'Bunq Bank',
+        'INGBANK'     =>'ING',
+        'KNAB'        =>'knab',
+        'RABOBANK'    =>'Rabobank',
+        'SNSBANK'     =>'SNS Bank',
+        'REGIOBANK'   =>'RegioBank',
+        'TRIODOSBANK' =>'Triodos Bank',
+        'VANLANSCHOT' =>'Van Lanschot Bankiers'
     );
 
 

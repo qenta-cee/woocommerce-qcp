@@ -36,14 +36,14 @@
  *
  * Handles configuration settings, basketcreation and addressinformation
  *
- * @since 2.2.0
+ * @since 1.3.0
  */
 class WC_Gateway_WCP_Config {
 
 	/**
 	 * Payment gateway settings
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 * @access protected
 	 * @var array
 	 */
@@ -52,7 +52,7 @@ class WC_Gateway_WCP_Config {
 	/**
 	 * Test/Demo configurations
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 * @access protected
 	 * @var array
 	 */
@@ -80,7 +80,7 @@ class WC_Gateway_WCP_Config {
 	/**
 	 * WC_Gateway_WCP_Config constructor.
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 *
 	 * @param $gateway_settings
 	 */
@@ -92,7 +92,7 @@ class WC_Gateway_WCP_Config {
 	/**
 	 * Handles configuration modes and returns config array for FrontendClient
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 *
 	 * @return array
 	 *
@@ -120,7 +120,7 @@ class WC_Gateway_WCP_Config {
 	/**
 	 * Extract language code from locale settings
 	 *
-	 * @since 2.2.0
+	 * @since 1.3.0
 	 * @return mixed
 	 */
 	public function get_language_code() {
