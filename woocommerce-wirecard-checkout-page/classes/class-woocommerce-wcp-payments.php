@@ -105,14 +105,31 @@ class WC_Gateway_WCP_Payments {
 		switch ( $payment_code ) {
 			case 'invoice':
 			case 'installment':
-				$today = date( 'Y' ) . "-" . date( 'm' ) . "-" . date( 'd' );
 				$html  = "<fieldset class='wc-invoice-installment-form wc-payment-form'>";
 				$html  .= '';
 
 				// account owner field
 				$html .= "<p class='form-row'>";
 				$html .= "<label>" . __( 'Date of Birth:', 'woocommerce-wcp' ) . "</label>";
-				$html .= "<input type='date' name='wcp_birthday' value='" . $today . "' class='form-control' />";
+				$html .= "<select name='".$payment_code."_wcp_day' class=''>";
+
+				for ( $day = 31; $day > 0; $day -- ) {
+					$html .= "<option value='$day'> $day </option>";
+				}
+
+				$html .= "</select>";
+
+				$html .= "<select name='".$payment_code."_wcp_month' class=''>";
+				for ( $month = 12; $month > 0; $month -- ) {
+					$html .= "<option value='$month'> $month </option>";
+				}
+				$html .= "</select>";
+
+				$html .= "<select name='".$payment_code."_wcp_year' class=''>";
+				for ( $year = date( "Y" ); $year > 1900; $year -- ) {
+					$html .= "<option value='$year'> $year </option>";
+				}
+				$html .= "</select>";
 				$html .= "</p>";
 
 				if ( ( $this->_settings['payolution_terms'] == 'yes' && $this->_settings['invoice_provider'] == 'payolution' && $payment_code == 'invoice' ) ||
@@ -131,7 +148,7 @@ class WC_Gateway_WCP_Payments {
 
 					$html .= "<p class='form-row'>";
 
-					$html .= "<label><input type='checkbox' name='consent'>"
+					$html .= "<label><input type='checkbox' name='".$payment_code."_consent'>"
 					         . __( 'I agree that the data which are necessary for the liquidation of purchase on account and which are used to complete the identity and credit check are transmitted to payolution. My ',
 							'woocommerce-wcp' )
 					         . $consent_link
@@ -204,13 +221,16 @@ class WC_Gateway_WCP_Payments {
 		switch ( $payment_code ) {
 			case 'invoice':
 			case 'installment':
-				$max_date = ( date( 'Y' ) - 18 ) . "-" . date( 'm' ) . "-" . date( 'd' );
-				$errors   = [];
+				$birthdate = new DateTime( $data[$payment_code.'_wcp_year'] . '-' . $data[$payment_code.'_wcp_month'] . '-' . $data[$payment_code.'_wcp_day'] );
+				$age = $birthdate->diff( new DateTime );
+				$age = $age->format( '%y' );
 
-				if ( $this->_settings['payolution_terms'] == 'yes' && $data['consent'] != 'on' && $this->_settings[$payment_code.'_provider'] == 'payolution' ) {
+				$errors = [];
+
+				if ( $this->_settings['payolution_terms'] == 'yes' && $data[$payment_code.'_consent'] != 'on' && $this->_settings[ $payment_code . '_provider' ] == 'payolution' ) {
 					$errors[] = "&bull; " . __( 'Please accept the consent terms!', 'woocommerce-wcp' );
 				}
-				if ( $data['wcp_birthday'] > $max_date ) {
+				if ( $age < 18 ) {
 					$errors[] = "&bull; " . __( 'You have to be 18 years or older to use this payment.',
 							'woocommerce-wcp' );
 				}
