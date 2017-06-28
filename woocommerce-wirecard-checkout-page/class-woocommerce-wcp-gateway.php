@@ -900,15 +900,17 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$options      = $wpdb->get_var( "SELECT option_value FROM {$wpdb->prefix}options WHERE option_name='woocommerce_wirecard_checkout_page_settings';" );
 		$option_array = unserialize( $options );
 
-		foreach ( $option_array as $k => $v ) {
-			switch ( $k ) {
-				case 'pt_skrilldirect':
-				case 'pt_elv':
-				case 'pt_c2p':
-				case 'pt_instantbank':
-				case 'pt_mpass':
-					unset( $option_array[ $k ] );
-					break;
+		if ( ! empty( $option_array ) ) {
+			foreach ( $option_array as $k => $v ) {
+				switch ( $k ) {
+					case 'pt_skrilldirect':
+					case 'pt_elv':
+					case 'pt_c2p':
+					case 'pt_instantbank':
+					case 'pt_mpass':
+						unset( $option_array[ $k ] );
+						break;
+				}
 			}
 		}
 		$options = serialize( $option_array );

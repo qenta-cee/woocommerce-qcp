@@ -74,7 +74,7 @@ return array(
 	'pt_select'                => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'select' ),
-		'default' => 'yes',
+		'default' => 'no',
 	),
 	'pt_ccard'                 => array(
 		'type'    => 'checkbox',
