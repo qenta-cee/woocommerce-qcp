@@ -7,11 +7,13 @@
  *  - Wrapped payment type in div
  *
  */
+require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-config.php' );
+require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
+
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.2.2' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.0' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_INVOICE_INSTALLMENT_MIN_AGE', 18 );
 
 class WC_Gateway_WCP extends WC_Payment_Gateway {
 
@@ -21,17 +23,30 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	protected $log;
 
 	/**
-	 * @var $customer_birthday DateTime
+	 * Config Class
+	 *
+	 * @since 1.3.0
+	 * @access protected
+	 * @var WC_Gateway_WCP_Config
 	 */
-	protected $customer_birthday;
+	protected $_config;
+
+	/**
+	 * Payments Class
+	 *
+	 * @since 1.3.0
+	 * @access protected
+	 * @var WC_Gateway_WCP_Payments
+	 */
+	protected $_payments;
 
 	function __construct() {
 		$this->id                 = 'wirecard_checkout_page';
 		$this->icon               = WOOCOMMERCE_GATEWAY_WCP_URL . 'assets/images/wirecard.png';
-		$this->has_fields         = false;
+		$this->has_fields         = true;
 		$this->method_title       = __( 'Wirecard Checkout Page', 'woocommerce-wcp' );
 		$this->method_description = __(
-			"Wirecard CEE is a popular payment service provider (PSP) and has connections with over 20 national and international currencies. ",
+			"Wirecard is a popular payment service provider (PSP) and has connections with over 20 national and international currencies. ",
 			'woocommerce-wcp'
 		);
 
@@ -40,11 +55,15 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		// Load the settings.
 		$this->init_settings();
+		$this->remove_old_payments();
 
-		$this->title       = $this->settings['title']; // frontend title
-		$this->description = $this->settings['description']; // frontend description
+		$this->_config = new WC_Gateway_WCP_Config($this->settings);
+		$this->_payments = new WC_Gateway_WCP_Payments($this->settings);
+
+		$this->title       = 'Wirecard Checkout Page'; // frontend title
 		$this->debug       = $this->settings['debug'] == 'yes';
 		$this->use_iframe  = $this->get_option( 'use_iframe' ) == 'yes';
+		$this->enabled = count( $this->get_enabled_paymenttypes(false ) ) > 0 ? "yes" : "no";
 
 		// Hooks
 		add_action(
@@ -81,15 +100,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				'dispatch_callback'
 			)
 		);
-
-		// custom birthday field
-		add_filter(
-			'woocommerce_billing_fields',
-			array(
-				$this,
-				'custom_fields'
-			)
-		);
 	}
 
 	/**
@@ -99,318 +109,18 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return void
 	 */
 	function init_form_fields() {
-		$this->form_fields = array(
-			'enabled'                  => array(
-				'title'   => __( 'Enable/Disable', 'woocommerce-wcp' ),
-				'type'    => 'checkbox',
-				'label'   => __( 'Enable Wirecard Checkout Page', 'woocommerce-wcp' ),
-				'default' => 'yes'
-			),
-			'title'                    => array(
-				'title'       => __( 'Title', 'woocommerce-wcp' ),
-				'type'        => 'text',
-				'description' => __( 'This controls the title which the user sees during checkout.',
-				                     'woocommerce-wcp' ),
-				'default'     => __( 'Wirecard', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'description'              => array(
-				'title'       => __( 'Description', 'woocommerce-wcp' ),
-				'type'        => 'textarea',
-				'description' => __(
-					'This controls the description which the user sees during checkout.',
-					'woocommerce-wcp'
-				),
-				'default'     => __( 'Pay via Wirecard Checkout Page', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'debug'                    => array(
-				'type'        => 'checkbox',
-				'default'     => 'no',
-				'label'       => __( 'Debug Log', 'woocommerce-wcp' ),
-				'description' => __( 'Log Wirecard Checkout Page events.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'customer_id'              => array(
-				'title'       => __( 'Customer Id', 'woocommerce-wcp' ),
-				'type'        => 'text',
-				'default'     => 'D200001',
-				'description' => __( 'Wirecard CEE Customer Id.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'shop_id'                  => array(
-				'title'       => __( 'Shop Id', 'woocommerce-wcp' ),
-				'type'        => 'text',
-				'default'     => '',
-				'description' => __( 'Wirecard CEE Shop Id.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'secret'                   => array(
-				'title'       => __( 'Secret', 'woocommerce-wcp' ),
-				'type'        => 'text',
-				'default'     => '',
-				'description' => __( 'Wirecard CEE Secret.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'service_url'              => array(
-				'title'       => __( 'Service Url', 'woocommerce-wcp' ),
-				'type'        => 'text',
-				'default'     => '',
-				'description' => __(
-					'Backlink on the Wirecard Checkout Page to your shop, usualy links to contact or imprint page.',
-					'woocommerce-wcp'
-				),
-				'desc_tip'    => true
-			),
-			'image_url'                => array(
-				'title'       => __( 'Image Url', 'woocommerce-wcp' ),
-				'type'        => 'text',
-				'default'     => '',
-				'description' => __(
-					'Image Url for displaying an image on the Wirecard Checkout Page (95x65 pixels preferred).',
-					'woocommerce-wcp'
-				),
-				'desc_tip'    => true
-			),
-			'max_retries'              => array(
-				'title'       => __( 'Max. retries', 'woocommerce-wcp' ),
-				'type'        => 'text',
-				'default'     => '-1',
-				'description' => __( 'Maximal number of payment retries.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'auto_deposit'             => array(
-				'type'        => 'checkbox',
-				'label'       => __( 'Enable auto deposit', 'woocommerce-wcp' ),
-				'default'     => 'yes',
-				'description' => __( 'Auto deposit.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'send_additional_data'     => array(
-				'type'        => 'checkbox',
-				'label'       => __( 'Send additional data', 'woocommerce-wcp' ),
-				'default'     => 'no',
-				'description' => __( 'Send additional customer information.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'use_iframe'               => array(
-				'type'        => 'checkbox',
-				'label'       => __( 'Use Iframe', 'woocommerce-wcp' ),
-				'default'     => 'no',
-				'description' => __( 'Use Iframe.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'display_text'             => array(
-				'title'       => __( 'Display text', 'woocommerce-wcp' ),
-				'type'        => 'text',
-				'description' => __( 'Display Text on the Wirecard Checkout Page.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			// payment types
-			'pt_select'                => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'select' ),
-				'default'     => 'yes',
-				'description' => __( 'Payment is choosen on the Wirecard Checkout Page.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_ccard'                 => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'ccard' ),
-				'default'     => 'no',
-				'description' => __( 'Credit Card.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_ccard-moto'            => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'ccard-moto' ),
-				'default'     => 'no',
-				'description' => __( 'Credit Card mobile-, tele-order.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_maestro'               => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'maestro' ),
-				'default'     => 'no',
-				'description' => __( 'Maestro SecureCode.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_eps'                   => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'eps' ),
-				'default'     => 'no',
-				'description' => __( 'eps Online Bank Transfer.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_idl'                   => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'idl' ),
-				'default'     => 'no',
-				'description' => __( 'iDEAL.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_giropay'               => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'giropay' ),
-				'default'     => 'no',
-				'description' => __( 'giropay.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_sofortueberweisung'    => array(
-				'type'        => 'checkbox',
-				'label'       => __( 'SOFORT banking (PIN/TAN)', 'woocommerce-wcp' ),
-				'default'     => 'no',
-				'description' => __( 'SOFORT banking (PIN/TAN).', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_pbx'                   => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'pbx' ),
-				'default'     => 'no',
-				'description' => __( 'Mobile Phone Invoicing.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_psc'                   => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'psc' ),
-				'default'     => 'no',
-				'description' => __( 'paysafecard.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_quick'                 => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'quick' ),
-				'default'     => 'no',
-				'description' => __( '@QUICK.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_paypal'                => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'paypal' ),
-				'default'     => 'no',
-				'description' => __( 'PayPal.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_elv'                   => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'elv' ),
-				'default'     => 'no',
-				'description' => __( 'SEPA Direct Debit.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_c2p'                   => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'c2p' ),
-				'default'     => 'no',
-				'description' => __( 'CLICK2PAY.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_invoice'               => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'invoice' ),
-				'default'     => 'no',
-				'description' => __( 'Invoice.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_installment'           => array(
-				'type'        => 'checkbox',
-				'label'       => __( 'Installment', 'woocommerce-wcp' ),
-				'default'     => 'no',
-				'description' => __( 'Installment.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_bancontact_mistercash' => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'bancontact_mistercash' ),
-				'default'     => 'no',
-				'description' => __( 'Bancontact/Mister Cash.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_przelewy24'            => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'przelewy24' ),
-				'default'     => 'no',
-				'description' => __( 'Przelewy24.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_moneta'                => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'moneta' ),
-				'default'     => 'no',
-				'description' => __( 'moneta.ru.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_poli'                  => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'poli' ),
-				'default'     => 'no',
-				'description' => __( 'POLi.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_ekonto'                => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'ekonto' ),
-				'default'     => 'no',
-				'description' => __( 'eKonto.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_instantbank'           => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'instantbank' ),
-				'default'     => 'no',
-				'description' => __( 'Trustly.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_mpass'                 => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'mpass' ),
-				'default'     => 'no',
-				'description' => __( 'mpass.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_skrilldirect'          => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'skrilldirect' ),
-				'default'     => 'no',
-				'description' => __( 'Skrill Direct.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'pt_skrillwallet'          => array(
-				'type'        => 'checkbox',
-				'label'       => $this->get_paymenttype_name( 'skrillwallet' ),
-				'default'     => 'no',
-				'description' => __( 'Skrill Digital Wallet.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'invoice_min_amount'       => array(
-				'type'        => 'text',
-				'title'       => __( 'Invoice minimum amount', 'woocommerce-wcp' ),
-				'default'     => '100',
-				'description' => __( 'Invoice minimum amount.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'invoice_max_amount'       => array(
-				'type'        => 'text',
-				'title'       => __( 'Invoice maximum amount', 'woocommerce-wcp' ),
-				'default'     => '1000',
-				'description' => __( 'Invoice maximum amount.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'installment_min_amount'   => array(
-				'type'        => 'text',
-				'title'       => __( 'Installment minimum amount', 'woocommerce-wcp' ),
-				'default'     => '100',
-				'description' => __( 'Installment minimum amount.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			),
-			'installment_max_amount'   => array(
-				'type'        => 'text',
-				'title'       => __( 'Installment maximum amount', 'woocommerce-wcp' ),
-				'default'     => '1000',
-				'description' => __( 'Installment maximum amount.', 'woocommerce-wcp' ),
-				'desc_tip'    => true
-			)
-		);
+		$countries = WC()->countries->countries;
+		$this->countries = array();
+		if ( ! empty( $countries ) ) {
+			foreach ( $countries as $key => $val ) {
+				$this->countries[$key] = $val;
+			}
+		}
+		$this->currency_code_options = array();
+		foreach ( get_woocommerce_currencies() as $code => $name ) {
+			$this->currency_code_options[ $code ] = $name . ' (' . get_woocommerce_currency_symbol( $code ) . ')';
+		}
+		$this->form_fields = include('includes/settings-wcp.php');
 	}
 
 	/**
@@ -421,14 +131,35 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 */
 	function admin_options() {
 		?>
-		<h3><?php _e( 'Wirecard Checkout Page', 'woocommerce-wcp' ); ?></h3>
-		<p><?php _e( 'Payment via Wirecard Checkout Page', 'woocommerce-wcp' ); ?></p>
-		<table class="form-table">
+        <h3><?php _e( 'Wirecard Checkout Page', 'woocommerce-wcp' ); ?></h3>
+        <div class="woo-wcs-settings-header-wrapper" style="min-width: 200px; max-width: 800px;">
+            <img src="<?= plugins_url( 'woocommerce-wirecard-checkout-page/assets/images/wirecard-logo.png' ) ?>">
+            <p style="text-transform: uppercase;"><?= __( 'Wirecard - Your Full Service Payment Provider - Comprehensive solutions from one single source',
+					'woocommerce-wcp' ) ?></p>
+
+            <p><?= __( 'Wirecard is one of the world´s leading providers of outsourcing and white label solutions for electronic payment transactions.',
+					'woocommerce-wcp' ) ?></p>
+
+            <p><?= __( 'As independent provider of payment solutions, we accompany our customers along the entire business development. Our payment solutions are perfectly tailored to suit e-Commerce requirements and have made	us Austria´s leading payment service provider. Customization, competence, and commitment.',
+					'woocommerce-wcp' ) ?></p>
+
+        </div>
+        <hr/>
+        <style>
+            .form-table td {
+                padding:0px;
+            }
+            .form-table th {
+                padding:0px;
+            }
+
+        </style>
+        <table class="form-table">
 			<?php
 			// Generate the HTML For the settings form.
 			$this->generate_settings_html();
 			?>
-		</table>
+        </table>
 		<?php
 	}
 
@@ -449,45 +180,24 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$order = new WC_Order( $order_id );
 
-		if ( ! isset( $_REQUEST['payment_method_wirecard_checkout_page_type'] ) ) {
-			wc_add_notice( __( 'Please select a payment type.', 'woocommerce-wcp' ), 'error' );
-
-			return false;
-		}
-
-		$paymenttype = $_REQUEST['payment_method_wirecard_checkout_page_type'];
+		$paymenttype = $_POST['wcp_payment_method'];
 		if ( ! $this->is_paymenttype_enabled( $paymenttype ) ) {
 			wc_add_notice( __( 'Payment type is not available, please select another payment type.',
-			                   'woocommerce-wcp' ), 'error' );
+				'woocommerce-wcp' ), 'error' );
 
 			return false;
 		}
 
-		// check customers age for invoice and installment
-		// make it here, because we have no birthday in earlier checkout steps
-		if ( $paymenttype == 'invoice' || $paymenttype == 'installment' ) {
-			if ( ! isset( $_POST['billing_birthday'] ) || ! strlen( $_POST['billing_birthday'] ) ) {
-				wc_add_notice( __( 'Please fill out the birthday field.', 'woocommerce-wcp' ), 'error' );
-
-				return false;
-			}
-
-			try {
-				// remember this, needed later
-				$this->customer_birthday = new \DateTime( $_POST['billing_birthday'] );
-			} catch ( Exception $e ) {
-				wc_add_notice( __( 'Birthday field is invalid.', 'woocommerce-wcp' ), 'error' );
-
-				return false;
-			}
-
-			$diff        = $this->customer_birthday->diff( new DateTime() );
-			$customerAge = $diff->format( '%y' );
-			if ( $customerAge < WOOCOMMERCE_GATEWAY_WCP_INVOICE_INSTALLMENT_MIN_AGE ) {
-				wc_add_notice( __( 'You are not allowed to use this payment type.', 'woocommerce-wcp' ), 'error' );
-
-				return false;
-			}
+		$birthday = null;
+		if ( isset( $_POST['wcp_birthday'] ) ) {
+			$birthday = $_POST['wcp_birthday'];
+		}
+		$financial_inst = null;
+		if ( $paymenttype == 'eps' ) {
+			$financial_inst = $_POST['wcp_eps_financialInstitution'];
+		}
+		if ( $paymenttype == 'idl' ) {
+			$financial_inst = $_POST['wcp_idl_financialInstitution'];
 		}
 
 		if ( $this->use_iframe ) {
@@ -505,7 +215,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				'redirect' => $page_url
 			);
 		} else {
-			$redirectUrl = $this->initiate_payment( $order, $paymenttype );
+			$redirectUrl = $this->initiate_payment( $order, $paymenttype, $birthday, $financial_inst );
 			if ( ! $redirectUrl ) {
 				return;
 			}
@@ -526,13 +236,26 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	function payment_page( $order_id ) {
 		$order = new WC_Order( $order_id );
 
-		$iframeUrl = $this->initiate_payment( $order, WC()->session->wirecard_checkout_page_type );
+		$birthday = null;
+		if ( isset( $_POST['wcp_birthday'] ) ) {
+			$birthday = $_POST['wcp_birthday'];
+		}
+		$financial_inst = null;
+		if ( WC()->session->wirecard_checkout_page_type == 'eps' ) {
+			$financial_inst = $_POST['wcp_eps_financialInstitution'];
+		}
+		if ( WC()->session->wirecard_checkout_page_type == 'idl' ) {
+			$financial_inst = $_POST['wcp_idl_financialInstitution'];
+		}
+
+		$iframeUrl = $this->initiate_payment( $order, WC()->session->wirecard_checkout_page_type, $birthday,
+			$financial_inst );
 		?>
-		<iframe src="<?php echo $iframeUrl ?>"
-		        name="<?php echo WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME ?>" width="100%"
-		        height="700px" border="0" frameborder="0">
-			<p>Your browser does not support iframes.</p>
-		</iframe>
+        <iframe src="<?php echo $iframeUrl ?>"
+                name="<?php echo WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME ?>" width="100%"
+                height="700px" border="0" frameborder="0">
+            <p>Your browser does not support iframes.</p>
+        </iframe>
 		<?php
 	}
 
@@ -573,7 +296,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function return_request() {
-		$this->log( 'return_request:' . print_r( $_REQUEST, true ), 'notice' );
+		$this->log( 'return_request:' . print_r( $_REQUEST, true ), 'info' );
 
 		$redirectUrl = $this->get_return_url();
 		if ( ! isset( $_REQUEST['wooOrderId'] ) || ! strlen( $_REQUEST['wooOrderId'] ) ) {
@@ -623,7 +346,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function confirm_request() {
-		$this->log( 'confirm_request:' . print_r( $_REQUEST, true ), 'notice' );
+		$this->log( 'confirm_request:' . print_r( $_REQUEST, true ), 'info' );
 
 		$message = null;
 		if ( ! isset( $_REQUEST['wooOrderId'] ) || ! strlen( $_REQUEST['wooOrderId'] ) ) {
@@ -658,7 +381,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$message = null;
 		try {
-			$return = WirecardCEE_QPay_ReturnFactory::getInstance( $_POST, $this->get_option( 'secret' ) );
+			$return = WirecardCEE_QPay_ReturnFactory::getInstance( $_POST, $this->_config->get_secret() );
 			if ( ! $return->validate() ) {
 				$message = __( 'Validation error: invalid response', 'woocommerce-wcp' );
 				$order->update_status( 'failed', $message );
@@ -674,7 +397,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			switch ( $return->getPaymentState() ) {
 				case WirecardCEE_QPay_ReturnFactory::STATE_SUCCESS:
 					update_post_meta( $order->get_id(), 'wcp_gateway_reference_number',
-					                  $return->getGatewayReferenceNumber() );
+						$return->getGatewayReferenceNumber() );
 					update_post_meta( $order->get_id(), 'wcp_order_number', $return->getOrderNumber() );
 					$order->payment_complete();
 					break;
@@ -704,8 +427,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 					foreach ( $return->getErrors() as $error ) {
 						$errors[] = $error->getConsumerMessage();
 						wc_add_notice( __( "Request failed! Error: {$error->getConsumerMessage()}",
-						                   'woocommerce-wcp' ),
-						               'error' );
+							'woocommerce-wcp' ),
+							'error' );
 						$this->log( $error->getConsumerMessage(), 'error' );
 						$str_errors += $error->getConsumerMessage();
 					}
@@ -747,65 +470,68 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @access public
 	 * @return void
 	 */
-	function payment_fields() {
-		if ( $description = $this->get_description() ) {
-			echo wpautop( wptexturize( $description ) );
-		}
-
+	public function payment_fields() {
+		?>
+        <input id="payment_method_wcp" type="hidden" value="woocommerce_wirecard_checkout_page"
+               name="wcp_payment_method"/>
+        <script type="text/javascript">
+            function changeWCPPayment(code) {
+                var changer = document.getElementById('payment_method_wcp');
+                changer.value = code;
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="<?= WOOCOMMERCE_GATEWAY_WCP_URL ?>assets/styles/payment.css">
+		<?php
 		foreach ( $this->get_enabled_paymenttypes() as $type ) {
 			?>
-			<div
-				id="wcp-payment-method-<?php echo $type->code ?>-wrap"
-				class="wcp-payment-method-wrap">
-				<input
-					id="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"
-					type="radio"
-					onclick="jQuery.post('<?= WC()->ajax_url() ?>',{action:'saveWcpPaymentMethod',code:'<?= $type->code ?>'});"
-					<?= WC()->session->selected_wcp_payment == $type->code ? 'checked="checked"' : '' ?>
-					value="<?php echo $type->code ?>"
-					name="payment_method_wirecard_checkout_page_type">
-				<label
-					for="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"><?php echo $type->label ?></label>
-			</div>
+            </div></li>
+        <li class="wc_payment_method payment_method_wirecard_checkout_page_<?php echo $type->code ?>">
+            <input
+                    id="payment_method_wirecard_checkout_page_<?php echo $type->code ?>"
+                    type="radio"
+                    class="input-radio"
+                    value="wirecard_checkout_page"
+                    onclick="changeWCPPayment('<?php echo $type->code ?>');"
+                    name="payment_method"
+                    data-order_button_text>
+            <label for="payment_method_wirecard_checkout_page_<?php echo $type->code ?>">
+				<?php
+				echo $type->label;
+				echo "<img src='{$this->_payments->get_payment_icon($type->code)}' alt='Wirecard {$type->label}'>";
+				?>
+            </label>
+        <div class="payment_box payment_method_wirecard_checkout_page_<?= ( $this->_payments->has_payment_fields($type->code) ) ? $type->code : "" ?>" style="display:none;">
 			<?php
+			echo $this->_payments->get_payment_fields($type->code);
 		}
 	}
 
 	/**
-	 * Filter hook, add custom field to the checkout, needed for invoice and installment
+	 * Basic validation for payment methods
 	 *
-	 * @param
-	 *            $address_fields
+	 * @since 1.3.0
 	 *
-	 * @return mixed
+	 * @return bool|void
 	 */
-	function custom_fields( $address_fields ) {
-		$address_fields['billing_birthday'] = array(
-			'label'       => __( 'Birthday', 'woocommerce-wcp' ),
-			'placeholder' => 'DD.MM.YYYY',
-			'required'    => 0,
-			'class'       => array(
-				'form-row-wide'
-			),
-			'validate'    => array(
-				'date'
-			),
-			'clear'       => 1
-		);
+	public function validate_fields() {
+		$args         = $this->get_post_data();
+		$payment_type = $args['wcp_payment_method'];
+		$validation   = $this->_payments->validate_payment( $payment_type, $args );
+		if ( $validation === true ) {
+			return true;
+		} else {
+			wc_add_notice( $validation, 'error' );
 
-		return $address_fields;
+			return;
+		}
 	}
-
-	/*
-	 * Protected Methods
-	 */
 
 	/**
 	 * List of enables paymenttypes
 	 *
 	 * @return array
 	 */
-	protected function get_enabled_paymenttypes() {
+	protected function get_enabled_paymenttypes($is_on_payment = true) {
 		$types = array();
 		foreach ( $this->settings as $k => $v ) {
 			if ( preg_match( '/^pt_(.+)$/', $k, $parts ) ) {
@@ -813,16 +539,10 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 					$type        = new stdClass();
 					$type->code  = $parts[1];
 					$type->label = $this->get_paymenttype_name( $type->code );
-					$method_name = 'check_paymenttype_' . $type->code;
 
-					if ( method_exists( $this, $method_name ) ) {
-						if ( ! call_user_func(
-							array(
-								$this,
-								$method_name
-							)
-						)
-						) {
+					if ( method_exists( $this->_payments, 'get_risk' ) && $is_on_payment ) {
+						$riskvalue = $this->_payments->get_risk( $type->code );
+						if ( ! $riskvalue ) {
 							continue;
 						}
 					}
@@ -853,163 +573,43 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Check whether invoice is allowed or not
-	 *
-	 * @return bool
-	 */
-	function check_paymenttype_invoice() {
-		global $woocommerce;
-		$customer = $woocommerce->customer;
-
-		$fields = array(
-			'first_name',
-			'last_name',
-			'address',
-			'address_2',
-			'city',
-			'country',
-			'postcode',
-			'state'
-		);
-
-		foreach ( $fields as $field ) {
-			$billing  = "get_billing_$field";
-			$shipping = "get_shipping_$field";
-
-			$billing_value  = call_user_func( array( $customer, $billing ) );
-			$shipping_value = call_user_func( array( $customer, $shipping ) );
-
-			if ( $billing_value != $shipping_value ) {
-				return false;
-			}
-		}
-
-		if ( get_woocommerce_currency() != 'EUR' ) {
-			return false;
-		}
-
-		$cart = new WC_Cart();
-		$cart->get_cart_from_session();
-
-		$total = $cart->total;
-		if ( (int) $this->get_option( 'invoice_min_amount' ) && (int) $this->get_option( 'invoice_min_amount' ) > $total ) {
-			return false;
-		}
-
-		if ( (int) $this->get_option( 'invoice_max_amount' ) && (int) $this->get_option( 'invoice_max_amount' ) < $total ) {
-			return false;
-		}
-
-		return true;
-	}
-
-
-	/**
-	 * Basic check if address is empty
-	 *
-	 * @since 1.2.2
-	 *
-	 * @param $address
-	 *
-	 * @return bool
-	 */
-	function address_empty( $address ) {
-
-		foreach ( $address as $key => $value ) {
-			if ( ! empty( $value ) ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * Check whether installment is allowed or not
-	 *
-	 * @return bool
-	 */
-	function check_paymenttype_installment() {
-		global $woocommerce;
-		$customer = $woocommerce->customer;
-
-		$fields = array(
-			'first_name',
-			'last_name',
-			'address',
-			'address_2',
-			'city',
-			'country',
-			'postcode',
-			'state'
-		);
-
-		foreach ( $fields as $field ) {
-			$billing  = "get_billing_$field";
-			$shipping = "get_shipping_$field";
-
-			$billing_value  = call_user_func( array( $customer, $billing ) );
-			$shipping_value = call_user_func( array( $customer, $shipping ) );
-
-			if ( $billing_value != $shipping_value ) {
-				return false;
-			}
-		}
-
-		if ( get_woocommerce_currency() != 'EUR' ) {
-			return false;
-		}
-
-		$cart = new WC_Cart();
-		$cart->get_cart_from_session();
-
-		$total = $cart->total;
-		if ( (int) $this->get_option( 'installment_min_amount' ) && (int) $this->get_option( 'installment_min_amount' ) > $total ) {
-			return false;
-		}
-
-		if ( (int) $this->get_option( 'installment_max_amount' ) && (int) $this->get_option( 'installment_max_amount' ) < $total ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * @param $order
 	 * @param $paymenttype
 	 *
 	 * @return string
 	 * @throws Exception
 	 */
-	protected function initiate_payment( $order, $paymenttype ) {
+	protected function initiate_payment( $order, $paymenttype, $birthday, $financial_inst ) {
 		if ( isset( WC()->session->wirecard_checkout_page_redirect_url ) && WC()->session->wirecard_checkout_page_redirect_url['id'] == $order->get_id() ) {
 			return WC()->session->wirecard_checkout_page_redirect_url['url'];
 		}
 
 		$paymenttype = strtoupper( $paymenttype );
 		try {
-
-			$client = new WirecardCEE_QPay_FrontendClient( array(
-				                                               'CUSTOMER_ID' => $this->get_option( 'customer_id' ),
-				                                               'SHOP_ID'     => $this->get_option( 'shop_id' ),
-				                                               'SECRET'      => $this->get_option( 'secret' ),
-				                                               'LANGUAGE'    => $this->get_language_code()
-			                                               ) );
+			$config = $this->_config->get_client_config();
+			$client = new WirecardCEE_QPay_FrontendClient( $config );
 
 			// consumer data (IP and User aget) are mandatory!
 			$consumerData = new WirecardCEE_Stdlib_ConsumerData();
 			$consumerData->setUserAgent( $_SERVER['HTTP_USER_AGENT'] )->setIpAddress( $_SERVER['REMOTE_ADDR'] );
 
-			if ( $this->get_option( 'send_additional_data' ) == 'yes' || in_array(
-					$paymenttype,
-					Array(
-						WirecardCEE_QPay_PaymentType::INVOICE,
-						WirecardCEE_QPay_PaymentType::INSTALLMENT
-					)
-				)
+			if ( $birthday !== null ) {
+				$date = DateTime::createFromFormat( 'Y-m-d', $birthday );
+				$consumerData->setBirthDate( $date );
+			}
+			$consumerData->setEmail( $order->get_billing_email() );
+
+			if ( $this->get_option( 'send_consumer_shipping' ) == 'yes' ||
+			     in_array( $paymenttype,
+				     Array( WirecardCEE_QPay_PaymentType::INVOICE, WirecardCEE_QPay_PaymentType::INSTALLMENT ) )
 			) {
-				$this->set_consumer_information( $order, $consumerData );
+				$consumerData->addAddressInformation( $this->get_consumer_data( $order, 'shipping' ) );
+			}
+			if ( $this->get_option( 'send_consumer_billing' ) == 'yes' ||
+			     in_array( $paymenttype,
+				     Array( WirecardCEE_QPay_PaymentType::INVOICE, WirecardCEE_QPay_PaymentType::INSTALLMENT ) )
+			) {
+				$consumerData->addAddressInformation( $this->get_consumer_data( $order, 'billing' ) );
 			}
 
 			$returnUrl = add_query_arg( 'wc-api', 'WC_Gateway_WCP', home_url( '/', is_ssl() ? 'https' : 'http' ) );
@@ -1035,19 +635,32 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			       ->setImageUrl( $this->get_option( 'image_url' ) )
 			       ->setConsumerData( $consumerData )
 			       ->setDisplayText( $this->get_option( 'display_text' ) )
-			       ->setCustomerStatement( $this->get_customer_statement( $order ) )
+			       ->setOrderReference( $this->get_order_reference( $order ) )
+			       ->setCustomerStatement( $this->get_customer_statement( $order, $paymenttype ) )
 			       ->setDuplicateRequestCheck( false )
 			       ->setMaxRetries( $this->get_option( 'max_retries' ) )
 			       ->createConsumerMerchantCrmId( $order->get_billing_email() )
 			       ->setWindowName( WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME );
 
+			if ( $paymenttype == WirecardCEE_QPay_PaymentType::MASTERPASS ) {
+				$client->setShippingProfile( 'NO_SHIPPING' );
+			}
+			if ( $financial_inst !== null ) {
+				$client->setFinancialInstitution( $financial_inst );
+			}
 			if ( ( $this->get_option( 'auto_deposit' ) == 'yes' ) ) {
 				$client->setAutoDeposit( (bool) ( $this->get_option( 'auto_deposit' ) == 'yes' ) );
 			}
 
+			if ( $this->get_option( 'send_basket_data' ) == 'yes' ||
+			     ( $paymenttype == WirecardCEE_QPay_PaymentType::INVOICE && $this->get_option( 'invoice_provider' ) != 'payolution' ) ||
+			     ( $paymenttype == WirecardCEE_QPay_PaymentType::INSTALLMENT && $this->get_option( 'installment_provider' ) != 'payolution' )
+			) {
+				$client->setBasket( $this->get_shopping_basket() );
+			}
+
 			$client->wooOrderId = $order->get_id();
 			$response           = $client->initiate();
-
 			if ( $response->hasFailed() ) {
 				wc_add_notice(
 					__( "Response failed! Error: {$response->getError()->getMessage()}", 'woocommerce-wcp' ),
@@ -1068,50 +681,120 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Fill additional consumer information
+	 * Get billing/shipping address
 	 *
-	 * @param WC_Order $order
-	 * @param WirecardCEE_Stdlib_ConsumerData $consumerData
+	 * @since 1.3.0
+	 * @access protected
+	 *
+	 * @param $order
+	 * @param string $address
+	 *
+	 * @return WirecardCEE_Stdlib_ConsumerData_Address
 	 */
-	protected function set_consumer_information( $order, WirecardCEE_Stdlib_ConsumerData $consumerData ) {
-		if ( $this->customer_birthday !== null ) {
-			$consumerData->setBirthDate( $this->customer_birthday );
-		}
-
-		$consumerData->setEmail( $order->get_billing_email() );
-
-		$billingAddress = new WirecardCEE_Stdlib_ConsumerData_Address( WirecardCEE_Stdlib_ConsumerData_Address::TYPE_BILLING );
-
-		$billingAddress->setFirstname( $order->get_billing_first_name() )
-		               ->setLastname( $order->get_billing_last_name() )
-		               ->setAddress1( $order->get_billing_address_1() )
-		               ->setAddress2( $order->get_billing_address_2() )
-		               ->setCity( $order->get_billing_city() )
-		               ->setZipCode( $order->get_billing_postcode() )
-		               ->setCountry( $order->get_billing_country() )
-		               ->setPhone( $order->get_billing_phone() )
-		               ->setState( $order->get_billing_state() );
-
-		$cart = new WC_Cart();
+	protected function get_consumer_data( $order, $address = 'billing' ) {
+		$consumer_address = 'billing';
+		$type             = WirecardCEE_Stdlib_ConsumerData_Address::TYPE_BILLING;
+		$cart             = new WC_Cart();
 		$cart->get_cart_from_session();
 
 		//check if shipping address is different
-		if ( $cart->needs_shipping_address() ) {
-			$shippingAddress = new WirecardCEE_Stdlib_ConsumerData_Address( WirecardCEE_Stdlib_ConsumerData_Address::TYPE_SHIPPING );
+		if ( $cart->needs_shipping_address() && $address == 'shipping' ) {
+			$consumer_address = 'shipping';
+			$type             = WirecardCEE_Stdlib_ConsumerData_Address::TYPE_SHIPPING;
+		}
+		switch ( $consumer_address ) {
+			case 'shipping':
+				$shippingAddress = new WirecardCEE_Stdlib_ConsumerData_Address( $type );
 
-			$shippingAddress->setFirstname( $order->get_shipping_first_name() )
-			                ->setLastname( $order->get_shipping_last_name() )
-			                ->setAddress1( $order->get_shipping_address_1() )
-			                ->setAddress2( $order->get_shipping_address_2() )
-			                ->setCity( $order->get_shipping_city() )
-			                ->setZipCode( $order->get_shipping_postcode() )
-			                ->setCountry( $order->get_shipping_country() )
-			                ->setState( $order->get_shipping_state() );
-		} else {
-			$shippingAddress = $billingAddress;
+				$shippingAddress->setFirstname( $order->get_shipping_first_name() )
+				                ->setLastname( $order->get_shipping_last_name() )
+				                ->setAddress1( $order->get_shipping_address_1() )
+				                ->setAddress2( $order->get_shipping_address_2() )
+				                ->setCity( $order->get_shipping_city() )
+				                ->setZipCode( $order->get_shipping_postcode() )
+				                ->setCountry( $order->get_shipping_country() )
+				                ->setState( $order->get_shipping_state() );
+
+				return $shippingAddress;
+			case 'billing':
+			default:
+				$billing_address = new WirecardCEE_Stdlib_ConsumerData_Address( $type );
+
+				$billing_address->setFirstname( $order->get_billing_first_name() )
+				                ->setLastname( $order->get_billing_last_name() )
+				                ->setAddress1( $order->get_billing_address_1() )
+				                ->setAddress2( $order->get_billing_address_2() )
+				                ->setCity( $order->get_billing_city() )
+				                ->setZipCode( $order->get_billing_postcode() )
+				                ->setCountry( $order->get_billing_country() )
+				                ->setPhone( $order->get_billing_phone() )
+				                ->setState( $order->get_billing_state() );
+
+				return $billing_address;
 		}
 
-		$consumerData->addAddressInformation( $billingAddress )->addAddressInformation( $shippingAddress );
+	}
+
+	/**
+	 * Generate shopping basket
+	 *
+	 * @since 1.3.0
+	 * @access protected
+	 * @return WirecardCEE_Stdlib_Basket
+	 */
+	protected function get_shopping_basket() {
+		global $woocommerce;
+
+		$cart = $woocommerce->cart;
+		$basket = new WirecardCEE_Stdlib_Basket();
+
+		foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+			$article_nr = $cart_item['product_id'];
+			if ( $cart_item['data']->get_sku() != '' ) {
+				$article_nr = $cart_item['data']->get_sku();
+			}
+
+			$attachment_ids = $cart_item['data']->get_gallery_image_ids();
+			foreach ( $attachment_ids as $attachment_id ) {
+				$image_url = wp_get_attachment_image_url( $attachment_id );
+			}
+
+			$item            = new WirecardCEE_Stdlib_Basket_Item( $article_nr );
+			$item_net_amount = $cart_item['line_total'];
+			$item_tax_amount = $cart_item['line_tax'];
+			$item_quantity   = $cart_item['quantity'];
+
+			// Calculate amounts per unit
+			$item_unit_net_amount   = $item_net_amount / $item_quantity;
+			$item_unit_tax_amount   = $item_tax_amount / $item_quantity;
+			$item_unit_gross_amount = wc_format_decimal( $item_unit_net_amount + $item_unit_tax_amount,
+				wc_get_price_decimals() );
+
+			$item->setUnitGrossAmount( $item_unit_gross_amount )
+			     ->setUnitNetAmount( wc_format_decimal( $item_unit_net_amount, wc_get_price_decimals() ) )
+			     ->setUnitTaxAmount( wc_format_decimal( $item_unit_tax_amount, wc_get_price_decimals() ) )
+			     ->setUnitTaxRate( number_format( ( $item_unit_tax_amount / $item_unit_net_amount ), 2, '.', '' ) )
+			     ->setDescription( substr( strip_tags( $cart_item['data']->get_short_description() ), 0, 127 ) )
+			     ->setName( substr( strip_tags( $cart_item['data']->get_name() ), 0, 127 ) )
+			     ->setImageUrl( isset( $image_url ) ? $image_url : '' );
+
+			$basket->addItem( $item, $item_quantity );
+		}
+
+		// Add shipping to the basket
+		if ( isset( $cart->shipping_total ) && $cart->shipping_total > 0 ) {
+			$item = new WirecardCEE_Stdlib_Basket_Item( 'shipping' );
+			$item->setUnitGrossAmount( wc_format_decimal( $cart->shipping_total + $cart->shipping_tax_total,
+				wc_get_price_decimals() ) )
+			     ->setUnitNetAmount( wc_format_decimal( $cart->shipping_total, wc_get_price_decimals() ) )
+			     ->setUnitTaxAmount( wc_format_decimal( $cart->shipping_tax_total, wc_get_price_decimals() ) )
+			     ->setUnitTaxRate( number_format( ( $cart->shipping_tax_total / $cart->shipping_total ), 2, '.', '' ) )
+			     ->setName( 'Shipping' )
+			     ->setDescription( 'Shipping' );
+			$basket->addItem( $item );
+		}
+
+		return $basket;
 	}
 
 	/**
@@ -1123,84 +806,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string void
 	 */
 	protected function get_paymenttype_name( $code ) {
-		switch ( $code ) {
-			case 'select':
-				return __( 'Select', 'woocommerce-wcp' );
-
-			case 'ccard':
-				return __( 'Credit Card', 'woocommerce-wcp' );
-
-			case 'ccard-moto':
-				return __( 'Credit Card MoTo', 'woocommerce-wcp' );
-
-			case 'maestro':
-				return __( 'Maestro', 'woocommerce-wcp' );
-
-			case 'eps':
-				return __( 'eps Online Bank Transfer', 'woocommerce-wcp' );
-			case 'idl':
-				return __( 'iDEAL', 'woocommerce-wcp' );
-
-			case 'giropay':
-				return __( 'giropay', 'woocommerce-wcp' );
-
-			case 'sofortueberweisung':
-				return __( 'sofortueberweisung', 'woocommerce-wcp' );
-
-			case 'pbx':
-				return __( 'Mobile Phone Invoicing', 'woocommerce-wcp' );
-
-			case 'psc':
-				return __( 'paysafecard', 'woocommerce-wcp' );
-
-			case 'quick':
-				return __( '@QUICK', 'woocommerce-wcp' );
-
-			case 'paypal':
-				return __( 'PayPal', 'woocommerce-wcp' );
-
-			case 'elv':
-				return __( 'SEPA Direct Debit', 'woocommerce-wcp' );
-
-			case 'c2p':
-				return __( 'CLICK2PAY', 'woocommerce-wcp' );
-
-			case 'invoice':
-				return __( 'Invoice', 'woocommerce-wcp' );
-
-			case 'installment':
-				return __( 'Installment', 'woocommerce-wcp' );
-
-			case 'bancontact_mistercash':
-				return __( 'Bancontact/Mister Cash', 'woocommerce-wcp' );
-
-			case 'przelewy24':
-				return __( 'Przelewy24', 'woocommerce-wcp' );
-
-			case 'moneta':
-				return __( 'moneta.ru', 'woocommerce-wcp' );
-
-			case 'poli':
-				return __( 'POLi', 'woocommerce-wcp' );
-
-			case 'ekonto':
-				return __( 'eKonto', 'woocommerce-wcp' );
-
-			case 'instantbank':
-				return __( 'Trustly', 'woocommerce-wcp' );
-
-			case 'mpass':
-				return __( 'mpass', 'woocommerce-wcp' );
-
-			case 'skrilldirect':
-				return __( 'Skrill Direct', 'woocommerce-wcp' );
-
-			case 'skrillwallet':
-				return __( 'Skrill Digital Wallet', 'woocommerce-wcp' );
-
-			default:
-				return $code;
-		}
+		return __( $code, 'woocommerce-wcp' );
 	}
 
 	/**
@@ -1222,17 +828,39 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	protected function get_order_description( $order ) {
-		return sprintf( 'user_id:%s order_id:%s', $order->get_user_id(), $order->get_id() );
+		return sprintf( '%s %s %s', $order->get_billing_email(), $order->get_billing_first_name(),
+			$order->get_billing_last_name() );
 	}
 
 	/**
+	 * Generate order reference
 	 *
 	 * @param $order WC_Order
 	 *
+	 * @since 1.3.0
 	 * @return string
 	 */
-	protected function get_customer_statement( $order ) {
-		return sprintf( '%s #%06s', $this->get_vendor(), $order->get_order_number() );
+	protected function get_order_reference( $order ) {
+		return sprintf( '%010s', substr( $order->get_id(), - 10 ) );
+	}
+
+	/**
+	 * Generate customer statement
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param $order
+	 * @param $payment_type
+	 *
+	 * @return string
+	 */
+	protected function get_customer_statement( $order, $payment_type ) {
+		$shop_name = sprintf( '%9s', substr( get_bloginfo( 'name' ), - 9 ) );
+		$order_reference = $this->get_order_reference( $order );
+		if ( $payment_type == WirecardCEE_QMore_PaymentType::POLI ) {
+			return $shop_name;
+		}
+		return $shop_name . ' ' . $order_reference;
 	}
 
 	/**
@@ -1251,12 +879,42 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @param
 	 *            $str
 	 */
-	protected function log( $str, $level = 'notice' ) {
-		if ( $this->debug ) {
+	protected function log( $str, $level = 'info' ) {
+		if ( $this->get_option('debug') == 'yes' ) {
 			if ( empty( $this->log ) ) {
 				$this->log = new WC_Logger();
 			}
-			$this->log->log( $level, 'WirecardCheckoutPage: ' . $str );
+			$this->log->$level( 'WirecardCheckoutPage: ' . $str );
 		}
+	}
+
+	/**
+	 * Remove deprecated payment methods from database
+	 *
+	 * @since 1.3.0
+	 * @access protected
+	 */
+	protected function remove_old_payments() {
+		global $wpdb;
+
+		$options      = $wpdb->get_var( "SELECT option_value FROM {$wpdb->prefix}options WHERE option_name='woocommerce_wirecard_checkout_page_settings';" );
+		$option_array = unserialize( $options );
+
+		if ( ! empty( $option_array ) ) {
+			foreach ( $option_array as $k => $v ) {
+				switch ( $k ) {
+					case 'pt_skrilldirect':
+					case 'pt_elv':
+					case 'pt_c2p':
+					case 'pt_instantbank':
+					case 'pt_mpass':
+						unset( $option_array[ $k ] );
+						break;
+				}
+			}
+		}
+		$options = serialize( $option_array );
+		$wpdb->update( $wpdb->prefix . 'options', array( 'option_value' => $options ),
+			array( 'option_name' => 'woocommerce_wirecard_checkout_page_settings' ) );
 	}
 }
