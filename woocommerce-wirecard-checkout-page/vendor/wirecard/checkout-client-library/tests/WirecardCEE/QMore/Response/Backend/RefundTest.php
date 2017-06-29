@@ -38,7 +38,7 @@ class WirecardCEE_QMore_Response_Backend_RefundTest extends PHPUnit_Framework_Te
 
     protected $_secret = 'B8AKTPWBRMNBV455FG6M2DANE99WU2';
     protected $_customerId = 'D200001';
-    protected $_shopId = 'qmore';
+    protected $_shopId = 'seamless';
     protected $_language = 'en';
     protected $_toolkitPassword = 'jcv45z';
     protected $_orderNumber = 123456;
@@ -57,14 +57,13 @@ class WirecardCEE_QMore_Response_Backend_RefundTest extends PHPUnit_Framework_Te
     protected function setUp()
     {
         parent::setUp();
-        $customerId      = $this->_customerId;
-        $shopId          = $this->_shopId;
-        $secret          = $this->_secret;
-        $language        = $this->_language;
-        $toolkitPassword = $this->_toolkitPassword;
-
-        $oBackClient  = new WirecardCEE_QMore_BackendClient();
-        $this->object = $oBackClient->refund($this->_orderNumber, $this->_amount, $this->_currency);
+        $this->object  = new WirecardCEE_QMore_BackendClient(Array(
+            'CUSTOMER_ID' => $this->_customerId,
+            'SHOP_ID'     => $this->_shopId,
+            'SECRET'      => $this->_secret,
+            'LANGUAGE'    => $this->_language,
+            'PASSWORD'    => $this->_toolkitPassword
+        ));
     }
 
     /**
@@ -72,7 +71,8 @@ class WirecardCEE_QMore_Response_Backend_RefundTest extends PHPUnit_Framework_Te
      */
     public function testGetStatus()
     {
-        $this->assertEquals($this->object->getStatus(), 0);
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency);
+        $this->assertEquals($response->getStatus(), 0);
     }
 
     /**
@@ -80,7 +80,8 @@ class WirecardCEE_QMore_Response_Backend_RefundTest extends PHPUnit_Framework_Te
      */
     public function testGetErrors()
     {
-        $this->assertEmpty($this->object->getErrors());
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency);
+        $this->assertEmpty($response->getErrors());
     }
 
     /**
@@ -88,8 +89,19 @@ class WirecardCEE_QMore_Response_Backend_RefundTest extends PHPUnit_Framework_Te
      */
     public function testGetCreditNumber()
     {
-        $this->assertInternalType('string', $this->object->getCreditNumber());
-        $this->assertNotEquals('', $this->object->getCreditNumber());
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency);
+        $this->assertInternalType('string', $response->getCreditNumber());
+        $this->assertNotEquals('', $response->getCreditNumber());
+    }
+
+    /**
+     * Test basket data
+     */
+    public function testWithBasketData()
+    {
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency, $this->getValidBasket());
+        $this->assertInternalType('string', $response->getCreditNumber());
+        $this->assertNotEquals('', $response->getCreditNumber());
     }
 
     /**
@@ -97,7 +109,8 @@ class WirecardCEE_QMore_Response_Backend_RefundTest extends PHPUnit_Framework_Te
      */
     public function testHasFailed()
     {
-        $this->assertFalse($this->object->hasFailed());
+        $response = $this->object->refund($this->_orderNumber, $this->_amount, $this->_currency);
+        $this->assertFalse($response->hasFailed());
     }
 
     /**
@@ -110,6 +123,28 @@ class WirecardCEE_QMore_Response_Backend_RefundTest extends PHPUnit_Framework_Te
         $this->object = null;
 
         parent::tearDown();
+    }
+
+    /**
+     * Creates a valid shopping basket.
+     *
+     * @return WirecardCEE_Stdlib_Basket
+     */
+    private function getValidBasket()
+    {
+        $basketItem = new WirecardCEE_Stdlib_Basket_Item('WirecardCEETestItem');
+        $basketItem->setUnitGrossAmount(10)
+            ->setUnitNetAmount(8)
+            ->setUnitTaxAmount(2)
+            ->setUnitTaxRate(20.0)
+            ->setDescription('unittest description')
+            ->setName('unittest name')
+            ->setImageUrl('http://example.com/picture.png');
+
+        $basket = new WirecardCEE_Stdlib_Basket();
+        $basket->addItem($basketItem);
+
+        return $basket;
     }
 }
 

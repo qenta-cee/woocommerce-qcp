@@ -209,6 +209,20 @@ class WirecardCEE_QPay_FrontendClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests WirecardCEE_QPay_FrontendClient->createConsumerMerchantCrmId()
+     */
+    public function testSetShippingProfile()
+    {
+        $shippingProfile = 'SP_00001';
+        $this->object->setShippingProfile($shippingProfile);
+
+        $expected = array_merge($this->aExpectedRequestData, array(
+            WirecardCEE_QPay_FrontendClient::SHIPPING_PROFILE => 'SP_00001'
+        ));
+        $this->assertAttributeEquals($expected, '_requestData', $this->object);
+    }
+
+    /**
      * Tests WirecardCEE_QPay_FrontendClient->setMaxRetries()
      */
     public function testSetOrderNumber()

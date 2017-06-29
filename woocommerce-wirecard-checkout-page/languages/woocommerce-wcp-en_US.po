@@ -1,18 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-24 16:52+0200\n"
+"Project-Id-Version: WirecardCheckoutPage 1.3.0\n"
+"Report-Msgid-Bugs-To: https://github.com/wirecard/woocommerce-wcp/issues\n"
+"POT-Creation-Date: 2017-06-19 10:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,7 +17,7 @@ msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:39
 msgid ""
-"Wirecard CEE is a popular payment service provider (PSP) and has connections "
+"Wirecard is a popular payment service provider (PSP) and has connections "
 "with over 20 national and international currencies. "
 msgstr ""
 
@@ -72,7 +66,7 @@ msgid "Customer Id"
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:109
-msgid "Wirecard CEE Customer Id."
+msgid "Wirecard Customer Id."
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:113
@@ -80,7 +74,7 @@ msgid "Shop Id"
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:116
-msgid "Wirecard CEE Shop Id."
+msgid "Wirecard Shop Id."
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:120
@@ -88,7 +82,7 @@ msgid "Secret"
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:123
-msgid "Wirecard CEE Secret."
+msgid "Wirecard Secret."
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:127
@@ -149,115 +143,6 @@ msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:171
 msgid "Display Text on the Wirecard Checkout Page."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:179
-msgid "Payment is choosen on the Wirecard Checkout Page."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:186
-msgid "Credit Card."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:193
-msgid "Credit Card mobile-, tele-order."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:200
-msgid "Maestro SecureCode."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:207
-msgid "eps Online Bank Transfer."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:214
-msgid "iDEAL."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:221
-msgid "giropay."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:226
-msgid "SOFORT banking (PIN/TAN)"
-msgstr "SOFORT Banking"
-
-#: class-woocommerce-wcp-gateway.php:228
-msgid "SOFORT banking (PIN/TAN)."
-msgstr "SOFORT Banking."
-
-#: class-woocommerce-wcp-gateway.php:235
-msgid "Mobile Phone Invoicing."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:242
-msgid "paysafecard."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:249
-msgid "@QUICK."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:256
-msgid "PayPal."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:263
-msgid "Direct Debit."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:270
-msgid "CLICK2PAY."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:277
-msgid "Invoice."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:282
-#: class-woocommerce-wcp-gateway.php:1053
-msgid "Installment"
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:284
-msgid "Installment."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:291
-msgid "Bancontact/Mister Cash."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:298
-msgid "Przelewy24."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:305
-msgid "moneta.ru."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:312
-msgid "POLi."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:319
-msgid "eKonto."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:326
-msgid "InstantBank."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:333
-msgid "mpass."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:340
-msgid "Skrill Direct."
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:347
-msgid "Skrill Digital Wallet."
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:352
@@ -354,98 +239,100 @@ msgstr ""
 msgid "Birthday"
 msgstr ""
 
-#: class-woocommerce-wcp-gateway.php:1008
-msgid "Select"
-msgstr ""
+###############PAYMENTTYPES#################
+#: class-woocommerce-wcp-gateway.php:186
+msgid "select"
+msgstr "Select"
 
-#: class-woocommerce-wcp-gateway.php:1011
-msgid "Credit Card"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:186
+msgid "ccard"
+msgstr "Credit Card"
 
-#: class-woocommerce-wcp-gateway.php:1014
-msgid "Credit Card MoTo"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:186
+msgid "masterpass"
+msgstr "Masterpass"
 
-#: class-woocommerce-wcp-gateway.php:1017
-msgid "Maestro"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:193
+msgid "ccard-moto"
+msgstr "Credit Card - Mail Order and Telephone Order"
 
-#: class-woocommerce-wcp-gateway.php:1020
-msgid "eps Online Bank Transfer"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:200
+msgid "maestro"
+msgstr "Maestro SecureCode"
 
-#: class-woocommerce-wcp-gateway.php:1023
-msgid "iDEAL"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:207
+msgid "eps"
+msgstr "eps-Überweisung"
 
-#: class-woocommerce-wcp-gateway.php:1026
+#: class-woocommerce-wcp-gateway.php:214
+msgid "idl"
+msgstr "iDEAL"
+
+#: class-woocommerce-wcp-gateway.php:221
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
-#: class-woocommerce-wcp-gateway.php:1029
+#: class-woocommerce-wcp-gateway.php:226
+msgid "sofort"
+msgstr "SOFORT Banking"
+
+#: class-woocommerce-wcp-gateway.php:226
 msgid "sofortueberweisung"
 msgstr "SOFORT Banking"
 
-#: class-woocommerce-wcp-gateway.php:1032
-msgid "Mobile Phone Invoicing"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:235
+msgid "pbx"
+msgstr "paybox"
 
-#: class-woocommerce-wcp-gateway.php:1035
-msgid "paysafecard"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:242
+msgid "psc"
+msgstr "paysafecard"
 
-#: class-woocommerce-wcp-gateway.php:1038
-msgid "@QUICK"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:249
+msgid "quick"
+msgstr "@QUICK"
 
-#: class-woocommerce-wcp-gateway.php:1041
-msgid "PayPal"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:256
+msgid "paypal"
+msgstr "PayPal"
 
-#: class-woocommerce-wcp-gateway.php:1044
-msgid "Direct Debit"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:263
+msgid "sepa"
+msgstr "SEPA Direct Debit"
 
-#: class-woocommerce-wcp-gateway.php:1047
-msgid "CLICK2PAY"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:277
+msgid "invoice"
+msgstr "Invoice"
 
-#: class-woocommerce-wcp-gateway.php:1050
-msgid "Invoice"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:282
+#: class-woocommerce-wcp-gateway.php:1053
+msgid "installment"
+msgstr "Installment"
 
-#: class-woocommerce-wcp-gateway.php:1056
-msgid "Bancontact/Mister Cash"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:291
+msgid "bancontact_mistercash"
+msgstr "Bancontact"
 
-#: class-woocommerce-wcp-gateway.php:1059
-msgid "Przelewy24"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:298
+msgid "przelewy24"
+msgstr "Przelewy24"
 
-#: class-woocommerce-wcp-gateway.php:1062
-msgid "moneta.ru"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:305
+msgid "moneta"
+msgstr "moneta.ru"
 
-#: class-woocommerce-wcp-gateway.php:1065
-msgid "POLi"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:312
+msgid "poli"
+msgstr "POLi"
 
-#: class-woocommerce-wcp-gateway.php:1068
-msgid "eKonto"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:319
+msgid "ekonto"
+msgstr "eKonto"
 
-#: class-woocommerce-wcp-gateway.php:1071
-msgid "InstantBank"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:347
+msgid "skrillwallet"
+msgstr "Skrill Digital Wallet"
 
-#: class-woocommerce-wcp-gateway.php:1074
-msgid "mpass"
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:1077
-msgid "Skrill Direct"
-msgstr ""
-
-#: class-woocommerce-wcp-gateway.php:1080
-msgid "Skrill Digital Wallet"
-msgstr ""
+#: class-woocommerce-wcp-gateway.php:350
+msgid "trustly"
+msgstr "Trustly"
