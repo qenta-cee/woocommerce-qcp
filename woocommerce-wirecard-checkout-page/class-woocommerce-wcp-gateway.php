@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-c
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.0' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.1' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
@@ -706,33 +706,46 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			case 'shipping':
 				$shippingAddress = new WirecardCEE_Stdlib_ConsumerData_Address( $type );
 
-				$shippingAddress->setFirstname( $order->get_shipping_first_name() )
-				                ->setLastname( $order->get_shipping_last_name() )
-				                ->setAddress1( $order->get_shipping_address_1() )
-				                ->setAddress2( $order->get_shipping_address_2() )
-				                ->setCity( $order->get_shipping_city() )
+				$shippingAddress->setFirstname( $this->rmv_chars( $order->get_shipping_first_name() ) )
+				                ->setLastname( $this->rmv_chars( $order->get_shipping_last_name() ) )
+				                ->setAddress1( $this->rmv_chars( $order->get_shipping_address_1() ) )
+				                ->setAddress2( $this->rmv_chars( $order->get_shipping_address_2() ) )
+				                ->setCity( $this->rmv_chars( $order->get_shipping_city() ) )
 				                ->setZipCode( $order->get_shipping_postcode() )
-				                ->setCountry( $order->get_shipping_country() )
-				                ->setState( $order->get_shipping_state() );
+				                ->setCountry( $this->rmv_chars( $order->get_shipping_country() ) )
+				                ->setState( $this->rmv_chars( $order->get_shipping_state() ) );
 
 				return $shippingAddress;
 			case 'billing':
 			default:
 				$billing_address = new WirecardCEE_Stdlib_ConsumerData_Address( $type );
 
-				$billing_address->setFirstname( $order->get_billing_first_name() )
-				                ->setLastname( $order->get_billing_last_name() )
-				                ->setAddress1( $order->get_billing_address_1() )
-				                ->setAddress2( $order->get_billing_address_2() )
-				                ->setCity( $order->get_billing_city() )
+				$billing_address->setFirstname( $this->rmv_chars( $order->get_billing_first_name() ) )
+				                ->setLastname( $this->rmv_chars( $order->get_billing_last_name() ) )
+				                ->setAddress1( $this->rmv_chars( $order->get_billing_address_1() ) )
+				                ->setAddress2( $this->rmv_chars( $order->get_billing_address_2() ) )
+				                ->setCity( $this->rmv_chars( $order->get_billing_city() ) )
 				                ->setZipCode( $order->get_billing_postcode() )
-				                ->setCountry( $order->get_billing_country() )
+				                ->setCountry( $this->rmv_chars( $order->get_billing_country() ) )
 				                ->setPhone( $order->get_billing_phone() )
-				                ->setState( $order->get_billing_state() );
+				                ->setState( $this->rmv_chars( $order->get_billing_state() ) );
 
 				return $billing_address;
 		}
 
+	}
+
+	/**
+	 * Remove invalid chars and trim
+	 *
+     * @since 1.3.1
+     *
+	 * @param $string
+	 *
+	 * @return string
+	 */
+	protected function rmv_chars( $string ) {
+		return trim( preg_replace( '/[^A-Za-z0-9\-]/', ' ', $string ) );
 	}
 
 	/**
