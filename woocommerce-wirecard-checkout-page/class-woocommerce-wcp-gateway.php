@@ -745,7 +745,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	protected function rmv_chars( $string ) {
-		return trim( preg_replace( '/[^A-Za-z0-9\-]/', ' ', $string ) );
+		return trim( preg_replace( '/[\']/i', ' ', $string ) );
 	}
 
 	/**
