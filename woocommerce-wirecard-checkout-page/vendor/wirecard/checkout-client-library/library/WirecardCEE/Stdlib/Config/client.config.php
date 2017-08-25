@@ -32,7 +32,7 @@
 
 return Array(
     'MODULE_NAME'    => 'WirecardCEE_Stdlib',
-    'MODULE_VERSION' => '3.0.2',
+    'MODULE_VERSION' => '3.0.3',
     'DEPENDENCIES'   => array(
         'SCRIPTING_LANG'         => 'PHP',
         'SCRIPTING_LANG_VERSION' => '5.2'
