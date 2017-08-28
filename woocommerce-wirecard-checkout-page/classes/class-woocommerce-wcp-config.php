@@ -118,6 +118,23 @@ class WC_Gateway_WCP_Config {
 	}
 
 	/**
+	 * Getter for customer id
+	 *
+	 * @since 1.3.2
+	 *
+	 * @return string
+	 */
+	public function get_customer_id() {
+		$config_mode = $this->_settings['configuration'];
+
+		if ( array_key_exists( $config_mode, $this->_presets ) ) {
+			return $this->_presets[ $config_mode ]['customer_id'];
+		} else {
+			return trim( $this->_settings['customer_id'] );
+		}
+	}
+
+	/**
 	 * Extract language code from locale settings
 	 *
 	 * @since 1.3.0

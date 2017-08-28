@@ -201,6 +201,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		}
 
 		if ( $this->use_iframe ) {
+			WC()->session->wirecard_checkout_page_idl = isset( $_POST['wcp_idl_financialInstitution'] ) ? $_POST['wcp_idl_financialInstitution'] : '';
+			WC()->session->wirecard_checkout_page_eps = isset( $_POST['wcp_eps_financialInstitution'] ) ? $_POST['wcp_eps_financialInstitution'] : '';
 			WC()->session->wirecard_checkout_page_type = $paymenttype;
 
 			$page_url = version_compare( WC()->version, '2.1.0', '<' )
@@ -241,11 +243,11 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$birthday = $_POST['wcp_birthday'];
 		}
 		$financial_inst = null;
-		if ( WC()->session->wirecard_checkout_page_type == 'eps' ) {
-			$financial_inst = $_POST['wcp_eps_financialInstitution'];
+		if ( WC()->session->wirecard_checkout_page_type == 'eps' && ( isset( $_POST['wcp_eps_financialInstitution'] ) || isset( WC()->session->wirecard_checkout_page_eps ) ) ) {
+			$financial_inst = isset( $_POST['wcp_eps_financialInstitution'] ) ? $_POST['wcp_eps_financialInstitution'] : WC()->session->wirecard_checkout_page_eps;
 		}
-		if ( WC()->session->wirecard_checkout_page_type == 'idl' ) {
-			$financial_inst = $_POST['wcp_idl_financialInstitution'];
+		if ( WC()->session->wirecard_checkout_page_type == 'idl'  && ( isset( $_POST['wcp_idl_financialInstitution'] ) || isset( WC()->session->wirecard_checkout_page_idl ) ) ) {
+			$financial_inst = isset( $_POST['wcp_idl_financialInstitution'] ) ? $_POST['wcp_idl_financialInstitution'] : WC()->session->wirecard_checkout_page_idl;
 		}
 
 		$iframeUrl = $this->initiate_payment( $order, WC()->session->wirecard_checkout_page_type, $birthday,
@@ -471,7 +473,27 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return void
 	 */
 	public function payment_fields() {
+		if ( WC()->session->get( 'wcpConsumerDeviceId' ) ) {
+		    $consumer_device_id = WC()->session->get( 'wcpConsumerDeviceId' );
+        } else {
+		    $timestamp = microtime();
+		    $customer_id = $this->_config->get_customer_id();
+		    $consumer_device_id = md5( $customer_id . "_" . $timestamp );
+		    WC()->session->set( 'wcpConsumerDeviceId', $consumer_device_id );
+        }
 		?>
+        <script language='JavaScript'>
+            var di = {t:'<?= $consumer_device_id ?>',v:'WDWL',l:'Checkout'};
+        </script>
+        <script type='text/javascript' src='//d.ratepay.com/<?= $consumer_device_id ?>/di.js'></script>
+        <noscript>
+            <link rel='stylesheet' type='text/css' href='//d.ratepay.com/di.css?t=<?= $consumer_device_id ?>&v=WDWL&l=Checkout'>
+        </noscript>
+        <object type='application/x-shockwave-flash' data='//d.ratepay.com/WDWL/c.swf' width='0' height='0'>
+            <param name='movie' value='//d.ratepay.com/WDWL/c.swf' />
+            <param name='flashvars' value='t=<?= $consumer_device_id ?>&v=WDWL'/>
+            <param name='AllowScriptAccess' value='always'/>
+        </object>
         <input id="payment_method_wcp" type="hidden" value="woocommerce_wirecard_checkout_page"
                name="wcp_payment_method"/>
         <script type="text/javascript">
@@ -642,6 +664,10 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			       ->createConsumerMerchantCrmId( $order->get_billing_email() )
 			       ->setWindowName( WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME );
 
+			if ( WC()->session->get( 'wcpConsumerDeviceId' ) ) {
+			    $client->consumerDeviceId = WC()->session->get( 'wcpConsumerDeviceId' );
+			    WC()->session->set( 'wcpConsumerDeviceId', false );
+            }
 			if ( $paymenttype == WirecardCEE_QPay_PaymentType::MASTERPASS ) {
 				$client->setShippingProfile( 'NO_SHIPPING' );
 			}
