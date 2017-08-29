@@ -128,14 +128,6 @@ class WirecardCEE_Stdlib_Basket
         return $this->_basket;
     }
 
-    /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        unset( $this );
-    }
-
     /***************************************
      *         PROTECTED METHODS           *
      ***************************************/
