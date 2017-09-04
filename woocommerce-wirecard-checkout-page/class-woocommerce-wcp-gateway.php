@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-c
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.2' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.3' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
@@ -418,7 +418,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 					/**
 					 * @var $return WirecardCEE_QPay_Return_Cancel
 					 */
-					$order->update_status( 'pending', __( 'Payment cancelled.', 'woocommerce-wcp' ) );
+					$order->update_status( 'cancelled', __( 'Payment cancelled.', 'woocommerce-wcp' ) );
 					break;
 
 				case WirecardCEE_QPay_ReturnFactory::STATE_FAILURE:
