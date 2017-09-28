@@ -125,11 +125,11 @@ msgstr "giropay"
 
 #: settings-wcp.php:116
 msgid "sofort"
-msgstr "SOFORT Überweisung"
+msgstr "Sofort."
 
 #: settings-wcp.php:116
 msgid "sofortueberweisung"
-msgstr "SOFORT Überweisung"
+msgstr "Sofort."
 
 #: settings-wcp.php:121
 msgid "pbx"
