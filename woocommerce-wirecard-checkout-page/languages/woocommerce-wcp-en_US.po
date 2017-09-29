@@ -16,9 +16,7 @@ msgid "Wirecard Checkout Page"
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:39
-msgid ""
-"Wirecard is a popular payment service provider (PSP) and has connections "
-"with over 20 national and international currencies. "
+msgid "Wirecard is a popular payment service provider (PSP) and has connections with over 20 national and international currencies. "
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:79
@@ -90,9 +88,7 @@ msgid "Service Url"
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:130
-msgid ""
-"Backlink on the Wirecard Checkout Page to your shop, usualy links to contact "
-"or imprint page."
+msgid "Backlink on the Wirecard Checkout Page to your shop, usualy links to contact or imprint page."
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:134
@@ -100,9 +96,7 @@ msgid "Image Url"
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:137
-msgid ""
-"Image Url for displaying an image on the Wirecard Checkout Page (95x65 "
-"pixels preferred)."
+msgid "Image Url for displaying an image on the Wirecard Checkout Page (95x65 pixels preferred)."
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:141
@@ -230,16 +224,13 @@ msgid "Payment failed."
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:687
-msgid ""
-"Your order will be processed, as soon as we get the payment notification "
-"from your bank institute"
+msgid "Your order will be processed, as soon as we get the payment notification from your bank institute"
 msgstr ""
 
 #: class-woocommerce-wcp-gateway.php:726
 msgid "Birthday"
 msgstr ""
 
-###############PAYMENTTYPES#################
 #: class-woocommerce-wcp-gateway.php:186
 msgid "select"
 msgstr "Select"
@@ -274,11 +265,11 @@ msgstr "giropay"
 
 #: class-woocommerce-wcp-gateway.php:226
 msgid "sofort"
-msgstr "SOFORT Banking"
+msgstr "Online bank transfer."
 
 #: class-woocommerce-wcp-gateway.php:226
 msgid "sofortueberweisung"
-msgstr "SOFORT Banking"
+msgstr "Online bank transfer."
 
 #: class-woocommerce-wcp-gateway.php:235
 msgid "pbx"
@@ -304,8 +295,7 @@ msgstr "SEPA Direct Debit"
 msgid "invoice"
 msgstr "Invoice"
 
-#: class-woocommerce-wcp-gateway.php:282
-#: class-woocommerce-wcp-gateway.php:1053
+#: class-woocommerce-wcp-gateway.php:282 class-woocommerce-wcp-gateway.php:1053
 msgid "installment"
 msgstr "Installment"
 

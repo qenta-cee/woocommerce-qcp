@@ -16,11 +16,8 @@ msgid "Wirecard Checkout Page"
 msgstr "Wirecard Checkout Page"
 
 #: class-woocommerce-wcp-gateway.php:39
-msgid ""
-"Wirecard is a popular payment service provider (PSP) and has connections "
-"with over 20 national and international currencies. "
-msgstr ""
-"Wirecard Österreichs marktführender Payment-Service-Provider (PSP) und hat Anbindungen an über 20 nationale und internationale Zahlungsmittel."
+msgid "Wirecard is a popular payment service provider (PSP) and has connections with over 20 national and international currencies. "
+msgstr "Wirecard Österreichs marktführender Payment-Service-Provider (PSP) und hat Anbindungen an über 20 nationale und internationale Zahlungsmittel."
 
 #: settings-wcp.php:1
 msgid "Enable/Disable"
@@ -30,9 +27,6 @@ msgstr "Aktivieren/Deaktivieren"
 msgid "Wirecard"
 msgstr "Wirecard"
 
-############# Config ###########################
-
-######## access data ########
 #: settings-wcp.php:11
 msgid "Access data"
 msgstr "Zugangsdaten"
@@ -47,31 +41,31 @@ msgstr "Konfiguration"
 
 #: settings-wcp.php:19
 msgid "For integration, select predefined configuration settings or 'Production' for live systems"
-msgstr "Zum Testen der Integration eine vordefinierte Konfiguration auswählen. Für Produktivsysteme "Production" auswählen."
+msgstr "Zum Testen der Integration eine vordefinierte Konfiguration auswählen. Für Produktivsysteme \"Production\" auswählen."
 
 #: settings-wcp.php:31
 msgid "Customer ID"
 msgstr "Customer ID"
 
 #: settings-wcp.php:34
-msgid "Customer number you received from Wirecard (customerId, i.e. D2#####). <a href="%s">More information</a>"
-msgstr "Ihre Wirecard-Kundennummer (customerId, im Format D2#####). <a href="%s">Weitere Informationen</a>"
+msgid "Customer number you received from Wirecard (customerId, i.e. D2#####). <a href=\"%s\">More information</a>"
+msgstr "Ihre Wirecard-Kundennummer (customerId, im Format D2#####). <a href=\"%s\">Weitere Informationen</a>"
 
 #: settings-wcp.php:39
 msgid "Shop ID"
 msgstr "Shop ID"
 
 #: settings-wcp.php:42
-msgid "Shop identifier in case of more than one shop. <a href="%s">More information</a>"
-msgstr "Shop-Kennung bei mehreren Onlineshops. <a href="%s">Weitere Informationen</a>"
+msgid "Shop identifier in case of more than one shop. <a href=\"%s\">More information</a>"
+msgstr "Shop-Kennung bei mehreren Onlineshops. <a href=\"%s\">Weitere Informationen</a>"
 
 #: settings-wcp.php:47
 msgid "Secret"
 msgstr "Secret"
 
 #: settings-wcp.php:50
-msgid "String which you received from Wirecard for signing and validating data to prove their authenticity. <a href="%s">More information</a>"
-msgstr "Geheime Zeichenfolge, die Sie von Wirecard erhalten haben, zum Signieren und Validieren von Daten zur Prüfung der Authentizität. <a href="%s">Weitere Informationen</a>"
+msgid "String which you received from Wirecard for signing and validating data to prove their authenticity. <a href=\"%s\">More information</a>"
+msgstr "Geheime Zeichenfolge, die Sie von Wirecard erhalten haben, zum Signieren und Validieren von Daten zur Prüfung der Authentizität. <a href=\"%s\">Weitere Informationen</a>"
 
 #: settings-wcp.php:55
 msgid "URL to contact page"
@@ -80,8 +74,6 @@ msgstr "URL zur Kontakt-Seite"
 #: settings-wcp.php:58
 msgid "URL to web page containing your contact information (imprint)."
 msgstr "URL der Kontakt-Seite (Impressum) des Onlineshops."
-
-######## payment methods ########
 
 #: settings-wcp.php:69
 msgid "Payment methods"
@@ -125,11 +117,11 @@ msgstr "giropay"
 
 #: settings-wcp.php:116
 msgid "sofort"
-msgstr "SOFORT Überweisung"
+msgstr "Sofort."
 
 #: settings-wcp.php:116
 msgid "sofortueberweisung"
-msgstr "SOFORT Überweisung"
+msgstr "Sofort."
 
 #: settings-wcp.php:121
 msgid "pbx"
@@ -187,8 +179,6 @@ msgstr "Skrill Digital Wallet"
 msgid "trustly"
 msgstr "Trustly"
 
-######## additional settings ########
-
 #: settings-wcp.php:194
 msgid "Additional settings"
 msgstr "Zusätzliche Einstellungen"
@@ -230,7 +220,7 @@ msgid "payoltuion terms"
 msgstr "payolution Nutzungsbedingungen"
 
 #: settings-wcp.php:231
-msgid "Consumer must accept payolution terms during the checkout process. <a href="%s">More information</a>"
+msgid "Consumer must accept payolution terms during the checkout process. <a href=\"%s\">More information</a>"
 msgstr "Kunden müssen die Nutzungsbedingungen von payolution während des Bezahlprozesses akzeptieren. <a href=\"%s\">Weitere Informationen</a>"
 
 #: settings-wcp.php:238
@@ -277,8 +267,6 @@ msgstr "Weiterleitung des Warenkorbs des Kunden an den Finanzdienstleister."
 msgid "Use Iframe"
 msgstr "IFrame verwenden"
 
-######## Invoice settings ########
-
 #: settings-wcp.php:290
 msgid "Invoice settings"
 msgstr "Einstellungen für Kauf auf Rechnung"
@@ -319,8 +307,6 @@ msgstr "Mindestbetrag"
 msgid "Maximum amount"
 msgstr "Höchstbetrag"
 
-######## Installment settings ########
-
 #: settings-wcp.php:290
 msgid "Installment settings"
 msgstr "Einstellungen für Kauf auf Raten"
@@ -332,8 +318,6 @@ msgstr "Provider für Kauf auf Raten"
 #: settings-wcp.php:297
 msgid "Choose your installment provider."
 msgstr "Wählen Sie einen Kauf auf Raten Provider aus."
-
-#################### FRONTEND ######################
 
 #: class-woocommerce-wcp-gateway.php:419
 msgid "Please select a payment type."
@@ -388,9 +372,7 @@ msgid "Payment failed."
 msgstr "Die Bezahlung ist fehlgeschlagen."
 
 #: class-woocommerce-wcp-gateway.php:687
-msgid ""
-"Your order will be processed, as soon as we get the payment notification "
-"from your bank institute"
+msgid "Your order will be processed, as soon as we get the payment notification from your bank institute"
 msgstr "Ihre Bestellung wir verarbeitet, sobald wir die Bestätigung Ihres Bankinstitutes erhalten haben"
 
 #: class-woocommerce-wcp-gateway.php:726
@@ -406,8 +388,8 @@ msgid "consent"
 msgstr "Einwilligung"
 
 #: class-woocommerce-wcp-payments.php:138
-msgid " can be revoked at any time with effect for the future."
-msgstr " kann ich jederzeit mit Wirkung für die Zukunft widerrufen."
+msgid "can be revoked at any time with effect for the future."
+msgstr "kann ich jederzeit mit Wirkung für die Zukunft widerrufen."
 
 #: class-woocommerce-wcp-payments.php:153
 msgid "Financial institution:"
@@ -428,4 +410,3 @@ msgstr "Sie müssen mindestens 18 Jahre alt sein um dieses Zahlungsmittel zu nut
 #: class-woocommerce-wcp-payments.php:222
 msgid "Financial institution must not be empty."
 msgstr "Bitte wählen Sie ein Finanzistitut aus."
-
