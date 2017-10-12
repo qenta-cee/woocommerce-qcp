@@ -288,6 +288,10 @@ msgid "paypal"
 msgstr "PayPal"
 
 #: class-woocommerce-wcp-gateway.php:263
+msgid "sepa-dd"
+msgstr "SEPA Direct Debit"
+
+#: class-woocommerce-wcp-gateway.php:263
 msgid "sepa"
 msgstr "SEPA Direct Debit"
 

@@ -136,7 +136,7 @@ return array(
 		'label'   => $this->get_paymenttype_name( 'paypal' ),
 		'default' => 'no',
 	),
-	'pt_sepa'                  => array(
+	'pt_sepa-dd'                  => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'sepa' ),
 		'default' => 'no',
