@@ -140,6 +140,10 @@ msgid "paypal"
 msgstr "PayPal"
 
 #: settings-wcp.php:141
+msgid "sepa-dd"
+msgstr "SEPA Lastschrift"
+
+#: settings-wcp.php:141
 msgid "sepa"
 msgstr "SEPA Lastschrift"
 
