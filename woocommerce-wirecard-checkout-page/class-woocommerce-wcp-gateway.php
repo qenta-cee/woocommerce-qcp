@@ -298,8 +298,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function return_request() {
-        foreach ($_REQUEST as &$param) {
-            $param = stripslashes($param);
+        foreach ( $_REQUEST as &$param ) {
+            $param = stripslashes( $param );
         }
 		$this->log( 'return_request:' . print_r( $_REQUEST, true ), 'info' );
 
@@ -351,9 +351,13 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function confirm_request() {
-        foreach ($_REQUEST as &$param) {
-            $param = stripslashes($param);
+        foreach ( $_REQUEST as &$param ) {
+            $param = stripslashes( $param );
         }
+        foreach ( $_POST as &$param ) {
+            $param = stripslashes( $param );
+        }
+
 		$this->log( 'confirm_request:' . print_r( $_REQUEST, true ), 'info' );
 
 		$message = null;
