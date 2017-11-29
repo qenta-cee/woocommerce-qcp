@@ -6,7 +6,7 @@
 Plugin Name: Wirecard Checkout Page
 Plugin URI: http://www.wirecard.at/integration/plugins/
 Description: Wirecard is a popular payment service provider (PSP) and has connections with over 20 national and international currencies.
-Version: 1.3.5
+Version: 1.3.6
 Author: Wirecard
 Author URI: http://www.wirecard.at/
 License: Proprietary

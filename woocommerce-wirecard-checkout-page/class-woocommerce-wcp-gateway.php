@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-c
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.5' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.6' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
@@ -298,6 +298,9 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function return_request() {
+        foreach ( $_REQUEST as &$param ) {
+            $param = stripslashes( $param );
+        }
 		$this->log( 'return_request:' . print_r( $_REQUEST, true ), 'info' );
 
 		$redirectUrl = $this->get_return_url();
@@ -348,6 +351,13 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function confirm_request() {
+        foreach ( $_REQUEST as &$param ) {
+            $param = stripslashes( $param );
+        }
+        foreach ( $_POST as &$param ) {
+            $param = stripslashes( $param );
+        }
+
 		$this->log( 'confirm_request:' . print_r( $_REQUEST, true ), 'info' );
 
 		$message = null;
