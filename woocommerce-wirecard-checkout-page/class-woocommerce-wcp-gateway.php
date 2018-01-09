@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-c
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.6' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.7' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
@@ -904,12 +904,24 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	protected function get_customer_statement( $order, $payment_type ) {
-		$shop_name = sprintf( '%9s', substr( get_bloginfo( 'name' ), - 9 ) );
-		$order_reference = $this->get_order_reference( $order );
-		if ( $payment_type == WirecardCEE_QPay_PaymentType::POLI ) {
-			return $shop_name;
+		$shop_name = get_bloginfo('name');
+		$order_reference = strval( intval( $this->get_order_reference( $order ) ) );
+
+		if ( $payment_type == WirecardCEE_QMore_PaymentType::POLI ) {
+			return sprintf( '%9s', substr( get_bloginfo( 'name' ), 0, 9 ) );
 		}
-		return $shop_name . ' ' . $order_reference;
+
+		$length = strlen( $shop_name . " " . $order_reference );
+
+		if ( $length > 20 ) {
+			$shop_name = substr($shop_name, 0, 20 - strlen(" " . $order_reference));
+		}
+
+		else if ( $length < 20 ) {
+			$order_reference = str_pad($order_reference, (20 - $length) + strlen($order_reference), '0', STR_PAD_LEFT);
+		}
+
+		return $shop_name . " " . $order_reference;
 	}
 
 	/**
