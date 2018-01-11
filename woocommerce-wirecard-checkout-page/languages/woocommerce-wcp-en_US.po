@@ -265,11 +265,11 @@ msgstr "giropay"
 
 #: class-woocommerce-wcp-gateway.php:226
 msgid "sofort"
-msgstr "Online bank transfer."
+msgstr "Pay now. Online bank transfer"
 
 #: class-woocommerce-wcp-gateway.php:226
 msgid "sofortueberweisung"
-msgstr "Online bank transfer."
+msgstr "Pay now. Online bank transfer"
 
 #: class-woocommerce-wcp-gateway.php:235
 msgid "pbx"
