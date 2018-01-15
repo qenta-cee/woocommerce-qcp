@@ -495,15 +495,19 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
         <script language='JavaScript'>
             var di = {t:'<?= $consumer_device_id ?>',v:'WDWL',l:'Checkout'};
         </script>
-        <script type='text/javascript' src='//d.ratepay.com/<?= $consumer_device_id ?>/di.js'></script>
-        <noscript>
-            <link rel='stylesheet' type='text/css' href='//d.ratepay.com/di.css?t=<?= $consumer_device_id ?>&v=WDWL&l=Checkout'>
-        </noscript>
-        <object type='application/x-shockwave-flash' data='//d.ratepay.com/WDWL/c.swf' width='0' height='0'>
-            <param name='movie' value='//d.ratepay.com/WDWL/c.swf' />
-            <param name='flashvars' value='t=<?= $consumer_device_id ?>&v=WDWL'/>
-            <param name='AllowScriptAccess' value='always'/>
-        </object>
+        <?php
+        if ( ($this->_config->is_ratepay_enabled('invoice_provider') && $this->is_paymenttype_enabled('invoice') ) ||
+            ( $this->_config->is_ratepay_enabled('installment_provider') && $this->is_paymenttype_enabled('installment') )) {?>
+            <script type='text/javascript' src='//d.ratepay.com/<?= $consumer_device_id ?>/di.js'></script>
+            <noscript>
+                <link rel='stylesheet' type='text/css' href='//d.ratepay.com/di.css?t=<?= $consumer_device_id ?>&v=WDWL&l=Checkout'>
+            </noscript>
+            <object type='application/x-shockwave-flash' data='//d.ratepay.com/WDWL/c.swf' width='0' height='0'>
+                <param name='movie' value='//d.ratepay.com/WDWL/c.swf' />
+                <param name='flashvars' value='t=<?= $consumer_device_id ?>&v=WDWL'/>
+                <param name='AllowScriptAccess' value='always'/>
+            </object>
+        <?php } ?>
         <input id="payment_method_wcp" type="hidden" value="woocommerce_wirecard_checkout_page"
                name="wcp_payment_method"/>
         <script type="text/javascript">

@@ -156,4 +156,15 @@ class WC_Gateway_WCP_Config {
 		$config = $this->get_client_config();
 		return $config['SECRET'];
 	}
+
+    /**
+     * Checks is ratepay enabled
+     *
+     * @since 1.3.8
+     * @param $payment_method
+     * @return boolean
+     */
+    public function is_ratepay_enabled($payment_method) {
+        return $this->_settings[$payment_method] == 'ratepay';
+    }
 }
