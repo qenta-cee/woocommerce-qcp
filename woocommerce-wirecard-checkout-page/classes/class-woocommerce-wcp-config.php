@@ -161,10 +161,10 @@ class WC_Gateway_WCP_Config {
      * Checks is ratepay enabled
      *
      * @since 1.3.8
-     * @param $payment_method
+     * @param $payment_provider
      * @return boolean
      */
-    public function is_ratepay_enabled($payment_method) {
-        return $this->_settings[$payment_method] == 'ratepay';
+    public function is_ratepay_enabled($payment_provider) {
+        return $this->_settings[$payment_provider] == 'ratepay';
     }
 }
