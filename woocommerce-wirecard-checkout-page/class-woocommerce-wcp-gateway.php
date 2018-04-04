@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-c
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_WirecardCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.8' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '1.3.9' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'WirecardCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
@@ -826,7 +826,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$item->setUnitGrossAmount( $item_unit_gross_amount )
 			     ->setUnitNetAmount( wc_format_decimal( $item_unit_net_amount, wc_get_price_decimals() ) )
 			     ->setUnitTaxAmount( wc_format_decimal( $item_unit_tax_amount, wc_get_price_decimals() ) )
-			     ->setUnitTaxRate( number_format( ( $item_unit_tax_amount / $item_unit_net_amount ), 2, '.', '' ) )
+			     ->setUnitTaxRate( number_format( ( $item_unit_tax_amount / $item_unit_net_amount ), 2, '.', '' ) * 100 )
 			     ->setDescription( substr( strip_tags( $cart_item['data']->get_short_description() ), 0, 127 ) )
 			     ->setName( substr( strip_tags( $cart_item['data']->get_name() ), 0, 127 ) )
 			     ->setImageUrl( isset( $image_url ) ? $image_url : '' );
@@ -841,7 +841,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				wc_get_price_decimals() ) )
 			     ->setUnitNetAmount( wc_format_decimal( $cart->shipping_total, wc_get_price_decimals() ) )
 			     ->setUnitTaxAmount( wc_format_decimal( $cart->shipping_tax_total, wc_get_price_decimals() ) )
-			     ->setUnitTaxRate( number_format( ( $cart->shipping_tax_total / $cart->shipping_total ), 2, '.', '' ) )
+			     ->setUnitTaxRate( number_format( ( $cart->shipping_tax_total / $cart->shipping_total ), 2, '.', '' ) * 100 )
 			     ->setName( 'Shipping' )
 			     ->setDescription( 'Shipping' );
 			$basket->addItem( $item );
