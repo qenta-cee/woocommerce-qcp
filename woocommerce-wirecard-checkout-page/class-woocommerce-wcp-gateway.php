@@ -187,6 +187,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 			return false;
 		}
+        update_post_meta( $order_id, '_payment_method_title', $this->get_paymenttype_name( $paymenttype ) );
 
 		$birthday = null;
 		if ( isset( $_POST['wcp_birthday'] ) ) {
@@ -237,7 +238,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 */
 	function payment_page( $order_id ) {
 		$order = new WC_Order( $order_id );
-
 		$birthday = null;
 		if ( isset( $_POST['wcp_birthday'] ) ) {
 			$birthday = $_POST['wcp_birthday'];
@@ -619,7 +619,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		if ( isset( WC()->session->wirecard_checkout_page_redirect_url ) && WC()->session->wirecard_checkout_page_redirect_url['id'] == $order->get_id() ) {
 			return WC()->session->wirecard_checkout_page_redirect_url['url'];
 		}
-
 		$paymenttype = strtoupper( $paymenttype );
 		try {
 			$config = $this->_config->get_client_config();
