@@ -227,7 +227,9 @@ class WC_Gateway_WCP_Payments {
 
 				$errors = [];
 
-				if ( $this->_settings['payolution_terms'] == 'yes' && $data[$payment_code.'_consent'] != 'on' && $this->_settings[ $payment_code . '_provider' ] == 'payolution' ) {
+				$hasConsent = isset($data[$payment_code.'_consent']) && $data[$payment_code.'_consent'] == 'on';
+
+				if ( $this->_settings['payolution_terms'] == 'yes' && !$hasConsent && $this->_settings[ $payment_code . '_provider' ] == 'payolution' ) {
 					$errors[] = "&bull; " . __( 'Please accept the consent terms!', 'woocommerce-wcp' );
 				}
 				if ( $age < 18 ) {
