@@ -390,7 +390,9 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$str = trim( $str );
 
 		update_post_meta( $order->get_id(), 'wcp_data', $str );
-		update_post_meta( $order->get_id(), '_payment_method', $_REQUEST['paymentType'] );
+		if ( isset( $_REQUEST['paymentType'] ) ) {
+			update_post_meta($order->get_id(), '_payment_method', $_REQUEST['paymentType']);
+		}
 
 		$message = null;
 		try {
