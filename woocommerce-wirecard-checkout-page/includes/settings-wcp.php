@@ -4,13 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 /**
- * Settings for WirecardCheckoutPage.
+ * Settings for QentaCheckoutPage.
  */
 return array(
 	'basic_settings'           => array(
 		'title'       => __( 'Access data', 'woocommerce-wcp' ),
 		'type'        => 'title',
-		'description' => __( 'Enter access data for using Wirecard Checkout Page.', 'woocommerce-wcp' ),
+		'description' => __( 'Enter access data for using Qenta Checkout Page.', 'woocommerce-wcp' ),
 	),
 	'configuration'            => array(
 		'title'       => __( 'Configuration', 'woocommerce-wcp' ),
@@ -31,8 +31,8 @@ return array(
 		'title'       => __( 'Customer ID', 'woocommerce-wcp' ),
 		'type'        => 'text',
 		'default'     => 'D200001',
-		'description' => sprintf( __( 'Customer number you received from Wirecard (customerId, i.e. D2#####). <a href="%s">More information</a>',
-			'woocommerce-wcp' ), 'https://guides.wirecard.at/request_parameters#customerid' ),
+		'description' => sprintf( __( 'Customer number you received from Qenta (customerId, i.e. D2#####). <a href="%s">More information</a>',
+			'woocommerce-wcp' ), 'https://guides.qenta.com/request_parameters#customerid' ),
 		'desc_tip'    => false
 	),
 	'shop_id'                  => array(
@@ -40,15 +40,15 @@ return array(
 		'type'        => 'text',
 		'default'     => '',
 		'description' => sprintf( __( 'Shop identifier in case of more than one shop. <a href="%s">More information</a>',
-			'woocommerce-wcp' ), 'https://guides.wirecard.at/request_parameters#shopid' ),
+			'woocommerce-wcp' ), 'https://guides.qenta.com/request_parameters#shopid' ),
 		'desc_tip'    => false
 	),
 	'secret'                   => array(
 		'title'       => __( 'Secret', 'woocommerce-wcp' ),
 		'type'        => 'text',
 		'default'     => '',
-		'description' => sprintf( __( 'String which you received from Wirecard for signing and validating data to prove their authenticity. <a href="%s">More information</a>',
-			'woocommerce-wcp' ), 'https://guides.wirecard.at/security:start#secret_and_fingerprint' ),
+		'description' => sprintf( __( 'String which you received from Qenta for signing and validating data to prove their authenticity. <a href="%s">More information</a>',
+			'woocommerce-wcp' ), 'https://guides.qenta.com/security:start#secret_and_fingerprint' ),
 		'desc_tip'    => false
 	),
 	'service_url'              => array(
@@ -199,7 +199,7 @@ return array(
 		'type'        => 'text',
 		'default'     => '',
 		'description' => __(
-			'Image Url for displaying an image on the Wirecard Checkout Page (95x65 pixels preferred).',
+			'Image Url for displaying an image on the Qenta Checkout Page (95x65 pixels preferred).',
 			'woocommerce-wcp'
 		),
 		'desc_tip'    => false
@@ -214,7 +214,7 @@ return array(
 	'display_text'             => array(
 		'title'       => __( 'Display text', 'woocommerce-wcp' ),
 		'type'        => 'text',
-		'description' => __( 'Display Text on the Wirecard Checkout Page.', 'woocommerce-wcp' ),
+		'description' => __( 'Display Text on the Qenta Checkout Page.', 'woocommerce-wcp' ),
 		'desc_tip'    => false
 	),
 	'payolution_mid' => array(
@@ -228,7 +228,7 @@ return array(
 		'title' => __('payolution terms', 'woocommerce-wcp'),
 		'type' => 'checkbox',
 		'default' => 'no',
-		'description' => sprintf( __( 'Consumer must accept payolution terms during the checkout process. <a href="%s">More information</a>', 'woocommerce-wcp'), 'https://guides.wirecard.at/payment_methods:invoice:payolution' ),
+		'description' => sprintf( __( 'Consumer must accept payolution terms during the checkout process. <a href="%s">More information</a>', 'woocommerce-wcp'), 'https://guides.qenta.com/payment_methods:invoice:payolution' ),
 		'desc_tip' => false,
 		'label' => __('Enable/Disable', 'woocommerce-wcp')
 	),
@@ -236,7 +236,7 @@ return array(
 		'type'    => 'checkbox',
 		'default' => 'no',
 		'title'   => __( 'Debug Log', 'woocommerce-wcp' ),
-		'description' => __( 'Log Wirecard Checkout Page events.', 'woocommerce-wcp' ),
+		'description' => __( 'Log Qenta Checkout Page events.', 'woocommerce-wcp' ),
 		'desc_tip' => false,
 		'label'   => __( 'Enable/Disable', 'woocommerce-wcp' )
 	),
@@ -245,7 +245,7 @@ return array(
 		'title'       => __( 'Automated deposit', 'woocommerce-wcp' ),
 		'default'     => 'yes',
 		'description' => sprintf( __( 'Enabling an automated deposit of payments. Please contact our sales teams to activate this feature. <a href="%s">More information</a>',
-			'woocommerce-wcp' ), 'https://guides.wirecard.at/sales' ),
+			'woocommerce-wcp' ), 'https://guides.qenta.com/sales' ),
 		'desc_tip'    => false,
 		'label'       => __( 'Enable/Disable', 'woocommerce-wcp' )
 	),
@@ -300,7 +300,7 @@ return array(
 		'options'     => array(
 			'payolution'       => __( 'payolution', 'woocommerce-wcp' ),
 			'ratepay'       => __( 'RatePay', 'woocommerce-wcp' ),
-			'wirecard'     => __( 'Wirecard', 'woocommerce-wcp' )
+			'qenta'     => __( 'Qenta', 'woocommerce-wcp' )
 		)
 	),
 	'invoice_shipping' => array(

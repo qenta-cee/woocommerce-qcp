@@ -1,5 +1,5 @@
 {
-    "name": "qenta/woocommerce-wirecard-checkout-page",
+    "name": "qenta/woocommerce-qenta-checkout-page",
     "license": "GPL-2.0",
     "type": "library",
     "description": "QENTA Checkout Page plugin for WooCommerce",
@@ -7,7 +7,7 @@
     "homepage": "https://www.qenta-cee.at",
     "support": {
         "email": "support@qenta.com",
-        "docs": "https://guides.wirecard.com"
+        "docs": "https://guides.qenta.com"
     },
     "require": {
         "php": "~7.4.0",

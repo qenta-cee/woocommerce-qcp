@@ -3,8 +3,8 @@
 /**
  * Shop System Plugins - Terms of Use
  *
- * The plugins offered are provided free of charge by Wirecard Central Eastern Europe GmbH
- * (abbreviated to Wirecard CEE) and are explicitly not part of the Wirecard CEE range of
+ * The plugins offered are provided free of charge by Qenta Payment CEE GmbH GmbH
+ * (abbreviated to Qenta CEE) and are explicitly not part of the Qenta CEE range of
  * products and services.
  *
  * They have been tested and approved for full functionality in the standard configuration
@@ -12,15 +12,15 @@
  * License Version 2 (GPLv2) and can be used, developed and passed on to third parties under
  * the same terms.
  *
- * However, Wirecard CEE does not provide any guarantee or accept any liability for any errors
+ * However, Qenta CEE does not provide any guarantee or accept any liability for any errors
  * occurring when used in an enhanced, customized shop system configuration.
  *
  * Operation in an enhanced, customized configuration is at your own risk and requires a
  * comprehensive test phase by the user of the plugin.
  *
- * Customers use the plugins at their own risk. Wirecard CEE does not guarantee their full
- * functionality neither does Wirecard CEE assume liability for any disadvantages related to
- * the use of the plugins. Additionally, Wirecard CEE does not guarantee the full functionality
+ * Customers use the plugins at their own risk. Qenta CEE does not guarantee their full
+ * functionality neither does Qenta CEE assume liability for any disadvantages related to
+ * the use of the plugins. Additionally, Qenta CEE does not guarantee the full functionality
  * for customized shop systems or installed plugins of other vendors of plugins within the same
  * shop system.
  *
@@ -171,7 +171,7 @@ class WC_Gateway_WCP_Payments {
 						'woocommerce-wcp' ) . " <span class='required'>*</span></label>";
 				$html .= "<select name='wcp_eps_financialInstitution' autocomplete='off'>";
 				$html .= "<option value=''>" . __( 'Choose your bank', 'woocommerce-wcp' ) . "</option>";
-				foreach ( WirecardCEE_Stdlib_PaymentTypeAbstract::getFinancialInstitutions( WirecardCEE_Stdlib_PaymentTypeAbstract::EPS ) as $key => $value ) {
+				foreach ( QentaCEE_Stdlib_PaymentTypeAbstract::getFinancialInstitutions( QentaCEE_Stdlib_PaymentTypeAbstract::EPS ) as $key => $value ) {
 					$html .= "<option value='$key'>$value</option>";
 				}
 
@@ -191,7 +191,7 @@ class WC_Gateway_WCP_Payments {
 						'woocommerce-wcp' ) . " <span class='required'>*</span></label>";
 				$html .= "<select name='wcp_idl_financialInstitution' autocomplete='off'>";
 				$html .= "<option value=''>" . __( 'Choose your bank', 'woocommerce-wcp' ) . "</option>";
-				foreach ( WirecardCEE_Stdlib_PaymentTypeAbstract::getFinancialInstitutions( WirecardCEE_Stdlib_PaymentTypeAbstract::IDL ) as $key => $value ) {
+				foreach ( QentaCEE_Stdlib_PaymentTypeAbstract::getFinancialInstitutions( QentaCEE_Stdlib_PaymentTypeAbstract::IDL ) as $key => $value ) {
 					$html .= "<option value='$key'>$value</option>";
 				}
 

@@ -19,8 +19,8 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '040dc7bb31ade7c0b99f7d6fa13c88796487ace7',
-    'name' => 'qenta/woocommerce-wirecard-checkout-page',
+    'reference' => '70c153650333116c1664f3036cd1cde51b9d3bab',
+    'name' => 'qenta/woocommerce-qenta-checkout-page',
   ),
   'versions' => 
   array (
@@ -99,16 +99,16 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '813a774d38036d630e8ba08326048c0066e1a05e',
+      'reference' => '9238ddebcc7ba85be2d777155d31b9efcf2e2191',
     ),
-    'qenta/woocommerce-wirecard-checkout-page' => 
+    'qenta/woocommerce-qenta-checkout-page' => 
     array (
       'pretty_version' => 'dev-master',
       'version' => 'dev-master',
       'aliases' => 
       array (
       ),
-      'reference' => '040dc7bb31ade7c0b99f7d6fa13c88796487ace7',
+      'reference' => '70c153650333116c1664f3036cd1cde51b9d3bab',
     ),
     'ralouphie/getallheaders' => 
     array (

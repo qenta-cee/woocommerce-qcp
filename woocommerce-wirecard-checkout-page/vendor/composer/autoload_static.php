@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc114faf2215957963a103fa05d223943
+class ComposerStaticInit091f1b89f9731ce865fbbfa469ce2f4e
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -51,9 +51,9 @@ class ComposerStaticInitc114faf2215957963a103fa05d223943
     );
 
     public static $prefixesPsr0 = array (
-        'W' => 
+        'Q' => 
         array (
-            'WirecardCEE' => 
+            'QentaCEE' => 
             array (
                 0 => __DIR__ . '/..' . '/qenta/checkout-client-library/library',
             ),
@@ -75,10 +75,10 @@ class ComposerStaticInitc114faf2215957963a103fa05d223943
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc114faf2215957963a103fa05d223943::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc114faf2215957963a103fa05d223943::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitc114faf2215957963a103fa05d223943::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitc114faf2215957963a103fa05d223943::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit091f1b89f9731ce865fbbfa469ce2f4e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit091f1b89f9731ce865fbbfa469ce2f4e::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit091f1b89f9731ce865fbbfa469ce2f4e::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit091f1b89f9731ce865fbbfa469ce2f4e::$classMap;
 
         }, null, ClassLoader::class);
     }

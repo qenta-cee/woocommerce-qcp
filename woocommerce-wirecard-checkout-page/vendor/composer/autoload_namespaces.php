@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'WirecardCEE' => array($vendorDir . '/qenta/checkout-client-library/library'),
+    'QentaCEE' => array($vendorDir . '/qenta/checkout-client-library/library'),
     'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),
 );

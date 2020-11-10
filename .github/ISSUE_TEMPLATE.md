@@ -1,7 +1,7 @@
 ### Prerequisites
 
-- [ ] I have my [server set up correctly](https://guides.wirecard.at/shop_plugins:wcp:woocommerce:installation).
-- [ ] I am using a [supported version of WooCommerce](https://guides.wirecard.at/shop_plugins:wcp:woocommerce:start).
+- [ ] I have my [server set up correctly](https://guides.qenta.com/shop_plugins:wcp:woocommerce:installation).
+- [ ] I am using a [supported version of WooCommerce](https://guides.qenta.com/shop_plugins:wcp:woocommerce:start).
 
 ### Versions
 

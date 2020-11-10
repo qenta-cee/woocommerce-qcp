@@ -406,6 +406,9 @@
                 "request",
                 "response"
             ],
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/master"
+            },
             "install-path": "../psr/http-message"
         },
         {
@@ -415,12 +418,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/qenta-cee/checkout-client-library.git",
-                "reference": "813a774d38036d630e8ba08326048c0066e1a05e"
+                "reference": "9238ddebcc7ba85be2d777155d31b9efcf2e2191"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/qenta-cee/checkout-client-library/zipball/813a774d38036d630e8ba08326048c0066e1a05e",
-                "reference": "813a774d38036d630e8ba08326048c0066e1a05e",
+                "url": "https://api.github.com/repos/qenta-cee/checkout-client-library/zipball/9238ddebcc7ba85be2d777155d31b9efcf2e2191",
+                "reference": "9238ddebcc7ba85be2d777155d31b9efcf2e2191",
                 "shasum": ""
             },
             "require": {
@@ -431,12 +434,12 @@
             "require-dev": {
                 "phpunit/phpunit": "^8.0"
             },
-            "time": "2020-10-31T17:42:10+00:00",
+            "time": "2020-11-08T19:17:50+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-0": {
-                    "WirecardCEE": "library"
+                    "QentaCEE": "library"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -453,7 +456,7 @@
                 "seamless"
             ],
             "support": {
-                "docs": "https://guides.wirecard.com",
+                "docs": "https://guides.qenta.com",
                 "email": "support@qenta.com",
                 "issues": "https://github.com/qenta-cee/checkout-client-library/issues",
                 "source": "https://github.com/qenta-cee/checkout-client-library/tree/4.0.0"
