@@ -3,7 +3,7 @@
 /**
  * Shop System Plugins - Terms of Use
  *
- * The plugins offered are provided free of charge by Qenta Payment CEE GmbH GmbH
+ * The plugins offered are provided free of charge by Qenta Payment CEE GmbH
  * (abbreviated to Qenta CEE) and are explicitly not part of the Qenta CEE range of
  * products and services.
  *
