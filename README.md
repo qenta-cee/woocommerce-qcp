@@ -28,5 +28,3 @@ Qenta Checkout Page offers:
 - PCI DSS 3 compliant, no PCI certification necessary for merchants.
 - Easy to add new payment methods, additional features, languages and currencies, etc.
 - Web interface for managing payments (approvals, cancelations, credits, etc.).
-- Benefit from Qenta Bank´s license to conclude credit card acceptance contracts (acquiring) and issue credit cards.
-- With Qenta Collecting only a single contract is required for payouts within various payment methods.
