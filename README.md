@@ -6,19 +6,13 @@
 [![PHP v7.4](https://img.shields.io/badge/php-v7.4-yellow.svg)](http://www.php.net)
 
 ----
-**IMPORTANT INFORMATION**  
-You are visiting a shop extension which will become obsolete in the near future. It has been replaced by a new one with new features and enhanced functionality.   
-Please use our new shop extension available on [woocommerce.qenta.com](https://woocommerce.qenta.com), which will be maintained, updated and supported on a regular basis.  
-If you have any questions, please contact shop-systems-support@qenta.com
-
-----
 
 Qenta Checkout Page plugin for WooCommerce. 
 
-Our [Online Guides](https://guides.qenta.com/) provide further information on payment methods and additional features. Please observe our [terms of use](https://guides.qenta.com/shop_plugins:info#terms_of_use) regarding plugins.
+Our [Online Guides](https://guides.qenta.com/) provide further information on payment methods and additional features. Please observe our [terms of use](https://guides.wirecard.com/shop_plugins:info#terms_of_use) regarding plugins.
 
 ## Installation
-Our [Online Guides](https://guides.genta.com/shop_plugins:woocommerce_wcp:start "Installation details") also provide technical documentation, installation and configuration instructions for the plugin.
+Our [Online Guides](https://guides.wirecard.com/shop_plugins:woocommerce_wcp:start "Installation details") also provide technical documentation, installation and configuration instructions for the plugin.
 
 
 ## Qenta Checkout Page
