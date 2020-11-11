@@ -1,0 +1,27 @@
+{
+    "name": "qenta/checkout-client-library",
+    "license": "GPL-2.0",
+    "type": "library",
+    "description": "QENTA Client Library for Checkout Page and Checkout Seamless",
+    "keywords": ["QENTA", "checkout", "page", "seamless", "payment"],
+    "homepage": "https://www.qenta-cee.at",
+    "support": {
+        "email": "support@qenta.com",
+        "docs": "https://guides.qenta.com"
+    },
+    "require": {
+        "php": "~7.2.5|~7.3.0|~7.4.0",
+        "guzzlehttp/guzzle": "^7.2",
+        "mobiledetect/mobiledetectlib": "^2.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "QentaCEE": "library"
+        }
+    },
+    "prefer-stable" : true
+}
+
