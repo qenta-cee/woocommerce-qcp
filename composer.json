@@ -10,7 +10,7 @@
         "docs": "https://guides.qenta.com"
     },
     "require": {
-        "php": "~7.4.0",
+        "php": ">=7.2.0",
         "psr/http-message": "^1.0",
         "qenta/checkout-client-library": "^4.0.0"
     },
