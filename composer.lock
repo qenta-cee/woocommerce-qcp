@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c8fe6182448c678435464f06f6079f9",
+    "content-hash": "3e26da2698e80798af8a547389455067",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -401,20 +401,20 @@
         },
         {
             "name": "qenta/checkout-client-library",
-            "version": "4.0.0",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/qenta-cee/checkout-client-library.git",
-                "reference": "9238ddebcc7ba85be2d777155d31b9efcf2e2191"
+                "reference": "c239fc09eeb2984cf6810a26677ded666cc5acab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/qenta-cee/checkout-client-library/zipball/9238ddebcc7ba85be2d777155d31b9efcf2e2191",
-                "reference": "9238ddebcc7ba85be2d777155d31b9efcf2e2191",
+                "url": "https://api.github.com/repos/qenta-cee/checkout-client-library/zipball/c239fc09eeb2984cf6810a26677ded666cc5acab",
+                "reference": "c239fc09eeb2984cf6810a26677ded666cc5acab",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/guzzle": "^7.2",
+                "guzzlehttp/guzzle": "~6.5.5|~7.2",
                 "mobiledetect/mobiledetectlib": "^2.8",
                 "php": "~7.2.5|~7.3.0|~7.4.0"
             },
@@ -423,8 +423,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "QentaCEE": "library"
+                "psr-4": {
+                    "QentaCEE\\": "src/QentaCEE/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -444,9 +444,9 @@
                 "docs": "https://guides.qenta.com",
                 "email": "support@qenta.com",
                 "issues": "https://github.com/qenta-cee/checkout-client-library/issues",
-                "source": "https://github.com/qenta-cee/checkout-client-library/tree/4.0.0"
+                "source": "https://github.com/qenta-cee/checkout-client-library/tree/5.0.2"
             },
-            "time": "2020-11-08T19:17:50+00:00"
+            "time": "2021-01-08T14:32:41+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
