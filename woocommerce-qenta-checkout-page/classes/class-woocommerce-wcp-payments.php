@@ -78,6 +78,7 @@ class WC_Gateway_WCP_Payments {
 	 *
 	 * @since 1.3.0
 	 *
+     * @param $payment_code
 	 * @return bool
 	 */
 	public function has_payment_fields( $payment_code ) {
@@ -171,7 +172,7 @@ class WC_Gateway_WCP_Payments {
 						'woocommerce-wcp' ) . " <span class='required'>*</span></label>";
 				$html .= "<select name='wcp_eps_financialInstitution' autocomplete='off'>";
 				$html .= "<option value=''>" . __( 'Choose your bank', 'woocommerce-wcp' ) . "</option>";
-				foreach ( QentaCEE_Stdlib_PaymentTypeAbstract::getFinancialInstitutions( QentaCEE_Stdlib_PaymentTypeAbstract::EPS ) as $key => $value ) {
+				foreach ( QentaCEE\Stdlib\PaymentTypeAbstract::getFinancialInstitutions( QentaCEE\Stdlib\PaymentTypeAbstract::EPS ) as $key => $value ) {
 					$html .= "<option value='$key'>$value</option>";
 				}
 
@@ -191,7 +192,7 @@ class WC_Gateway_WCP_Payments {
 						'woocommerce-wcp' ) . " <span class='required'>*</span></label>";
 				$html .= "<select name='wcp_idl_financialInstitution' autocomplete='off'>";
 				$html .= "<option value=''>" . __( 'Choose your bank', 'woocommerce-wcp' ) . "</option>";
-				foreach ( QentaCEE_Stdlib_PaymentTypeAbstract::getFinancialInstitutions( QentaCEE_Stdlib_PaymentTypeAbstract::IDL ) as $key => $value ) {
+				foreach ( QentaCEE\Stdlib\PaymentTypeAbstract::getFinancialInstitutions( QentaCEE\Stdlib\PaymentTypeAbstract::IDL ) as $key => $value ) {
 					$html .= "<option value='$key'>$value</option>";
 				}
 
@@ -207,16 +208,17 @@ class WC_Gateway_WCP_Payments {
 		}
 	}
 
-	/**
-	 * Validate payment methods with form fields
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param $payment_code
-	 * @param $data
-	 *
-	 * @return bool|string
-	 */
+    /**
+     * Validate payment methods with form fields
+     *
+     * @param $payment_code
+     * @param $data
+     *
+     * @return bool|string
+     * @throws Exception
+     * @since 1.3.0
+     *
+     */
 	public function validate_payment( $payment_code, $data ) {
 		switch ( $payment_code ) {
 			case 'invoice':
@@ -261,6 +263,7 @@ class WC_Gateway_WCP_Payments {
 	 *
 	 * @since 1.3.0
 	 *
+     * @param $payment_code
 	 * @return boolean
 	 */
 	public function get_risk( $payment_code ) {
