@@ -7,3 +7,4 @@
 .idea/php.xml
 .idea/woocommerce-qcp.iml
 woocommerce-qenta-checkout-page/vendor/*
+.DS_Store

@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-c
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_QentaCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '2.0.1' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '2.0.2' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'QentaCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
@@ -319,17 +319,17 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$paymentState = $_REQUEST['paymentState'];
 		switch ( $paymentState ) {
-			case QentaCEE_QPay_ReturnFactory::STATE_SUCCESS:
-			case QentaCEE_QPay_ReturnFactory::STATE_PENDING:
+			case QentaCEE\QPay\ReturnFactory::STATE_SUCCESS:
+			case QentaCEE\QPay\ReturnFactory::STATE_PENDING:
 				return $this->get_return_url( $order );
 
-			case QentaCEE_QPay_ReturnFactory::STATE_CANCEL:
+			case QentaCEE\QPay\ReturnFactory::STATE_CANCEL:
 				wc_add_notice( __( 'Payment has been cancelled.', 'woocommerce-wcp' ), 'error' );
 				unset( WC()->session->qenta_checkout_page_redirect_url );
 
 				return $order->get_cancel_endpoint();
 
-			case QentaCEE_QPay_ReturnFactory::STATE_FAILURE:
+			case QentaCEE\QPay\ReturnFactory::STATE_FAILURE:
 				if ( array_key_exists( 'consumerMessage', $_REQUEST ) ) {
 					wc_add_notice( $_REQUEST['consumerMessage'], 'error' );
 				} else {
@@ -365,7 +365,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$message = 'order-id missing';
 			$this->log( $message, 'error' );
 
-			return QentaCEE_QPay_ReturnFactory::generateConfirmResponseString( $message );
+			return QentaCEE\QPay\ReturnFactory::generateConfirmResponseString( $message );
 		}
 		$order_id = $_REQUEST['wooOrderId'];
 		$order    = new WC_Order( $order_id );
@@ -373,14 +373,14 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$message = "order with id `$order->get_id()` not found";
 			$this->log( $message, 'error' );
 
-			return QentaCEE_QPay_ReturnFactory::generateConfirmResponseString( $message );
+			return QentaCEE\QPay\ReturnFactory::generateConfirmResponseString( $message );
 		}
 
 		if ( $order->get_status() == "processing" || $order->get_status() == "completed" ) {
 			$message = "cannot change the order with id `$order->get_id()`";
 			$this->log( $message, 'error' );
 
-			return QentaCEE_QPay_ReturnFactory::generateConfirmResponseString( $message );
+			return QentaCEE\QPay\ReturnFactory::generateConfirmResponseString( $message );
 		}
 
 		$str = '';
@@ -396,30 +396,30 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$message = null;
 		try {
-			$return = QentaCEE_QPay_ReturnFactory::getInstance( $_POST, $this->_config->get_secret() );
+			$return = QentaCEE\QPay\ReturnFactory::getInstance( $_POST, $this->_config->get_secret() );
 			if ( ! $return->validate() ) {
 				$message = __( 'Validation error: invalid response', 'woocommerce-wcp' );
 				$order->update_status( 'failed', $message );
 
-				return QentaCEE_QPay_ReturnFactory::generateConfirmResponseString( $message );
+				return QentaCEE\QPay\ReturnFactory::generateConfirmResponseString( $message );
 			}
 
 			/**
-			 * @var $return QentaCEE_Stdlib_Return_ReturnAbstract
+			 * @var $return QentaCEE\Stdlib\Returns\ReturnAbstract
 			 */
 			update_post_meta( $order->get_id(), 'wcp_payment_state', $return->getPaymentState() );
 
 			switch ( $return->getPaymentState() ) {
-				case QentaCEE_QPay_ReturnFactory::STATE_SUCCESS:
+				case QentaCEE\QPay\ReturnFactory::STATE_SUCCESS:
 					update_post_meta( $order->get_id(), 'wcp_gateway_reference_number',
 						$return->getGatewayReferenceNumber() );
 					update_post_meta( $order->get_id(), 'wcp_order_number', $return->getOrderNumber() );
 					$order->payment_complete();
 					break;
 
-				case QentaCEE_QPay_ReturnFactory::STATE_PENDING:
+				case QentaCEE\QPay\ReturnFactory::STATE_PENDING:
 					/**
-					 * @var $return QentaCEE_QPay_Return_Pending
+					 * @var $return QentaCEE\QPay\Returns\Pending
 					 */
 					$order->update_status(
 						'on-hold',
@@ -427,16 +427,16 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 					);
 					break;
 
-				case QentaCEE_QPay_ReturnFactory::STATE_CANCEL:
+				case QentaCEE\QPay\ReturnFactory::STATE_CANCEL:
 					/**
-					 * @var $return QentaCEE_QPay_Return_Cancel
+					 * @var $return QentaCEE\QPay\Returns\Cancel
 					 */
 					$order->update_status( 'cancelled', __( 'Payment cancelled.', 'woocommerce-wcp' ) );
 					break;
 
-				case QentaCEE_QPay_ReturnFactory::STATE_FAILURE:
+				case QentaCEE\QPay\ReturnFactory::STATE_FAILURE:
 					/**
-					 * @var $return QentaCEE_QPay_Return_Failure
+					 * @var $return QentaCEE\QPay\Returns\Failure
 					 */
 					$str_errors = '';
 					foreach ( $return->getErrors() as $error ) {
@@ -459,7 +459,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$message = $e->getMessage();
 		}
 
-		return QentaCEE_QPay_ReturnFactory::generateConfirmResponseString( $message );
+		return QentaCEE\QPay\ReturnFactory::generateConfirmResponseString( $message );
 	}
 
 	/**
@@ -625,10 +625,10 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$paymenttype = strtoupper( $paymenttype );
 		try {
 			$config = $this->_config->get_client_config();
-			$client = new QentaCEE_QPay_FrontendClient( $config );
+			$client = new QentaCEE\QPay\FrontendClient( $config );
 
 			// consumer data (IP and User aget) are mandatory!
-			$consumerData = new QentaCEE_Stdlib_ConsumerData();
+			$consumerData = new QentaCEE\Stdlib\ConsumerData();
 			$consumerData->setUserAgent( $_SERVER['HTTP_USER_AGENT'] )->setIpAddress( $_SERVER['REMOTE_ADDR'] );
 
 			if ( $birthday !== null ) {
@@ -639,20 +639,20 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 			if ( $this->get_option( 'send_consumer_shipping' ) == 'yes' ||
 			     in_array( $paymenttype,
-				     Array( QentaCEE_QPay_PaymentType::INVOICE, QentaCEE_QPay_PaymentType::INSTALLMENT ) )
+				     Array( QentaCEE\QPay\PaymentType::INVOICE, QentaCEE\QPay\PaymentType::INSTALLMENT ) )
 			) {
 				$consumerData->addAddressInformation( $this->get_consumer_data( $order, 'shipping' ) );
 			}
 			if ( $this->get_option( 'send_consumer_billing' ) == 'yes' ||
 			     in_array( $paymenttype,
-				     Array( QentaCEE_QPay_PaymentType::INVOICE, QentaCEE_QPay_PaymentType::INSTALLMENT ) )
+				     Array( QentaCEE\QPay\PaymentType::INVOICE, QentaCEE\QPay\PaymentType::INSTALLMENT ) )
 			) {
 				$consumerData->addAddressInformation( $this->get_consumer_data( $order, 'billing' ) );
 			}
 
 			$returnUrl = add_query_arg( 'wc-api', 'WC_Gateway_WCP', home_url( '/', is_ssl() ? 'https' : 'http' ) );
 
-			$version = QentaCEE_QPay_FrontendClient::generatePluginVersion(
+			$version = QentaCEE\QPay\FrontendClient::generatePluginVersion(
 				$this->get_vendor(),
 				WC()->version,
 				WOOCOMMERCE_GATEWAY_WCP_NAME,
@@ -684,7 +684,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			    $client->consumerDeviceId = WC()->session->get( 'wcpConsumerDeviceId' );
 			    WC()->session->set( 'wcpConsumerDeviceId', false );
             }
-			if ( $paymenttype == QentaCEE_QPay_PaymentType::MASTERPASS ) {
+			if ( $paymenttype == QentaCEE\QPay\PaymentType::MASTERPASS ) {
 				$client->setShippingProfile( 'NO_SHIPPING' );
 			}
 			if ( $financial_inst !== null ) {
@@ -695,8 +695,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			}
 
 			if ( $this->get_option( 'send_basket_data' ) == 'yes' ||
-			     ( $paymenttype == QentaCEE_QPay_PaymentType::INVOICE && $this->get_option( 'invoice_provider' ) != 'payolution' ) ||
-			     ( $paymenttype == QentaCEE_QPay_PaymentType::INSTALLMENT && $this->get_option( 'installment_provider' ) != 'payolution' )
+			     ( $paymenttype == QentaCEE\QPay\PaymentType::INVOICE && $this->get_option( 'invoice_provider' ) != 'payolution' ) ||
+			     ( $paymenttype == QentaCEE\QPay\PaymentType::INSTALLMENT && $this->get_option( 'installment_provider' ) != 'payolution' )
 			) {
 				$client->setBasket( $this->get_shopping_basket() );
 			}
@@ -731,22 +731,22 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @param $order
 	 * @param string $address
 	 *
-	 * @return QentaCEE_Stdlib_ConsumerData_Address
+	 * @return QentaCEE\Stdlib\ConsumerData\Address
 	 */
 	protected function get_consumer_data( $order, $address = 'billing' ) {
 		$consumer_address = 'billing';
-		$type             = QentaCEE_Stdlib_ConsumerData_Address::TYPE_BILLING;
+		$type             = QentaCEE\Stdlib\ConsumerData\Address::TYPE_BILLING;
 		$cart             = new WC_Cart();
 		$cart->get_cart_from_session();
 
 		//check if shipping address is different
 		if ( $cart->needs_shipping_address() && $address == 'shipping' ) {
 			$consumer_address = 'shipping';
-			$type             = QentaCEE_Stdlib_ConsumerData_Address::TYPE_SHIPPING;
+			$type             = QentaCEE\Stdlib\ConsumerData\Address::TYPE_SHIPPING;
 		}
 		switch ( $consumer_address ) {
 			case 'shipping':
-				$shippingAddress = new QentaCEE_Stdlib_ConsumerData_Address( $type );
+				$shippingAddress = new QentaCEE\Stdlib\ConsumerData\Address( $type );
 
 				$shippingAddress->setFirstname( $this->rmv_chars( $order->get_shipping_first_name() ) )
 				                ->setLastname( $this->rmv_chars( $order->get_shipping_last_name() ) )
@@ -760,7 +760,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				return $shippingAddress;
 			case 'billing':
 			default:
-				$billing_address = new QentaCEE_Stdlib_ConsumerData_Address( $type );
+				$billing_address = new QentaCEE\Stdlib\ConsumerData\Address( $type );
 
 				$billing_address->setFirstname( $this->rmv_chars( $order->get_billing_first_name() ) )
 				                ->setLastname( $this->rmv_chars( $order->get_billing_last_name() ) )
@@ -795,13 +795,13 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 *
 	 * @since 1.3.0
 	 * @access protected
-	 * @return QentaCEE_Stdlib_Basket
+	 * @return QentaCEE\Stdlib\Basket
 	 */
 	protected function get_shopping_basket() {
 		global $woocommerce;
 
 		$cart = $woocommerce->cart;
-		$basket = new QentaCEE_Stdlib_Basket();
+		$basket = new QentaCEE\Stdlib\Basket();
 
 		foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
 			$article_nr = $cart_item['product_id'];
@@ -814,7 +814,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				$image_url = wp_get_attachment_image_url( $attachment_id );
 			}
 
-			$item            = new QentaCEE_Stdlib_Basket_Item( $article_nr );
+			$item            = new QentaCEE\Stdlib\Basket\Item( $article_nr );
 			$item_net_amount = $cart_item['line_total'];
 			$item_tax_amount = $cart_item['line_tax'];
 			$item_quantity   = $cart_item['quantity'];
@@ -838,7 +838,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		// Add shipping to the basket
 		if ( isset( $cart->shipping_total ) && $cart->shipping_total > 0 ) {
-			$item = new QentaCEE_Stdlib_Basket_Item( 'shipping' );
+			$item = new QentaCEE\Stdlib\Basket\Item( 'shipping' );
 			$item->setUnitGrossAmount( wc_format_decimal( $cart->shipping_total + $cart->shipping_tax_total,
 				wc_get_price_decimals() ) )
 			     ->setUnitNetAmount( wc_format_decimal( $cart->shipping_total, wc_get_price_decimals() ) )
@@ -913,7 +913,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$shop_name = get_bloginfo('name');
 		$order_reference = strval( intval( $this->get_order_reference( $order ) ) );
 
-		if ( $payment_type == QentaCEE_QPay_PaymentType::POLI ) {
+		if ( $payment_type == QentaCEE\QPay\PaymentType::POLI ) {
 			return sprintf( '%9s', substr( get_bloginfo( 'name' ), 0, 9 ) );
 		}
 
