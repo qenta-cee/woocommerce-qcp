@@ -6,7 +6,7 @@
 Plugin Name: Qenta Checkout Page
 Plugin URI: http://www.qenta.com/integration/plugins/
 Description: Qenta is a popular payment service provider (PSP) and has connections with over 20 national and international currencies.
-Version: 2.0.0
+Version: 2.0.2
 Author: Qenta
 Author URI: http://www.qenta-cee.at/
 License: Proprietary
