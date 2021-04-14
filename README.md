@@ -1,8 +1,8 @@
 # Qenta Checkout Page plugin for WooCommerce
 
 [![License](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://raw.githubusercontent.com/qenta-cee/woocommerce-wcp/master/LICENSE)
-[![WordPress](https://img.shields.io/badge/WordPress-v5.5.1-green.svg)](https://wordpress.org/)
-[![WooCommerce](https://img.shields.io/badge/WooCommerce-v4.6.1-green.svg)](https://www.woocommerce.com/)
+[![WordPress](https://img.shields.io/badge/WordPress-v5.7-green.svg)](https://wordpress.org/)
+[![WooCommerce](https://img.shields.io/badge/WooCommerce-v5.2-green.svg)](https://www.woocommerce.com/)
 [![PHP v>=7.2](https://img.shields.io/badge/php-v>=7.2-yellow.svg)](http://www.php.net)
 
 ----
