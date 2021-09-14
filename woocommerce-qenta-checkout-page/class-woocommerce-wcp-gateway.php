@@ -267,7 +267,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 */
 	function dispatch_callback() {
 		// if session data is available assume browser redirect, otherwise server-to-server request
-		if ( isset( WC()->session->chosen_payment_method ) ) {
+		if ( isset( WC()->session->qenta_checkout_page_type ) ) {
 
 			// do iframe breakout, if needed and not already done
 			if ( $this->use_iframe && ! array_key_exists( 'redirected', $_REQUEST ) ) {
