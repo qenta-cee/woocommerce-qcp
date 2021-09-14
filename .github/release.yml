@@ -1,0 +1,41 @@
+on:
+  push:
+    tags:
+      - '[0-9].[0-9]*'
+
+name: Create Release
+
+jobs:
+  build:
+    name: Release
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: composer install
+      - name: Pack Release zip
+        run: zip -9r woocommerce-qenta-checkout-page.zip woocommerce-qenta-checkout-page
+      - name: Get the Tag Name
+        id: get_tag
+        run: echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./woocommerce-qenta-checkout-page.zip
+          asset_name: woocommerce-qenta-checkout-page.zip
+          asset_content_type: application/zip
