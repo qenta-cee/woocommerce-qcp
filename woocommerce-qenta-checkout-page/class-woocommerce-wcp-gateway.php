@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-c
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_QentaCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '2.0.2' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '2.0.3' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'QentaCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
@@ -265,32 +265,38 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * Dispatch callback, invoked twice, first server-to-server, second browser redirect
 	 * Do iframe breakout, if needed
 	 */
-	function dispatch_callback() {
-		// if session data is available assume browser redirect, otherwise server-to-server request
-		if ( isset( WC()->session->chosen_payment_method ) ) {
+  function dispatch_callback()
+  {
+      $ua = $_SERVER['HTTP_USER_AGENT'];
+      $aQpayUA = array('qpay','qenta');
+      // if user agent contains QENTA or QPAY, it's S2S request from qpay
+      if(str_replace($aQpayUA, '', strtolower($ua)) !== strtolower($ua)) {
+        print $this->confirm_request();
 
-			// do iframe breakout, if needed and not already done
-			if ( $this->use_iframe && ! array_key_exists( 'redirected', $_REQUEST ) ) {
-				$url = add_query_arg( 'wc-api', 'WC_Gateway_WCP', home_url( '/', is_ssl() ? 'https' : 'http' ) );
-				wc_get_template(
-					'templates/iframebreakout.php',
-					array(
-						'url' => $url
-					),
-					WOOCOMMERCE_GATEWAY_WCP_BASEDIR,
-					WOOCOMMERCE_GATEWAY_WCP_BASEDIR
-				);
-				die();
-			}
+        exit();
+      }
+      
+      // do iframe breakout, if needed and not already done
+      if ($this->use_iframe && !array_key_exists('redirected', $_REQUEST)) {
+          $url = add_query_arg('wc-api', 'WC_Gateway_WCP', home_url('/', is_ssl() ? 'https' : 'http'));
+          wc_get_template(
+              'templates/iframebreakout.php',
+              [
+                  'url' => $url,
+              ],
+              WOOCOMMERCE_GATEWAY_WCP_BASEDIR,
+              WOOCOMMERCE_GATEWAY_WCP_BASEDIR
+          );
 
-			$redirectUrl = $this->return_request();
-			header( 'Location: ' . $redirectUrl );
-		} else {
-			print $this->confirm_request();
-		}
+          exit();
+      }
 
-		die();
-	}
+      $redirectUrl = $this->return_request();
+      header('Location: '.$redirectUrl);
+
+      exit();
+  }
+
 
 	/**
 	 * handle browser return
