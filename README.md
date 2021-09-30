@@ -1,19 +1,18 @@
 # Qenta Checkout Page plugin for WooCommerce
 
 [![License](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://raw.githubusercontent.com/qenta-cee/woocommerce-wcp/master/LICENSE)
-[![WordPress](https://img.shields.io/badge/WordPress-v5.7-green.svg)](https://wordpress.org/)
-[![WooCommerce](https://img.shields.io/badge/WooCommerce-v5.2-green.svg)](https://www.woocommerce.com/)
+[![WordPress](https://img.shields.io/badge/WordPress-v5.8.1-green.svg)](https://wordpress.org/)
+[![WooCommerce](https://img.shields.io/badge/WooCommerce-v5.7.1-green.svg)](https://www.woocommerce.com/)
 [![PHP v>=7.2](https://img.shields.io/badge/php-v>=7.2-yellow.svg)](http://www.php.net)
 
+>  Tested up to: 5.8.1 (WordPress), 5.7.1 (WooCommerce)
 ----
 
-Qenta Checkout Page plugin for WooCommerce. 
 
-Our [Online Guides](https://guides.qenta.com/) provide further information on payment methods and additional features. Please observe our [terms of use](https://guides.wirecard.com/shop_plugins:info#terms_of_use) regarding plugins.
+Our [Online Guides](https://guides.qenta.com/) provide further information on payment methods and additional features. Please observe our [terms of use](https://guides.qenta.com/shop_plugins/info/) regarding plugins.
 
 ## Installation
-Our [Online Guides](https://guides.wirecard.com/shop_plugins:woocommerce_wcp:start "Installation details") also provide technical documentation, installation and configuration instructions for the plugin.
-
+Please refer to our (https://guides.qenta.com/shop_plugins/qpay/woocommerce/installation/ "Installation Guide") for installation and configuration instructions. We also provide technical documentation and a list of [supported payment methods](https://guides.qenta.com/shop_plugins/qpay/woocommerce/start/).
 
 ## Qenta Checkout Page
 Qenta Checkout Page is designed to meet the ambitious demands of merchants offering a wide range of payment methods while at the same time fulfilling PCI DSS compliance.
