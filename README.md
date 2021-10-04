@@ -11,8 +11,7 @@
 
 Our [Online Guides](https://guides.qenta.com/) provide further information on payment methods and additional features. Please observe our [terms of use](https://guides.qenta.com/shop_plugins/info/) regarding plugins.
 
-## Installation
-Please refer to our (https://guides.qenta.com/shop_plugins/qpay/woocommerce/installation/ "Installation Guide") for installation and configuration instructions. We also provide technical documentation and a list of [supported payment methods](https://guides.qenta.com/shop_plugins/qpay/woocommerce/start/).
+***
 
 ## Qenta Checkout Page
 Qenta Checkout Page is designed to meet the ambitious demands of merchants offering a wide range of payment methods while at the same time fulfilling PCI DSS compliance.
@@ -27,3 +26,22 @@ Qenta Checkout Page offers:
 - PCI DSS 3 compliant, no PCI certification necessary for merchants.
 - Easy to add new payment methods, additional features, languages and currencies, etc.
 - Web interface for managing payments (approvals, cancelations, credits, etc.).
+
+***
+## Installation
+Please refer to our [Installation Guide](https://guides.qenta.com/shop_plugins/qpay/woocommerce/installation/) for installation and configuration instructions. We also provide technical documentation and a list of [supported payment methods](https://guides.qenta.com/shop_plugins/qpay/woocommerce/start/).
+
+### Docker
+To quickly start up a WooCommerce Shop with our plugin already installed all you need is to add your [NGROK token](https://ngrok.com/) to the `.env` file and run
+```
+docker-compose up
+```
+#### Persistent Installation
+For persistent installation it is recommended to use an existing host and pass it via `.env` file
+```
+WORDPRESS_HOST=782c-213-147-167-8.ngrok.io
+```
+and run
+```
+docker-compose -f docker-compose.persistent.yml up
+```

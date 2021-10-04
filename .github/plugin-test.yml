@@ -1,0 +1,33 @@
+name: Test Plugin
+
+on:
+  push:
+
+jobs:
+  Tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get Branch Name
+        shell: bash
+        run: echo "::set-output name=name::$(bash docker/branchname.sh)"
+        id: branch
+      - name: Start NGROK
+        shell: bash
+        run: echo "::set-output name=host::$(timeout 1m bash docker/wordpress/ngrok.sh)"
+        id: ngrok
+        env:
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+      - name: Launch Shop
+        run: docker-compose up -d
+        env:
+           WORDPRESS_HOST: ${{ steps.ngrok.outputs.host }}
+           PORT_HTTP: 80
+           PORT_SSL: 443
+      - name: Wait for Shop Setup
+        run: bash scripts/wait-for-shop.sh
+      - name: Test Step (dummy)
+        env:
+           WP_URL: ${{ steps.ngrok.outputs.host }}
+        run: curl https://${{ steps.ngrok.outputs.host }}

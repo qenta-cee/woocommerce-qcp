@@ -1,0 +1,44 @@
+services:
+  wc_db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_ROOTPASS:-ABC123}
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME:-wordpress}
+      MYSQL_USER: ${WORDPRESS_DB_USER:-wordpress}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASS:-wordpress}
+    # volumes:
+    #   - ./data/wc_db:/var/lib/mysql
+  woocommerce:
+    container_name: woocommerce
+    build:
+      context: docker/wordpress/
+      dockerfile: Dockerfile
+    depends_on:
+      - wc_db
+    ports:
+      - ${PORT_HTTP:-8000}:80
+      - ${PORT_SSL:-8443}:443
+    # volumes:
+    #   - ./data/woocommerce:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST:-wc_db}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-wordpress}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-wordpress}
+      WORDPRESS_DB_PASS: ${WORDPRESS_DB_PASS:-wordpress}
+      WORDPRESS_TABLE_PREFIX: "wp_"
+      WORDPRESS_DEBUG: 1
+      WORDPRESS_LOCALE: ${WORDPRESS_LOCALE:-en_US}
+      WORDPRESS_TITLE: ${WORDPRESS_TITLE:-QSHOP}
+      WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER:-admin}
+      WORDPRESS_ADMIN_PASS: ${WORDPRESS_ADMIN_PASS:-admin123}
+      WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL:-admin@admin.com}
+      WORDPRESS_URL: ${WORDPRESS_HOST}
+      PLUGIN_VERSION: ${PLUGIN_VERSION}
+      PLUGIN_URL: ${PLUGIN_URL}
+      NGROK_TOKEN: ${NGROK_TOKEN}
+      GITHUB_SERVER_URL: ${GITHUB_SERVER_URL}
+      GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}
+      GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}
+      GITHUB_SHA: ${GITHUB_SHA}
+      GITHUB_REF: ${GITHUB_REF}
