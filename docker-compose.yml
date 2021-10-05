@@ -19,7 +19,8 @@ services:
     ports:
       - ${PORT_HTTP:-8000}:80
       - ${PORT_SSL:-8443}:443
-    # volumes:
+    volumes:
+      - ./:/tmp/plugin:ro
     #   - ./data/woocommerce:/var/www/html
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST:-wc_db}
@@ -35,7 +36,7 @@ services:
       WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL:-admin@admin.com}
       WORDPRESS_URL: ${WORDPRESS_HOST}
       PLUGIN_VERSION: ${PLUGIN_VERSION}
-      PLUGIN_URL: ${PLUGIN_URL}
+      PLUGIN_URL: ${PLUGIN_URL:-local}
       NGROK_TOKEN: ${NGROK_TOKEN}
       GITHUB_SERVER_URL: ${GITHUB_SERVER_URL}
       GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}

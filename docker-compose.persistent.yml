@@ -20,6 +20,7 @@ services:
       - ${PORT_HTTP:-8000}:80
       - ${PORT_SSL:-8443}:443
     volumes:
+      - ./:/tmp/plugin:ro
       - ./data/woocommerce:/var/www/html
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST:-wc_db}

@@ -48,7 +48,6 @@ function install_core() {
 }
 
 function install_woocommerce() {
-  echo "Installing WooCommerce"
   wp plugin install woocommerce --activate
 
   echo "Install Sample Data"
