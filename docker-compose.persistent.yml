@@ -1,6 +1,6 @@
 services:
   wc_db:
-    image: mysql:5.7
+    image: mariadb:10.5
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_ROOTPASS:-ABC123}

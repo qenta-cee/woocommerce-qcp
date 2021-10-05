@@ -38,8 +38,6 @@ function create_db() {
 }
 
 function install_core() {
-  echo "Installing Wordpress"
-
   wp core install \
     --url=${WORDPRESS_URL} \
     --title=${WORDPRESS_TITLE} \
