@@ -357,11 +357,11 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function confirm_request() {
-    $params_request = $tags = array_map( 'esc_attr', $_REQUEST );
+    $params_request = $tags = array_map( 'sanitize_text_field', $_REQUEST );
     foreach ( $params_request as &$param ) {
         $param = stripslashes( $param );
     }
-    $params_post = array_map( 'esc_attr', $_POST );
+    $params_post = array_map( 'sanitize_text_field', $_POST );
     foreach ( $params_post as &$param ) {
         $param = stripslashes( $param );
     }
