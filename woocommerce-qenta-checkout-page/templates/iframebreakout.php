@@ -20,7 +20,8 @@
 <form method="POST" name="redirectForm" action="<?php echo $url; ?>" target="_parent">
     <input type="hidden" name="redirected" value="1" />
     <?php
-    foreach ($_POST as $k => $v)
+    $params_post = array_map( 'esc_attr', $_POST );
+    foreach ($params_post as $k => $v)
     {
         printf('<input type="hidden" name="%s" value="%s" />', htmlspecialchars($k), htmlspecialchars($v));
     }

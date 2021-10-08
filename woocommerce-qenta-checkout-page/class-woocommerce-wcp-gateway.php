@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-c
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_QentaCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '2.0.3' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '2.0.3aa' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'QentaCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
@@ -180,7 +180,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$order = new WC_Order( $order_id );
 
-		$paymenttype = $_POST['wcp_payment_method'];
+		$paymenttype = sanitize_text_field($_POST['wcp_payment_method']);
 		if ( ! $this->is_paymenttype_enabled( $paymenttype ) ) {
 			wc_add_notice( __( 'Payment type is not available, please select another payment type.',
 				'woocommerce-wcp' ), 'error' );
@@ -191,19 +191,19 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$birthday = null;
 		if ( isset( $_POST['wcp_birthday'] ) ) {
-			$birthday = $_POST['wcp_birthday'];
+			$birthday = sanitize_text_field($_POST['wcp_birthday']);
 		}
 		$financial_inst = null;
 		if ( $paymenttype == 'eps' ) {
-			$financial_inst = $_POST['wcp_eps_financialInstitution'];
+			$financial_inst = sanitize_text_field($_POST['wcp_eps_financialInstitution']);
 		}
 		if ( $paymenttype == 'idl' ) {
-			$financial_inst = $_POST['wcp_idl_financialInstitution'];
+			$financial_inst = sanitize_text_field($_POST['wcp_idl_financialInstitution']);
 		}
 
 		if ( $this->use_iframe ) {
-			WC()->session->qenta_checkout_page_idl = isset( $_POST['wcp_idl_financialInstitution'] ) ? $_POST['wcp_idl_financialInstitution'] : '';
-			WC()->session->qenta_checkout_page_eps = isset( $_POST['wcp_eps_financialInstitution'] ) ? $_POST['wcp_eps_financialInstitution'] : '';
+			WC()->session->qenta_checkout_page_idl = isset( $_POST['wcp_idl_financialInstitution'] ) ? sanitize_text_field($_POST['wcp_idl_financialInstitution']) : '';
+			WC()->session->qenta_checkout_page_eps = isset( $_POST['wcp_eps_financialInstitution'] ) ? sanitize_text_field($_POST['wcp_eps_financialInstitution']) : '';
 			WC()->session->qenta_checkout_page_type = $paymenttype;
 
 			$page_url = version_compare( WC()->version, '2.1.0', '<' )
@@ -240,14 +240,14 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$order = new WC_Order( $order_id );
 		$birthday = null;
 		if ( isset( $_POST['wcp_birthday'] ) ) {
-			$birthday = $_POST['wcp_birthday'];
+			$birthday = sanitize_text_field($_POST['wcp_birthday']);
 		}
 		$financial_inst = null;
 		if ( WC()->session->qenta_checkout_page_type == 'eps' && ( isset( $_POST['wcp_eps_financialInstitution'] ) || isset( WC()->session->qenta_checkout_page_eps ) ) ) {
-			$financial_inst = isset( $_POST['wcp_eps_financialInstitution'] ) ? $_POST['wcp_eps_financialInstitution'] : WC()->session->qenta_checkout_page_eps;
+			$financial_inst = isset( $_POST['wcp_eps_financialInstitution'] ) ? sanitize_text_field($_POST['wcp_eps_financialInstitution']) : WC()->session->qenta_checkout_page_eps;
 		}
 		if ( WC()->session->qenta_checkout_page_type == 'idl'  && ( isset( $_POST['wcp_idl_financialInstitution'] ) || isset( WC()->session->qenta_checkout_page_idl ) ) ) {
-			$financial_inst = isset( $_POST['wcp_idl_financialInstitution'] ) ? $_POST['wcp_idl_financialInstitution'] : WC()->session->qenta_checkout_page_idl;
+			$financial_inst = isset( $_POST['wcp_idl_financialInstitution'] ) ? sanitize_text_field($_POST['wcp_idl_financialInstitution']) : WC()->session->qenta_checkout_page_idl;
 		}
 
 		$iframeUrl = $this->initiate_payment( $order, WC()->session->qenta_checkout_page_type, $birthday,
@@ -357,23 +357,25 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function confirm_request() {
-        foreach ( $_REQUEST as &$param ) {
-            $param = stripslashes( $param );
-        }
-        foreach ( $_POST as &$param ) {
-            $param = stripslashes( $param );
-        }
+    $params_request = $tags = array_map( 'esc_attr', $_REQUEST );
+    foreach ( $params_request as &$param ) {
+        $param = stripslashes( $param );
+    }
+    $params_post = array_map( 'esc_attr', $_POST );
+    foreach ( $params_post as &$param ) {
+        $param = stripslashes( $param );
+    }
 
-		$this->log( 'confirm_request:' . print_r( $_REQUEST, true ), 'info' );
+		$this->log( 'confirm_request:' . print_r( $params_request, true ), 'info' );
 
 		$message = null;
-		if ( ! isset( $_REQUEST['wooOrderId'] ) || ! strlen( $_REQUEST['wooOrderId'] ) ) {
+		if ( ! isset( $params_request['wooOrderId'] ) || ! strlen( $params_request['wooOrderId'] ) ) {
 			$message = 'order-id missing';
 			$this->log( $message, 'error' );
 
 			return QentaCEE\QPay\ReturnFactory::generateConfirmResponseString( $message );
 		}
-		$order_id = $_REQUEST['wooOrderId'];
+		$order_id = $params_request['wooOrderId'];
 		$order    = new WC_Order( $order_id );
 		if ( ! $order->get_id() ) {
 			$message = "order with id `$order->get_id()` not found";
@@ -390,19 +392,19 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		}
 
 		$str = '';
-		foreach ( $_POST as $k => $v ) {
+		foreach ( $params_post as $k => $v ) {
 			$str .= "$k:$v\n";
 		}
 		$str = trim( $str );
 
 		update_post_meta( $order->get_id(), 'wcp_data', $str );
 		if ( isset( $_REQUEST['paymentType'] ) ) {
-			update_post_meta($order->get_id(), '_payment_method', $_REQUEST['paymentType']);
+			update_post_meta($order->get_id(), '_payment_method', $params_request['paymentType']);
 		}
 
 		$message = null;
 		try {
-			$return = QentaCEE\QPay\ReturnFactory::getInstance( $_POST, $this->_config->get_secret() );
+			$return = QentaCEE\QPay\ReturnFactory::getInstance( $params_post, $this->_config->get_secret() );
 			if ( ! $return->validate() ) {
 				$message = __( 'Validation error: invalid response', 'woocommerce-wcp' );
 				$order->update_status( 'failed', $message );
