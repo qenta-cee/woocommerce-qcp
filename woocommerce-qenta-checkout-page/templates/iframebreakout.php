@@ -7,7 +7,7 @@
         }
 
         h3 {
-            color: #55555;
+            color: #555555;
             font-size: 1.1em;
             font-weight: bold;
             margin: 20px 0 10px;
@@ -17,7 +17,7 @@
 <body>
 <h3><?php _e('You will be redirected shortly') ?></h3>
 <p><?php _e('If not, please click <a href="#" onclick="iframeBreakout()">here</a>') ?></p>
-<form method="POST" name="redirectForm" action="<?php echo $url; ?>" target="_parent">
+<form method="POST" name="redirectForm" action="<?php echo esc_url($url); ?>" target="_parent">
     <input type="hidden" name="redirected" value="1" />
     <?php
     $params_post = array_map( 'sanitize_text_field', $_POST );

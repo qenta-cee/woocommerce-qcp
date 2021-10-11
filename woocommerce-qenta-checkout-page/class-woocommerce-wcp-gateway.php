@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-c
 require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_QentaCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '2.0.3aa' );
+define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '2.0.4' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'QentaCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
@@ -253,7 +253,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		$iframeUrl = $this->initiate_payment( $order, WC()->session->qenta_checkout_page_type, $birthday,
 			$financial_inst );
 		?>
-        <iframe src="<?php echo $iframeUrl ?>"
+        <iframe src="<?php echo esc_url($iframeUrl) ?>"
                 name="<?php echo WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME ?>" width="100%"
                 height="700px" border="0" frameborder="0">
             <p>Your browser does not support iframes.</p>
@@ -532,24 +532,26 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		foreach ( $this->get_enabled_paymenttypes() as $type ) {
 			?>
             </div></li>
-        <li class="wc_payment_method payment_method_qenta_checkout_page_<?php echo $type->code ?>">
+        <li class="wc_payment_method payment_method_qenta_checkout_page_<?php echo esc_attr($type->code) ?>">
             <input
-                    id="payment_method_qenta_checkout_page_<?php echo $type->code ?>"
+                    id="payment_method_qenta_checkout_page_<?php echo esc_attr($type->code) ?>"
                     type="radio"
                     class="input-radio"
                     value="qenta_checkout_page"
-                    onclick="changeWCPPayment('<?php echo $type->code ?>');"
+                    onclick="changeWCPPayment('<?php echo esc_attr($type->code) ?>');"
                     name="payment_method"
                     data-order_button_text>
-            <label for="payment_method_qenta_checkout_page_<?php echo $type->code ?>">
+            <label for="payment_method_qenta_checkout_page_<?php echo esc_attr($type->code) ?>">
 				<?php
-				echo $type->label;
-				echo "<img src='{$this->_payments->get_payment_icon($type->code)}' alt='Qenta {$type->label}'>";
+				echo esc_html($type->label);
+        $url_payment_icon = esc_url($this->_payments->get_payment_icon($type->code));
+        $label_pacment_icon = esc_attr($type->label);
+				echo "<img src='{$url_payment_icon}' alt='Qenta {$label_pacment_icon}'>";
 				?>
             </label>
-        <div class="payment_box payment_method_qenta_checkout_page_<?= ( $this->_payments->has_payment_fields($type->code) ) ? $type->code : "" ?>" style="display:none;">
+        <div class="payment_box payment_method_qenta_checkout_page_<?= ( $this->_payments->has_payment_fields($type->code) ) ? esc_attr($type->code) : "" ?>" style="display:none;">
 			<?php
-			echo $this->_payments->get_payment_fields($type->code);
+			echo esc_html($this->_payments->get_payment_fields($type->code));
 		}
 	}
 
