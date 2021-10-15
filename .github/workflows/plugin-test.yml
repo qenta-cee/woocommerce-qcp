@@ -9,6 +9,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          tools: composer
       - name: Get Branch Name
         shell: bash
         run: echo "::set-output name=name::$(bash docker/branchname.sh)"
@@ -37,7 +42,8 @@ jobs:
       - name: Prepare Artifact
         run: |
           mkdir -p /tmp/artifact
-          cp -r woocommerce-qenta-checkout-page /tmp/artifact/
+          cp -r woocommerce-qenta-checkout-page composer.* /tmp/artifact/
+          cd /tmp/artifact && composer install && rm composer.*
       - name: Upload Artifact
         id: upload_artifact
         uses: actions/upload-artifact@v2
