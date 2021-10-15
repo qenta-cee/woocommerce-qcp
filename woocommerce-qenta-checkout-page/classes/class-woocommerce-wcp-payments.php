@@ -70,7 +70,7 @@ class WC_Gateway_WCP_Payments {
 	 * @return string
 	 */
 	public function get_payment_icon( $payment_code ) {
-		return WOOCOMMERCE_GATEWAY_WCP_URL . "assets/images/" . $payment_code . ".png";
+		return WOOCOMMERCE_GATEWAY_QPAY_URL . "assets/images/" . $payment_code . ".png";
 	}
 
 	/**

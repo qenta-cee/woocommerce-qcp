@@ -7,13 +7,13 @@
  *  - Wrapped payment type in div
  *
  */
-require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-config.php' );
-require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
+require_once( WOOCOMMERCE_GATEWAY_QPAY_BASEDIR . 'classes/class-woocommerce-wcp-config.php' );
+require_once( WOOCOMMERCE_GATEWAY_QPAY_BASEDIR . 'classes/class-woocommerce-wcp-payments.php' );
 
-define( 'WOOCOMMERCE_GATEWAY_WCP_NAME', 'Woocommerce2_QentaCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_VERSION', '2.0.4' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME', 'QentaCheckoutPageFrame' );
-define( 'WOOCOMMERCE_GATEWAY_WCP_TABLE_NAME', 'woocommerce_wcp_transaction' );
+define( 'WOOCOMMERCE_GATEWAY_QPAY_NAME', 'Woocommerce2_QentaCheckoutPage' );
+define( 'WOOCOMMERCE_GATEWAY_QPAY_VERSION', '2.0.4' );
+define( 'WOOCOMMERCE_GATEWAY_QPAY_WINDOWNAME', 'QentaCheckoutPageFrame' );
+define( 'WOOCOMMERCE_GATEWAY_QPAY_TABLE_NAME', 'woocommerce_wcp_transaction' );
 
 class WC_Gateway_WCP extends WC_Payment_Gateway {
 
@@ -42,7 +42,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 	function __construct() {
 		$this->id                 = 'qenta_checkout_page';
-		$this->icon               = WOOCOMMERCE_GATEWAY_WCP_URL . 'assets/images/qenta.png';
+		$this->icon               = WOOCOMMERCE_GATEWAY_QPAY_URL . 'assets/images/qenta.png';
 		$this->has_fields         = true;
 		$this->method_title       = __( 'Qenta Checkout Page', 'woocommerce-wcp' );
 		$this->method_description = __(
@@ -254,7 +254,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$financial_inst );
 		?>
         <iframe src="<?php echo esc_url($iframeUrl) ?>"
-                name="<?php echo WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME ?>" width="100%"
+                name="<?php echo WOOCOMMERCE_GATEWAY_QPAY_WINDOWNAME ?>" width="100%"
                 height="700px" border="0" frameborder="0">
             <p>Your browser does not support iframes.</p>
         </iframe>
@@ -284,8 +284,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
               [
                   'url' => $url,
               ],
-              WOOCOMMERCE_GATEWAY_WCP_BASEDIR,
-              WOOCOMMERCE_GATEWAY_WCP_BASEDIR
+              WOOCOMMERCE_GATEWAY_QPAY_BASEDIR,
+              WOOCOMMERCE_GATEWAY_QPAY_BASEDIR
           );
 
           exit();
@@ -527,7 +527,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
                 changer.value = code;
             }
         </script>
-        <link rel="stylesheet" type="text/css" href="<?= WOOCOMMERCE_GATEWAY_WCP_URL ?>assets/styles/payment.css">
+        <link rel="stylesheet" type="text/css" href="<?= WOOCOMMERCE_GATEWAY_QPAY_URL ?>assets/styles/payment.css">
 		<?php
 		foreach ( $this->get_enabled_paymenttypes() as $type ) {
 			?>
@@ -668,8 +668,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$version = QentaCEE\QPay\FrontendClient::generatePluginVersion(
 				$this->get_vendor(),
 				WC()->version,
-				WOOCOMMERCE_GATEWAY_WCP_NAME,
-				WOOCOMMERCE_GATEWAY_WCP_VERSION
+				WOOCOMMERCE_GATEWAY_QPAY_NAME,
+				WOOCOMMERCE_GATEWAY_QPAY_VERSION
 			);
 
       // If Test Mode customer randomize orderReference to avoid issues with duplicate references per customerId
@@ -698,7 +698,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			       ->setDuplicateRequestCheck( false )
 			       ->setMaxRetries( $this->get_option( 'max_retries' ) )
 			       ->createConsumerMerchantCrmId( $order->get_billing_email() )
-			       ->setWindowName( WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME );
+			       ->setWindowName( WOOCOMMERCE_GATEWAY_QPAY_WINDOWNAME );
 
 			if ( WC()->session->get( 'wcpConsumerDeviceId' ) ) {
 			    $client->consumerDeviceId = WC()->session->get( 'wcpConsumerDeviceId' );
