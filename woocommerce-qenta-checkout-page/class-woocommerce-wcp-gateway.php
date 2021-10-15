@@ -637,6 +637,9 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$config = $this->_config->get_client_config();
 			$client = new QentaCEE\QPay\FrontendClient( $config );
 
+      // get customerId to determine if we are Test customer
+      $customerId = $this->_config->get_customer_id( $this );
+
 			// consumer data (IP and User aget) are mandatory!
 			$consumerData = new QentaCEE\Stdlib\ConsumerData();
 			$consumerData->setUserAgent( $_SERVER['HTTP_USER_AGENT'] )->setIpAddress( $_SERVER['REMOTE_ADDR'] );
@@ -669,6 +672,13 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				WOOCOMMERCE_GATEWAY_WCP_VERSION
 			);
 
+      // If Test Mode customer randomize orderReference to avoid issues with duplicate references per customerId
+      if ( strtolower( $customerId ) == 'd200411' ) {
+        $orderReference = md5( random_int( 0, 999999 ) . $this->get_order_reference( $order ) );
+      } else {
+        $orderReference = $this->get_order_reference( $order );
+      }
+
 			$client->setAmount( $order->get_total() )
 			       ->setCurrency( get_woocommerce_currency() )
 			       ->setPaymentType( $paymenttype )
@@ -683,7 +693,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			       ->setImageUrl( $this->get_option( 'image_url' ) )
 			       ->setConsumerData( $consumerData )
 			       ->setDisplayText( $this->get_option( 'display_text' ) )
-			       ->setOrderReference( $this->get_order_reference( $order ) )
+			       ->setOrderReference( $orderReference )
 			       ->setCustomerStatement( $this->get_customer_statement( $order, $paymenttype ) )
 			       ->setDuplicateRequestCheck( false )
 			       ->setMaxRetries( $this->get_option( 'max_retries' ) )
