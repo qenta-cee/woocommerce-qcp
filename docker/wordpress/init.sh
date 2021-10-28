@@ -83,6 +83,11 @@ function setup_store() {
   wp option set woocommerce_default_country "AT"
   wp_set_array woocommerce_onboarding_profile skipped 1
   wp wc --user=admin tool run install_pages
+  wp option update page_on_front 5
+  wp option update show_on_front page
+  wp option update blogdescription "QENTA Plugin DEMO"
+  wp theme install twentytwenty --activate
+  wp post delete 2 --force
 }
 
 function print_info() {
@@ -90,7 +95,6 @@ function print_info() {
   echo '####################################'
   echo
   echo "URL: https://${WORDPRESS_URL}"
-  echo "Shop: https://${WORDPRESS_URL}/?post_type=product"
   echo "Panel: https://${WORDPRESS_URL}/wp-admin/"
   echo "Plugin Config: https://${WORDPRESS_URL}/wp-admin/admin.php?page=wc-settings&tab=checkout"
   echo "User: ${WORDPRESS_ADMIN_USER}"
