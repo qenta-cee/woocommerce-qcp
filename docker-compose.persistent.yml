@@ -1,6 +1,6 @@
 services:
   wc_db:
-    image: mysql:5.7
+    image: mariadb:10.5
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_ROOTPASS:-ABC123}
@@ -20,6 +20,7 @@ services:
       - ${PORT_HTTP:-8000}:80
       - ${PORT_SSL:-8443}:443
     volumes:
+      - ./:/tmp/plugin:ro
       - ./data/woocommerce:/var/www/html
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST:-wc_db}

@@ -38,8 +38,6 @@ function create_db() {
 }
 
 function install_core() {
-  echo "Installing Wordpress"
-
   wp core install \
     --url=${WORDPRESS_URL} \
     --title=${WORDPRESS_TITLE} \
@@ -50,7 +48,6 @@ function install_core() {
 }
 
 function install_woocommerce() {
-  echo "Installing WooCommerce"
   wp plugin install woocommerce --activate
 
   echo "Install Sample Data"

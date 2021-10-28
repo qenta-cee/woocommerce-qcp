@@ -12,6 +12,8 @@
 
 REPO_WS=$(mktemp -d)
 
+[[ ${PLUGIN_URL} == 'local' ]] && cp -r /tmp/plugin/* ${REPO_WS}/
+
 # can be zip or repo url
 PLUGIN_URL=${1}
 
@@ -40,8 +42,7 @@ if [[ ${PLUGIN_URL} == http*://*.zip ]]; then
   PATH_TO_ZIP=${REPO_WS}/${ZIP_NAME}
   PLUGIN_NAME=$(unzip -l ${PATH_TO_ZIP} | sed -n 's/.*\ \(.*\)\/$/\1/p' | head -n 1)
 elif [[ ${PLUGIN_URL} == 'local' ]]; then
-  >&2 echo "Creating plugin zip of ${PLUGIN_VERSION} from ${PLUGIN_URL}"
-  >&2 clone
+  >&2 echo "Creating plugin zip from local folder"
   create_package
 else
   >&2 echo "Creating plugin zip of ${PLUGIN_VERSION} from ${PLUGIN_URL}"
