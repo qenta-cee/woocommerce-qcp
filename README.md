@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://raw.githubusercontent.com/qenta-cee/woocommerce-wcp/master/LICENSE)
 [![WordPress](https://img.shields.io/badge/WordPress-v5.8.1-green.svg)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-v5.7.1-green.svg)](https://www.woocommerce.com/)
-[![PHP v>=7.2](https://img.shields.io/badge/php-v>=7.2-yellow.svg)](http://www.php.net)
+[![PHP v>=7.2](https://img.shields.io/badge/php-v>=7.4-yellow.svg)](http://www.php.net)
 
 >  Tested up to: 5.8.1 (WordPress), 5.7.1 (WooCommerce)
 ----
