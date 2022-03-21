@@ -267,12 +267,6 @@ return array(
 		'desc_tip'    => false,
 		'label'       => __( 'Enable/Disable', 'woocommerce-wcp' )
 	),
-	'use_iframe'               => array(
-		'type'    => 'checkbox',
-		'title'   => __( 'Use Iframe', 'woocommerce-wcp' ),
-		'default' => 'no',
-		'label'   => __( 'Enable/Disable', 'woocommerce-wcp' )
-	),
 	'additional_settings_end' => array(
 		'title' => '<hr/>',
 		'type' => 'title'

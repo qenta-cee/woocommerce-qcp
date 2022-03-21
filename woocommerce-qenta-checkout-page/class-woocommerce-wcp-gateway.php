@@ -62,7 +62,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 
 		$this->title       = 'Qenta Checkout Page'; // frontend title
 		$this->debug       = $this->settings['debug'] == 'yes';
-		$this->use_iframe  = $this->get_option( 'use_iframe' ) == 'yes';
+		$this->use_iframe  = false;
 		$this->enabled = count( $this->get_enabled_paymenttypes(false ) ) > 0 ? "yes" : "no";
 
 		// Hooks
@@ -80,17 +80,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				'thankyou_page_text'
 			)
 		);
-
-		// iframe only
-		if ( $this->use_iframe ) {
-			add_action(
-				'woocommerce_receipt_' . $this->id,
-				array(
-					$this,
-					'payment_page'
-				)
-			);
-		}
 
 		// Payment listener/API hook
 		add_action(
@@ -201,33 +190,15 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			$financial_inst = $_POST['wcp_idl_financialInstitution'];
 		}
 
-		if ( $this->use_iframe ) {
-			WC()->session->qenta_checkout_page_idl = isset( $_POST['wcp_idl_financialInstitution'] ) ? $_POST['wcp_idl_financialInstitution'] : '';
-			WC()->session->qenta_checkout_page_eps = isset( $_POST['wcp_eps_financialInstitution'] ) ? $_POST['wcp_eps_financialInstitution'] : '';
-			WC()->session->qenta_checkout_page_type = $paymenttype;
+    $redirectUrl = $this->initiate_payment( $order, $paymenttype, $birthday, $financial_inst );
+    if ( ! $redirectUrl ) {
+      return;
+    }
 
-			$page_url = version_compare( WC()->version, '2.1.0', '<' )
-				? get_permalink( wc_get_page_id( 'pay' ) )
-				: $order->get_checkout_payment_url( true );
-
-			$page_url = add_query_arg( 'key', $order->get_order_key(), $page_url );
-			$page_url = add_query_arg( 'order-pay', $order_id, $page_url );
-
-			return array(
-				'result'   => 'success',
-				'redirect' => $page_url
-			);
-		} else {
-			$redirectUrl = $this->initiate_payment( $order, $paymenttype, $birthday, $financial_inst );
-			if ( ! $redirectUrl ) {
-				return;
-			}
-
-			return array(
-				'result'   => 'success',
-				'redirect' => $redirectUrl
-			);
-		}
+    return array(
+      'result'   => 'success',
+      'redirect' => $redirectUrl
+    );
 	}
 
 	/**
@@ -274,21 +245,6 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
         print $this->confirm_request();
 
         exit();
-      }
-      
-      // do iframe breakout, if needed and not already done
-      if ($this->use_iframe && !array_key_exists('redirected', $_REQUEST)) {
-          $url = add_query_arg('wc-api', 'WC_Gateway_WCP', home_url('/', is_ssl() ? 'https' : 'http'));
-          wc_get_template(
-              'templates/iframebreakout.php',
-              [
-                  'url' => $url,
-              ],
-              WOOCOMMERCE_GATEWAY_WCP_BASEDIR,
-              WOOCOMMERCE_GATEWAY_WCP_BASEDIR
-          );
-
-          exit();
       }
 
       $redirectUrl = $this->return_request();
