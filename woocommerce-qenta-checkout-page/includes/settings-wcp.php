@@ -240,15 +240,6 @@ return array(
 		'desc_tip' => false,
 		'label'   => __( 'Enable/Disable', 'woocommerce-wcp' )
 	),
-	'auto_deposit'             => array(
-		'type'        => 'checkbox',
-		'title'       => __( 'Automated deposit', 'woocommerce-wcp' ),
-		'default'     => 'yes',
-		'description' => sprintf( __( 'Enabling an automated deposit of payments. Please contact our sales teams to activate this feature. <a href="%s">More information</a>',
-			'woocommerce-wcp' ), 'https://guides.qenta.com/sales' ),
-		'desc_tip'    => false,
-		'label'       => __( 'Enable/Disable', 'woocommerce-wcp' )
-	),
 	'send_consumer_shipping'   => array(
 		'type'        => 'checkbox',
 		'title'       => __( 'Forward consumer shipping data', 'woocommerce-wcp' ),

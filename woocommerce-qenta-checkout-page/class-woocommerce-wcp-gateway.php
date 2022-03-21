@@ -696,9 +696,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			if ( $financial_inst !== null ) {
 				$client->setFinancialInstitution( $financial_inst );
 			}
-			if ( ( $this->get_option( 'auto_deposit' ) == 'yes' ) ) {
-				$client->setAutoDeposit( (bool) ( $this->get_option( 'auto_deposit' ) == 'yes' ) );
-			}
+			$client->setAutoDeposit( (bool) ( $this->get_option( 'auto_deposit' ) == 'no' ) );
 
 			if ( $this->get_option( 'send_basket_data' ) == 'yes' ||
 			     ( $paymenttype == QentaCEE\QPay\PaymentType::INVOICE && $this->get_option( 'invoice_provider' ) != 'payolution' ) ||
