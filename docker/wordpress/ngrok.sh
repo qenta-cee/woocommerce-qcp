@@ -1,15 +1,13 @@
 #!/bin/bash
 
-set -e
-
 which ngrok >/dev/null
 if [[ $? == 0 ]]; then
   NGROK_BINARY="$(which ngrok)"
 else
   >&2 echo "Installing NGROK"
   cd ~/
-  npm install ngrok
-  NGROK_BINARY="~/node_modules/ngrok/bin/ngrok"
+  npm install ngrok >&2
+  NGROK_BINARY="./node_modules/ngrok/bin/ngrok"
 fi
 
 function get_ngrok_url() {

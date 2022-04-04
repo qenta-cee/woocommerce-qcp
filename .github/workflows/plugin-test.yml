@@ -9,13 +9,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          tools: composer
       - name: Get Branch Name
         shell: bash
         run: echo "::set-output name=name::$(bash docker/branchname.sh)"
         id: branch
       - name: Start NGROK
         shell: bash
-        run: echo "::set-output name=host::$(timeout 1m bash docker/wordpress/ngrok.sh)"
+        run: |
+          NGROK_HOST=$(timeout 5m bash docker/wordpress/ngrok.sh)
+          echo "ngrok hostname: ${NGROK_HOST}"
+          echo "::set-output name=host::${NGROK_HOST}"
         id: ngrok
         env:
           NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
@@ -31,3 +39,14 @@ jobs:
         env:
            WP_URL: ${{ steps.ngrok.outputs.host }}
         run: curl https://${{ steps.ngrok.outputs.host }}
+      - name: Prepare Artifact
+        run: |
+          mkdir -p /tmp/artifact
+          cp -r woocommerce-qenta-checkout-page composer.* /tmp/artifact/
+          cd /tmp/artifact && composer install && rm composer.*
+      - name: Upload Artifact
+        id: upload_artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: woocommerce-qenta-checkout-page
+          path: /tmp/artifact

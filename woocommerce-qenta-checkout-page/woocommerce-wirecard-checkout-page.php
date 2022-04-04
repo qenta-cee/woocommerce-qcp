@@ -6,7 +6,7 @@
 Plugin Name: Qenta Checkout Page
 Plugin URI: http://www.qenta.com/integration/plugins/
 Description: Qenta is a popular payment service provider (PSP) and has connections with over 20 national and international currencies.
-Version: 2.0.3
+Version: 2.0.4
 Author: Qenta
 Author URI: http://www.qenta-cee.at/
 License: Proprietary
@@ -36,8 +36,8 @@ License: Proprietary
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-define( 'WOOCOMMERCE_GATEWAY_WCP_BASEDIR', plugin_dir_path( __FILE__ ) );
-define( 'WOOCOMMERCE_GATEWAY_WCP_URL', plugin_dir_url( __FILE__ ) );
+define( 'WOOCOMMERCE_GATEWAY_QPAY_BASEDIR', plugin_dir_path( __FILE__ ) );
+define( 'WOOCOMMERCE_GATEWAY_QPAY_URL', plugin_dir_url( __FILE__ ) );
 
 
 require_once 'vendor/autoload.php';
@@ -65,7 +65,7 @@ function woocommerce_init_qenta_checkout_page()
     if ( ! class_exists( 'WC_Payment_Gateway' ) )
         return;
 
-    require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'class-woocommerce-wcp-gateway.php' );
+    require_once( WOOCOMMERCE_GATEWAY_QPAY_BASEDIR . 'class-woocommerce-wcp-gateway.php' );
 
     add_filter( 'woocommerce_payment_gateways', 'woocommerce_add_qenta_checkout_page' );
 }

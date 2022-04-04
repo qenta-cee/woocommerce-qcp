@@ -74,12 +74,12 @@ return array(
 	'pt_select'                => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'select' ),
-		'default' => 'no',
+		'default' => 'yes',
 	),
 	'pt_ccard'                 => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'ccard' ),
-		'default' => 'no',
+		'default' => 'yes',
 	),
 	'pt_masterpass'            => array(
 		'type'    => 'checkbox',
@@ -245,7 +245,7 @@ return array(
 		'title'       => __( 'Automated deposit', 'woocommerce-wcp' ),
 		'default'     => 'yes',
 		'description' => sprintf( __( 'Enabling an automated deposit of payments. Please contact our sales teams to activate this feature. <a href="%s">More information</a>',
-			'woocommerce-wcp' ), 'https://guides.qenta.com/sales' ),
+			'woocommerce-wcp' ), 'https://guides.qenta.com/contact/' ),
 		'desc_tip'    => false,
 		'label'       => __( 'Enable/Disable', 'woocommerce-wcp' )
 	),
@@ -270,7 +270,7 @@ return array(
 	'send_basket_data'         => array(
 		'type'        => 'checkbox',
 		'title'       => __( 'Forward basket data', 'woocommerce-wcp' ),
-		'default'     => 'no',
+		'default'     => 'yes',
 		'description' => __( 'Forwarding basket data to the respective financial service provider.',
 			'woocommerce-wcp' ),
 		'desc_tip'    => false,
