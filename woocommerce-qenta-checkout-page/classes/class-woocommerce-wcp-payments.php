@@ -270,8 +270,6 @@ class WC_Gateway_WCP_Payments {
 		switch ( $payment_code ) {
 			case 'invoice':
 				return $this->is_available_invoice();
-			case 'installment':
-				return $this->is_available_installment();
 			default:
 				return true;
 		}

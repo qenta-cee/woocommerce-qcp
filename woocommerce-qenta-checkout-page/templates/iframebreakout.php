@@ -17,12 +17,13 @@
 <body>
 <h3><?php _e('You will be redirected shortly') ?></h3>
 <p><?php _e('If not, please click <a href="#" onclick="iframeBreakout()">here</a>') ?></p>
-<form method="POST" name="redirectForm" action="<?php echo $url; ?>" target="_parent">
+<form method="POST" name="redirectForm" action="<?php echo esc_url_raw($url); ?>" target="_parent">
     <input type="hidden" name="redirected" value="1" />
     <?php
-    foreach ($_POST as $k => $v)
+    $postdata = $this->get_post_data();
+    foreach ($postdata as $k => $v)
     {
-        printf('<input type="hidden" name="%s" value="%s" />', htmlspecialchars($k), htmlspecialchars($v));
+        printf('<input type="hidden" name="%s" value="%s" />', esc_attr($k), esc_html($v));
     }
     ?>
 </form>

@@ -122,26 +122,24 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		?>
         <h3><?php _e( 'Qenta Checkout Page', 'woocommerce-wcp' ); ?></h3>
         <div class="woo-wcs-settings-header-wrapper" style="min-width: 200px; max-width: 800px;">
-            <img src="<?= plugins_url( 'woocommerce-qenta-checkout-page/assets/images/qenta-logo.png' ) ?>">
-            <p style="text-transform: uppercase;"><?= __( 'Qenta - Your Full Service Payment Provider - Comprehensive solutions from one single source',
-					'woocommerce-wcp' ) ?></p>
+            <img src="<?php echo plugins_url( 'woocommerce-qenta-checkout-page/assets/images/qenta-logo.png' ) ?>">
+            <p style="text-transform: uppercase;"><?php echo __( 'Qenta - Your Full Service Payment Provider - Comprehensive solutions from one single source',
+					'woocommerce-wcp' ); ?></p>
 
-            <p><?= __( 'Qenta is one of the world´s leading providers of outsourcing and white label solutions for electronic payment transactions.',
-					'woocommerce-wcp' ) ?></p>
+            <p><?php echo __( 'Qenta is one of the world´s leading providers of outsourcing and white label solutions for electronic payment transactions.',
+					'woocommerce-wcp' ); ?></p>
 
-            <p><?= __( 'As independent provider of payment solutions, we accompany our customers along the entire business development. Our payment solutions are perfectly tailored to suit e-Commerce requirements and have made	us Austria´s leading payment service provider. Customization, competence, and commitment.',
-					'woocommerce-wcp' ) ?></p>
-
+            <p><?php echo __( 'As independent provider of payment solutions, we accompany our customers along the entire business development. Our payment solutions are perfectly tailored to suit e-Commerce requirements and have made	us Austria´s leading payment service provider. Customization, competence, and commitment.',
+					'woocommerce-wcp' ); ?></p>
         </div>
         <hr/>
         <style>
-            .form-table td {
-                padding:0px;
-            }
-            .form-table th {
-                padding:0px;
-            }
-
+        .form-table td {
+            padding:0px;
+        }
+        .form-table th {
+            padding:0px;
+        }
         </style>
         <table class="form-table">
 			<?php
@@ -166,10 +164,10 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		 * @global $woocommerce Woocommerce
 		 */
 		global $woocommerce;
-
+    $postdata = $this->get_post_data();
 		$order = new WC_Order( $order_id );
 
-		$paymenttype = $_POST['wcp_payment_method'];
+		$paymenttype = $postdata['wcp_payment_method'];
 		if ( ! $this->is_paymenttype_enabled( $paymenttype ) ) {
 			wc_add_notice( __( 'Payment type is not available, please select another payment type.',
 				'woocommerce-wcp' ), 'error' );
@@ -179,15 +177,12 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
         update_post_meta( $order_id, '_payment_method_title', $this->get_paymenttype_name( $paymenttype ) );
 
 		$birthday = null;
-		if ( isset( $_POST['wcp_birthday'] ) ) {
-			$birthday = $_POST['wcp_birthday'];
+		if ( isset( $postdata['wcp_birthday'] ) ) {
+			$birthday = $postdata['wcp_birthday'];
 		}
 		$financial_inst = null;
 		if ( $paymenttype == 'eps' ) {
-			$financial_inst = $_POST['wcp_eps_financialInstitution'];
-		}
-		if ( $paymenttype == 'idl' ) {
-			$financial_inst = $_POST['wcp_idl_financialInstitution'];
+			$financial_inst = $postdata['wcp_eps_financialInstitution'];
 		}
 
     $redirectUrl = $this->initiate_payment( $order, $paymenttype, $birthday, $financial_inst );
@@ -210,22 +205,20 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	function payment_page( $order_id ) {
 		$order = new WC_Order( $order_id );
 		$birthday = null;
-		if ( isset( $_POST['wcp_birthday'] ) ) {
-			$birthday = $_POST['wcp_birthday'];
+    $postdata = $this->get_post_data();
+		if ( isset( $postdata['wcp_birthday'] ) ) {
+			$birthday = $postdata['wcp_birthday'];
 		}
 		$financial_inst = null;
-		if ( WC()->session->qenta_checkout_page_type == 'eps' && ( isset( $_POST['wcp_eps_financialInstitution'] ) || isset( WC()->session->qenta_checkout_page_eps ) ) ) {
-			$financial_inst = isset( $_POST['wcp_eps_financialInstitution'] ) ? $_POST['wcp_eps_financialInstitution'] : WC()->session->qenta_checkout_page_eps;
-		}
-		if ( WC()->session->qenta_checkout_page_type == 'idl'  && ( isset( $_POST['wcp_idl_financialInstitution'] ) || isset( WC()->session->qenta_checkout_page_idl ) ) ) {
-			$financial_inst = isset( $_POST['wcp_idl_financialInstitution'] ) ? $_POST['wcp_idl_financialInstitution'] : WC()->session->qenta_checkout_page_idl;
+		if ( WC()->session->qenta_checkout_page_type == 'eps' && ( isset( $postdata['wcp_eps_financialInstitution'] ) || isset( WC()->session->qenta_checkout_page_eps ) ) ) {
+			$financial_inst = isset( $postdata['wcp_eps_financialInstitution'] ) ? $postdata['wcp_eps_financialInstitution'] : WC()->session->qenta_checkout_page_eps;
 		}
 
 		$iframeUrl = $this->initiate_payment( $order, WC()->session->qenta_checkout_page_type, $birthday,
 			$financial_inst );
 		?>
-        <iframe src="<?php echo $iframeUrl ?>"
-                name="<?php echo WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME ?>" width="100%"
+        <iframe src="<?php echo esc_url_raw($iframeUrl) ?>"
+                name="<?php echo esc_attr(WOOCOMMERCE_GATEWAY_WCP_WINDOWNAME) ?>" width="100%"
                 height="700px" border="0" frameborder="0">
             <p>Your browser does not support iframes.</p>
         </iframe>
@@ -260,18 +253,20 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function return_request() {
-        foreach ( $_REQUEST as &$param ) {
-            $param = stripslashes( $param );
-        }
-		$this->log( 'return_request:' . print_r( $_REQUEST, true ), 'info' );
+    $params_request = array_map( 'sanitize_text_field', $_REQUEST );
+
+    foreach ( $params_request as &$param ) {
+        $param = stripslashes( $param );
+    }
+		$this->log( 'return_request:' . print_r( $params_request, true ), 'info' );
 
 		$redirectUrl = $this->get_return_url();
-		if ( ! isset( $_REQUEST['wooOrderId'] ) || ! strlen( $_REQUEST['wooOrderId'] ) ) {
+		if ( ! isset( $params_request['wooOrderId'] ) || ! strlen( $params_request['wooOrderId'] ) ) {
 			wc_add_notice( __( 'Panic: Order-Id missing', 'woocommerce-wcp' ), 'error' );
 
 			return $redirectUrl;
 		}
-		$order_id = $_REQUEST['wooOrderId'];
+		$order_id = $params_request['wooOrderId'];
 		$order    = new WC_Order( $order_id );
 		if ( ! $order->get_id() ) {
 			wc_add_notice( __( 'Panic: Order-Id missing', 'woocommerce-wcp' ), 'error' );
@@ -279,7 +274,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			return $redirectUrl;
 		}
 
-		$paymentState = $_REQUEST['paymentState'];
+		$paymentState = $params_request['paymentState'];
 		switch ( $paymentState ) {
 			case QentaCEE\QPay\ReturnFactory::STATE_SUCCESS:
 			case QentaCEE\QPay\ReturnFactory::STATE_PENDING:
@@ -292,8 +287,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 				return $order->get_cancel_endpoint();
 
 			case QentaCEE\QPay\ReturnFactory::STATE_FAILURE:
-				if ( array_key_exists( 'consumerMessage', $_REQUEST ) ) {
-					wc_add_notice( $_REQUEST['consumerMessage'], 'error' );
+				if ( array_key_exists( 'consumerMessage', $params_request ) ) {
+					wc_add_notice( $params_request['consumerMessage'], 'error' );
 				} else {
 					wc_add_notice( __( 'Payment has failed.', 'woocommerce-wcp' ), 'error' );
 				}
@@ -313,23 +308,25 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	function confirm_request() {
-        foreach ( $_REQUEST as &$param ) {
-            $param = stripslashes( $param );
-        }
-        foreach ( $_POST as &$param ) {
-            $param = stripslashes( $param );
-        }
+    $postdata = $this->get_post_data();
+    $params_request = array_map( 'sanitize_text_field', $_REQUEST );
+    foreach ( $params_request as &$param ) {
+        $param = stripslashes( $param );
+    }
+    foreach ( $postdata as &$param ) {
+        $param = stripslashes( $param );
+    }
 
-		$this->log( 'confirm_request:' . print_r( $_REQUEST, true ), 'info' );
+		$this->log( 'confirm_request:' . print_r( $params_request, true ), 'info' );
 
 		$message = null;
-		if ( ! isset( $_REQUEST['wooOrderId'] ) || ! strlen( $_REQUEST['wooOrderId'] ) ) {
+		if ( ! isset( $params_request['wooOrderId'] ) || ! strlen( $params_request['wooOrderId'] ) ) {
 			$message = 'order-id missing';
 			$this->log( $message, 'error' );
 
 			return QentaCEE\QPay\ReturnFactory::generateConfirmResponseString( $message );
 		}
-		$order_id = $_REQUEST['wooOrderId'];
+		$order_id = $params_request['wooOrderId'];
 		$order    = new WC_Order( $order_id );
 		if ( ! $order->get_id() ) {
 			$message = "order with id `$order->get_id()` not found";
@@ -346,19 +343,20 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 		}
 
 		$str = '';
-		foreach ( $_POST as $k => $v ) {
+
+		foreach ( $postdata as $k => $v ) {
 			$str .= "$k:$v\n";
 		}
 		$str = trim( $str );
 
 		update_post_meta( $order->get_id(), 'wcp_data', $str );
-		if ( isset( $_REQUEST['paymentType'] ) ) {
-			update_post_meta($order->get_id(), '_payment_method', $_REQUEST['paymentType']);
+		if ( isset( $params_request['paymentType'] ) ) {
+			update_post_meta($order->get_id(), '_payment_method', $params_request['paymentType']);
 		}
 
 		$message = null;
 		try {
-			$return = QentaCEE\QPay\ReturnFactory::getInstance( $_POST, $this->_config->get_secret() );
+			$return = QentaCEE\QPay\ReturnFactory::getInstance( $postdata, $this->_config->get_secret() );
 			if ( ! $return->validate() ) {
 				$message = __( 'Validation error: invalid response', 'woocommerce-wcp' );
 				$order->update_status( 'failed', $message );
@@ -370,6 +368,7 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			 * @var $return QentaCEE\Stdlib\Returns\ReturnAbstract
 			 */
 			update_post_meta( $order->get_id(), 'wcp_payment_state', $return->getPaymentState() );
+      $array_errors = [];
 
 			switch ( $return->getPaymentState() ) {
 				case QentaCEE\QPay\ReturnFactory::STATE_SUCCESS:
@@ -400,16 +399,15 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 					/**
 					 * @var $return QentaCEE\QPay\Returns\Failure
 					 */
-					$str_errors = '';
 					foreach ( $return->getErrors() as $error ) {
 						$errors[] = $error->getConsumerMessage();
 						wc_add_notice( __( "Request failed! Error: {$error->getConsumerMessage()}",
 							'woocommerce-wcp' ),
 							'error' );
 						$this->log( $error->getConsumerMessage(), 'error' );
-						$str_errors += $error->getConsumerMessage();
+						$array_errors[] = $error->getConsumerMessage();
 					}
-					$order->update_status( 'failed', $str_errors );
+					$order->update_status( 'failed', join('<br>', $array_errors) );
 					break;
 
 				default:
@@ -458,21 +456,8 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
         }
 		?>
         <script language='JavaScript'>
-            var di = {t:'<?= $consumer_device_id ?>',v:'WDWL',l:'Checkout'};
+            var di = {t:'<?php esc_attr($consumer_device_id); ?>',v:'WDWL',l:'Checkout'};
         </script>
-        <?php
-        if ( ($this->_config->is_ratepay_enabled('invoice_provider') && $this->is_paymenttype_enabled('invoice') ) ||
-            ( $this->_config->is_ratepay_enabled('installment_provider') && $this->is_paymenttype_enabled('installment') )) {?>
-            <script type='text/javascript' src='//d.ratepay.com/<?= $consumer_device_id ?>/di.js'></script>
-            <noscript>
-                <link rel='stylesheet' type='text/css' href='//d.ratepay.com/di.css?t=<?= $consumer_device_id ?>&v=WDWL&l=Checkout'>
-            </noscript>
-            <object type='application/x-shockwave-flash' data='//d.ratepay.com/WDWL/c.swf' width='0' height='0'>
-                <param name='movie' value='//d.ratepay.com/WDWL/c.swf' />
-                <param name='flashvars' value='t=<?= $consumer_device_id ?>&v=WDWL'/>
-                <param name='AllowScriptAccess' value='always'/>
-            </object>
-        <?php } ?>
         <input id="payment_method_wcp" type="hidden" value="woocommerce_qenta_checkout_page"
                name="wcp_payment_method"/>
         <script type="text/javascript">
@@ -481,29 +466,29 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
                 changer.value = code;
             }
         </script>
-        <link rel="stylesheet" type="text/css" href="<?= WOOCOMMERCE_GATEWAY_WCP_URL ?>assets/styles/payment.css">
+        <link rel="stylesheet" type="text/css" href="<?php esc_url_raw( WOOCOMMERCE_GATEWAY_WCP_URL ); ?>assets/styles/payment.css">
 		<?php
 		foreach ( $this->get_enabled_paymenttypes() as $type ) {
 			?>
             </div></li>
-        <li class="wc_payment_method payment_method_qenta_checkout_page_<?php echo $type->code ?>">
+        <li class="wc_payment_method payment_method_qenta_checkout_page_<?php echo esc_attr($type->code) ?>">
             <input
-                    id="payment_method_qenta_checkout_page_<?php echo $type->code ?>"
+                    id="payment_method_qenta_checkout_page_<?php echo esc_attr($type->code) ?>"
                     type="radio"
                     class="input-radio"
                     value="qenta_checkout_page"
-                    onclick="changeWCPPayment('<?php echo $type->code ?>');"
+                    onclick="changeWCPPayment('<?php echo esc_attr($type->code); ?>');"
                     name="payment_method"
                     data-order_button_text>
-            <label for="payment_method_qenta_checkout_page_<?php echo $type->code ?>">
+            <label for="payment_method_qenta_checkout_page_<?php echo esc_attr($type->code); ?>">
 				<?php
-				echo $type->label;
-				echo "<img src='{$this->_payments->get_payment_icon($type->code)}' alt='Qenta {$type->label}'>";
+				echo esc_html($type->label);
+				echo "<img src='" . esc_url_raw( $this->_payments->get_payment_icon($type->code) ) . "' alt='Qenta " . esc_html($type->label) . "'>";
 				?>
             </label>
-        <div class="payment_box payment_method_qenta_checkout_page_<?= ( $this->_payments->has_payment_fields($type->code) ) ? $type->code : "" ?>" style="display:none;">
+        <div class="payment_box payment_method_qenta_checkout_page_<?php ( $this->_payments->has_payment_fields($type->code) ) ? esc_attr($type->code) : "" ?>" style="display:none;">
 			<?php
-			echo $this->_payments->get_payment_fields($type->code);
+			echo esc_attr($this->_payments->get_payment_fields($type->code));
 		}
 	}
 
@@ -646,13 +631,10 @@ class WC_Gateway_WCP extends WC_Payment_Gateway {
 			    $client->consumerDeviceId = WC()->session->get( 'wcpConsumerDeviceId' );
 			    WC()->session->set( 'wcpConsumerDeviceId', false );
             }
-			if ( $paymenttype == QentaCEE\QPay\PaymentType::MASTERPASS ) {
-				$client->setShippingProfile( 'NO_SHIPPING' );
-			}
 			if ( $financial_inst !== null ) {
 				$client->setFinancialInstitution( $financial_inst );
 			}
-			$client->setAutoDeposit( (bool) ( $this->get_option( 'auto_deposit' ) == 'no' ) );
+			$client->setAutoDeposit( false );
 
 			if ( $this->get_option( 'send_basket_data' ) == 'yes' ||
 			     ( $paymenttype == QentaCEE\QPay\PaymentType::INVOICE && $this->get_option( 'invoice_provider' ) != 'payolution' ) ||

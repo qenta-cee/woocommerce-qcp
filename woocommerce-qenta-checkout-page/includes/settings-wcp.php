@@ -81,19 +81,9 @@ return array(
 		'label'   => $this->get_paymenttype_name( 'ccard' ),
 		'default' => 'no',
 	),
-	'pt_masterpass'            => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'masterpass' ),
-		'default' => 'no',
-	),
 	'pt_ccard-moto'            => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'ccard-moto' ),
-		'default' => 'no',
-	),
-	'pt_maestro'               => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'maestro' ),
 		'default' => 'no',
 	),
 	'pt_eps'                   => array(
@@ -101,34 +91,14 @@ return array(
 		'label'   => $this->get_paymenttype_name( 'eps' ),
 		'default' => 'no',
 	),
-	'pt_idl'                   => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'idl' ),
-		'default' => 'no',
-	),
-	'pt_giropay'               => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'giropay' ),
-		'default' => 'no',
-	),
 	'pt_sofortueberweisung'    => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'sofort' ),
 		'default' => 'no',
 	),
-	'pt_pbx'                   => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'pbx' ),
-		'default' => 'no',
-	),
 	'pt_psc'                   => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'psc' ),
-		'default' => 'no',
-	),
-	'pt_quick'                 => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'quick' ),
 		'default' => 'no',
 	),
 	'pt_paypal'                => array(
@@ -146,44 +116,9 @@ return array(
 		'label'   => $this->get_paymenttype_name( 'invoice' ),
 		'default' => 'no',
 	),
-	'pt_installment'           => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'installment' ),
-		'default' => 'no',
-	),
-	'pt_bancontact_mistercash' => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'bancontact_mistercash' ),
-		'default' => 'no',
-	),
 	'pt_przelewy24'            => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'przelewy24' ),
-		'default' => 'no',
-	),
-	'pt_moneta'                => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'moneta' ),
-		'default' => 'no',
-	),
-	'pt_poli'                  => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'poli' ),
-		'default' => 'no',
-	),
-	'pt_ekonto'                => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'ekonto' ),
-		'default' => 'no',
-	),
-	'pt_trustly'               => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'trustly' ),
-		'default' => 'no',
-	),
-	'pt_skrillwallet'          => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'skrillwallet' ),
 		'default' => 'no',
 	),
 	'paymenttypes_end' => array(
@@ -284,7 +219,6 @@ return array(
 		'desc_tip'    => false,
 		'options'     => array(
 			'payolution'       => __( 'payolution', 'woocommerce-wcp' ),
-			'ratepay'       => __( 'RatePay', 'woocommerce-wcp' ),
 			'qenta'     => __( 'Qenta', 'woocommerce-wcp' )
 		)
 	),
@@ -343,8 +277,7 @@ return array(
 		'default'     => 'payolution',
 		'desc_tip'    => false,
 		'options'     => array(
-			'payolution'       => __( 'payolution', 'woocommerce-wcp' ),
-			'ratepay'       => __( 'RatePay', 'woocommerce-wcp' )
+			'payolution'       => __( 'payolution', 'woocommerce-wcp' )
 		)
 	),
 	'installment_shipping' => array(
