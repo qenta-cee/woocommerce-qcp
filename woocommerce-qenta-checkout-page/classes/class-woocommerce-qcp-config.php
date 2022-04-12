@@ -38,7 +38,7 @@
  *
  * @since 1.3.0
  */
-class WC_Gateway_WCP_Config {
+class WC_Gateway_QCP_Config {
 
 	/**
 	 * Payment gateway settings
@@ -64,21 +64,15 @@ class WC_Gateway_WCP_Config {
 			'backendpw'   => 'jcv45z'
 		),
 		'test'   => array(
-			'customer_id' => 'D200411',
-			'shop_id'     => '',
-			'secret'      => 'CHCSH7UGHVVX2P7EHDHSY4T2S4CGYK4QBE4M5YUUG2ND5BEZWNRZW5EJYVJQ',
-			'backendpw'   => '2g4f9q2m'
-		),
-		'test3d' => array(
-			'customer_id' => 'D200411',
-			'shop_id'     => '3D',
-			'secret'      => 'DP4TMTPQQWFJW34647RM798E9A5X7E8ATP462Z4VGZK53YEJ3JWXS98B9P4F',
-			'backendpw'   => '2g4f9q2m'
+			'customer_id' => 'D200410',
+			'shop_id'     => 'page',
+			'secret'      => 'UVNWUCQ7AGE9F5837YW53JBWDP77PWDHS2DMC3TMJ8VYB42G2WM4FWYTK5Z9',
+			'backendpw'   => '9p3a0m5f'
 		)
 	);
 
 	/**
-	 * WC_Gateway_WCP_Config constructor.
+	 * WC_Gateway_QCP_Config constructor.
 	 *
 	 * @since 1.3.0
 	 *
