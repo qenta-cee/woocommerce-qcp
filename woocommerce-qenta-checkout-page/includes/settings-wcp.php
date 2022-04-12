@@ -81,11 +81,6 @@ return array(
 		'label'   => $this->get_paymenttype_name( 'ccard' ),
 		'default' => 'no',
 	),
-	'pt_ccard-moto'            => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'ccard-moto' ),
-		'default' => 'no',
-	),
 	'pt_eps'                   => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'eps' ),
