@@ -1,5 +1,5 @@
 services:
-  wc_db:
+  wc_db_qcp:
     image: mariadb:10.5
     restart: always
     environment:
@@ -8,22 +8,21 @@ services:
       MYSQL_USER: ${WORDPRESS_DB_USER:-wordpress}
       MYSQL_PASSWORD: ${WORDPRESS_DB_PASS:-wordpress}
     # volumes:
-    #   - ./data/wc_db:/var/lib/mysql
+    #   - ./data/wc_db_qcp:/var/lib/mysql
   woocommerce:
-    container_name: woocommerce
+    container_name: woocommerce_qcp
     build:
       context: docker/wordpress/
       dockerfile: Dockerfile
     depends_on:
-      - wc_db
+      - wc_db_qcp
     ports:
-      - ${PORT_HTTP:-8000}:80
-      - ${PORT_SSL:-8443}:443
+      - ${PORT_HTTP:-8010}:80
+      - ${PORT_SSL:-8444}:443
     volumes:
       - ./:/tmp/plugin:ro
-    #   - ./data/woocommerce:/var/www/html
     environment:
-      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST:-wc_db}
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST:-wc_db_qcp}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-wordpress}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-wordpress}
       WORDPRESS_DB_PASS: ${WORDPRESS_DB_PASS:-wordpress}
