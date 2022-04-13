@@ -68,8 +68,16 @@ function woocommerce_init_qenta_checkout_page()
     require_once( WOOCOMMERCE_GATEWAY_QCP_BASEDIR . 'class-woocommerce-qcp-gateway.php' );
 
     add_filter( 'woocommerce_payment_gateways', 'woocommerce_add_qenta_checkout_page' );
+    add_filter( 'default_checkout_billing_country', 'qcp_change_default_checkout_country' );
+    add_filter( 'default_checkout_shipping_country', 'qcp_change_default_checkout_country' );
 }
 
+/**
+ * Return default billing country
+ **/
+function qcp_change_default_checkout_country() {
+  return getenv('DEFAULT_COUNTRY_CODE') ?: 'AT';
+}
 
 /**
  * Add the gateway to woocommerce
