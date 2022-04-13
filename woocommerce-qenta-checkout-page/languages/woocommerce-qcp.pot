@@ -1,12 +1,16 @@
 #. Plugin Name of the plugin#: class-woocommerce-qcp-gateway.php:47#: class-woocommerce-qcp-gateway.php:134
 msgid "Qenta Checkout Page"
-msgstr ""#. Plugin URI of the plugin
+msgstr ""
+#. Plugin URI of the plugin
 msgid "http://www.qenta.com/integration/plugins/"
-msgstr ""#. Description of the plugin
+msgstr ""
+#. Description of the plugin
 msgid "Qenta is a popular payment service provider (PSP) and has connections with over 20 national and international currencies."
-msgstr ""#. Author of the plugin#: includes/settings-qcp.php:233
+msgstr ""
+#. Author of the plugin#: includes/settings-qcp.php:233
 msgid "Qenta"
-msgstr ""#. Author URI of the plugin
+msgstr ""
+#. Author URI of the plugin
 msgid "http://www.qenta-cee.at/"
 msgstr ""
 #: class-woocommerce-qcp-gateway.php:48
