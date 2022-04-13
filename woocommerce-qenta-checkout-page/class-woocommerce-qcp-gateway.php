@@ -466,7 +466,7 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
                 changer.value = code;
             }
         </script>
-        <link rel="stylesheet" type="text/css" href="<?php esc_url_raw( WOOCOMMERCE_GATEWAY_QCP_URL ); ?>assets/styles/payment.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo esc_url_raw( WOOCOMMERCE_GATEWAY_QCP_URL ); ?>assets/styles/payment.css">
 		<?php
 		foreach ( $this->get_enabled_paymenttypes() as $type ) {
 			?>
@@ -906,7 +906,7 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
 	protected function remove_old_payments() {
 		global $wpdb;
 
-		$options      = $wpdb->get_var( esc_sql("SELECT option_value FROM {$wpdb->prefix}options WHERE option_name='woocommerce_qenta_checkout_page_settings';" ) );
+		$options      = $wpdb->get_var( "SELECT option_value FROM {$wpdb->prefix}options WHERE option_name='woocommerce_qenta_checkout_page_settings';" );
 		$option_array = unserialize( $options );
 
 		if ( ! empty( $option_array ) ) {

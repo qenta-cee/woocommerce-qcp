@@ -171,29 +171,9 @@ class WC_Gateway_QCP_Payments {
 				$html .= "<label>" . __( 'Financial institution:',
 						'woocommerce-qcp' ) . " <span class='required'>*</span></label>";
 				$html .= "<select name='qcp_eps_financialInstitution' autocomplete='off'>";
-				$html .= "<option value=''>" . __( 'Choose your bank', 'woocommerce-qcp' ) . "</option>";
+				$html .= "<option value=''>" . esc_html(__( 'Choose your bank', 'woocommerce-qcp' )) . "</option>";
 				foreach ( QentaCEE\Stdlib\PaymentTypeAbstract::getFinancialInstitutions( QentaCEE\Stdlib\PaymentTypeAbstract::EPS ) as $key => $value ) {
-					$html .= "<option value='$key'>$value</option>";
-				}
-
-				$html .= "</select>";
-				$html .= "</p>";
-
-				$html .= '</fieldset>';
-
-				return $html;
-				break;
-			case 'idl':
-				$html = '<fieldset  class="wc-idl-form wc-payment-form">';
-
-				// dropdown for financial institution
-				$html .= "<p class='form-row'>";
-				$html .= "<label>" . __( 'Financial institution:',
-						'woocommerce-qcp' ) . " <span class='required'>*</span></label>";
-				$html .= "<select name='qcp_idl_financialInstitution' autocomplete='off'>";
-				$html .= "<option value=''>" . __( 'Choose your bank', 'woocommerce-qcp' ) . "</option>";
-				foreach ( QentaCEE\Stdlib\PaymentTypeAbstract::getFinancialInstitutions( QentaCEE\Stdlib\PaymentTypeAbstract::IDL ) as $key => $value ) {
-					$html .= "<option value='$key'>$value</option>";
+					$html .= "<option value='" . esc_attr($key) . "'>" . esc_html($value) . "</option>";
 				}
 
 				$html .= "</select>";
