@@ -1,314 +1,224 @@
-#. Plugin Name of the plugin
-#: class-woocommerce-qcp-gateway.php:47
-#: class-woocommerce-qcp-gateway.php:134
+#. Plugin Name of the plugin#: class-woocommerce-qcp-gateway.php:47#: class-woocommerce-qcp-gateway.php:134
 msgid "Qenta Checkout Page"
-msgstr ""
-
-#. Plugin URI of the plugin
+msgstr ""#. Plugin URI of the plugin
 msgid "http://www.qenta.com/integration/plugins/"
-msgstr ""
-
-#. Description of the plugin
+msgstr ""#. Description of the plugin
 msgid "Qenta is a popular payment service provider (PSP) and has connections with over 20 national and international currencies."
-msgstr ""
-
-#. Author of the plugin
-#: includes/settings-qcp.php:233
+msgstr ""#. Author of the plugin#: includes/settings-qcp.php:233
 msgid "Qenta"
-msgstr ""
-
-#. Author URI of the plugin
+msgstr ""#. Author URI of the plugin
 msgid "http://www.qenta-cee.at/"
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:48
 msgid "Qenta is a popular payment service provider (PSP) and has connections with over 20 national and international currencies. "
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:137
 msgid "Qenta - Your Full Service Payment Provider - Comprehensive solutions from one single source"
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:140
 msgid "Qenta is one of the world´s leading providers of outsourcing and white label solutions for electronic payment transactions."
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:143
 msgid "As independent provider of payment solutions, we accompany our customers along the entire business development. Our payment solutions are perfectly tailored to suit e-Commerce requirements and have made\tus Austria´s leading payment service provider. Customization, competence, and commitment."
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:185
 msgid "Payment type is not available, please select another payment type."
 msgstr ""
-
-#: class-woocommerce-qcp-gateway.php:314
-#: class-woocommerce-qcp-gateway.php:321
+#: class-woocommerce-qcp-gateway.php:314#: class-woocommerce-qcp-gateway.php:321
 msgid "Panic: Order-Id missing"
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:333
 msgid "Payment has been cancelled."
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:342
 msgid "Payment has failed."
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:407
 msgid "Validation error: invalid response"
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:432
 msgid "Awaiting payment notification from 3rd party."
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:440
 msgid "Payment cancelled."
 msgstr ""
-
 #: class-woocommerce-qcp-gateway.php:480
 msgid "Your order will be processed, as soon as we get the payment notification from your bank institute"
 msgstr ""
-
 #: classes/class-woocommerce-qcp-payments.php:114
 msgid "Date of Birth:"
 msgstr ""
-
-#: classes/class-woocommerce-qcp-payments.php:142
-#: classes/class-woocommerce-qcp-payments.php:147
+#: classes/class-woocommerce-qcp-payments.php:142#: classes/class-woocommerce-qcp-payments.php:147
 msgid "consent"
 msgstr ""
-
 #: classes/class-woocommerce-qcp-payments.php:153
 msgid "I agree that the data which are necessary for the liquidation of purchase on account and which are used to complete the identity and credit check are transmitted to payolution. My "
 msgstr ""
-
 #: classes/class-woocommerce-qcp-payments.php:156
 msgid " can be revoked at any time with effect for the future."
 msgstr ""
-
 #: classes/class-woocommerce-qcp-payments.php:171
 msgid "Financial institution:"
 msgstr ""
-
 #: classes/class-woocommerce-qcp-payments.php:174
 msgid "Choose your bank"
 msgstr ""
-
 #: classes/class-woocommerce-qcp-payments.php:215
 msgid "Please accept the consent terms!"
 msgstr ""
-
 #: classes/class-woocommerce-qcp-payments.php:218
 msgid "You have to be 18 years or older to use this payment."
 msgstr ""
-
-#: classes/class-woocommerce-qcp-payments.php:226
-#: classes/class-woocommerce-qcp-payments.php:232
+#: classes/class-woocommerce-qcp-payments.php:226#: classes/class-woocommerce-qcp-payments.php:232
 msgid "Financial institution must not be empty."
 msgstr ""
-
 #: includes/settings-qcp.php:18
 msgid "Access data"
 msgstr ""
-
 #: includes/settings-qcp.php:20
 msgid "Enter access data for using Qenta Checkout Page."
 msgstr ""
-
 #: includes/settings-qcp.php:23
 msgid "Configuration"
 msgstr ""
-
 #: includes/settings-qcp.php:26
 msgid "For integration, select predefined configuration settings or 'Production' for live systems"
 msgstr ""
-
 #: includes/settings-qcp.php:31
 msgid "Demo"
 msgstr ""
-
 #: includes/settings-qcp.php:32
 msgid "Test"
 msgstr ""
-
 #: includes/settings-qcp.php:33
 msgid "Production"
 msgstr ""
-
 #: includes/settings-qcp.php:37
 msgid "Customer ID"
 msgstr ""
-
 #: includes/settings-qcp.php:40
 msgid "Customer number you received from Qenta (customerId, i.e. D2#####). <a href=\"%s\">More information</a>"
 msgstr ""
-
 #: includes/settings-qcp.php:45
 msgid "Shop ID"
 msgstr ""
-
 #: includes/settings-qcp.php:48
 msgid "Shop identifier in case of more than one shop. <a href=\"%s\">More information</a>"
 msgstr ""
-
 #: includes/settings-qcp.php:53
 msgid "Secret"
 msgstr ""
-
 #: includes/settings-qcp.php:56
 msgid "String which you received from Qenta for signing and validating data to prove their authenticity. <a href=\"%s\">More information</a>"
 msgstr ""
-
 #: includes/settings-qcp.php:61
 msgid "URL to contact page"
 msgstr ""
-
 #: includes/settings-qcp.php:64
 msgid "URL to web page containing your contact information (imprint)."
 msgstr ""
-
 #: includes/settings-qcp.php:76
 msgid "Payment methods"
 msgstr ""
-
 #: includes/settings-qcp.php:78
 msgid "Enable payment methods."
 msgstr ""
-
 #: includes/settings-qcp.php:140
 msgid "Additional settings"
 msgstr ""
-
 #: includes/settings-qcp.php:144
 msgid "URL to image on payment page"
 msgstr ""
-
 #: includes/settings-qcp.php:147
 msgid "Image Url for displaying an image on the Qenta Checkout Page (95x65 pixels preferred)."
 msgstr ""
-
 #: includes/settings-qcp.php:154
 msgid "Max. retries"
 msgstr ""
-
 #: includes/settings-qcp.php:157
 msgid "Maximal number of payment retries."
 msgstr ""
-
 #: includes/settings-qcp.php:161
 msgid "Display text"
 msgstr ""
-
 #: includes/settings-qcp.php:163
 msgid "Display Text on the Qenta Checkout Page."
 msgstr ""
-
 #: includes/settings-qcp.php:167
 msgid "payolution mID"
 msgstr ""
-
 #: includes/settings-qcp.php:170
 msgid "Your payolution merchant ID, non-base64-encoded."
 msgstr ""
-
 #: includes/settings-qcp.php:174
 msgid "payolution terms"
 msgstr ""
-
 #: includes/settings-qcp.php:177
 msgid "Consumer must accept payolution terms during the checkout process. <a href=\"%s\">More information</a>"
 msgstr ""
-
-#: includes/settings-qcp.php:179
-#: includes/settings-qcp.php:187
-#: includes/settings-qcp.php:196
-#: includes/settings-qcp.php:205
-#: includes/settings-qcp.php:214
-#: includes/settings-qcp.php:242
+#: includes/settings-qcp.php:179#: includes/settings-qcp.php:187#: includes/settings-qcp.php:196#: includes/settings-qcp.php:205#: includes/settings-qcp.php:214#: includes/settings-qcp.php:242
 msgid "Enable/Disable"
 msgstr ""
-
 #: includes/settings-qcp.php:184
 msgid "Debug Log"
 msgstr ""
-
 #: includes/settings-qcp.php:185
 msgid "Log Qenta Checkout Page events."
 msgstr ""
-
 #: includes/settings-qcp.php:191
 msgid "Forward consumer shipping data"
 msgstr ""
-
 #: includes/settings-qcp.php:193
 msgid "Forwarding shipping data about your consumer to the respective financial service provider."
 msgstr ""
-
 #: includes/settings-qcp.php:200
 msgid "Forward consumer billing data"
 msgstr ""
-
 #: includes/settings-qcp.php:202
 msgid "Forwarding billing data about your consumer to the respective financial service provider."
 msgstr ""
-
 #: includes/settings-qcp.php:209
 msgid "Forward basket data"
 msgstr ""
-
 #: includes/settings-qcp.php:211
 msgid "Forwarding basket data to the respective financial service provider."
 msgstr ""
-
 #: includes/settings-qcp.php:221
 msgid "Invoice settings"
 msgstr ""
-
 #: includes/settings-qcp.php:225
 msgid "Invoice Provider"
 msgstr ""
-
 #: includes/settings-qcp.php:228
 msgid "Choose your invoice provider."
 msgstr ""
-
 #: includes/settings-qcp.php:232
 msgid "payolution"
 msgstr ""
-
 #: includes/settings-qcp.php:237
 msgid "Billing/shipping address must be identical"
 msgstr ""
-
 #: includes/settings-qcp.php:240
 msgid "Only applicable for payolution"
 msgstr ""
-
 #: includes/settings-qcp.php:245
 msgid "Allowed billing countries"
 msgstr ""
-
 #: includes/settings-qcp.php:252
 msgid "Allowed shipping countries"
 msgstr ""
-
 #: includes/settings-qcp.php:259
 msgid "Accepted currencies"
 msgstr ""
-
 #: includes/settings-qcp.php:267
 msgid "Minimum amount"
 msgstr ""
-
 #: includes/settings-qcp.php:272
 msgid "Maximum amount"
 msgstr ""
-
 #: templates/iframebreakout.php:18
 msgid "You will be redirected shortly"
 msgstr ""
-
 #: templates/iframebreakout.php:19
 msgid "If not, please click <a href=\"#\" onclick=\"iframeBreakout()\">here</a>"
 msgstr ""
