@@ -1,8 +1,3 @@
-# Copyright (C) 2022 Qenta
-# This file is distributed under the Proprietary.
-msgid ""
-msgstr ""
-
 #. Plugin Name of the plugin
 #: class-woocommerce-qcp-gateway.php:47
 #: class-woocommerce-qcp-gateway.php:134
