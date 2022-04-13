@@ -3,6 +3,13 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+// set shop logo, if custom logo exists
+$logo = wp_get_attachment_image_src(get_theme_mod( 'custom_logo' ), 'full' );
+$logo_url = $logo[0];
+$logo_width = $logo[1];
+$logo_height = $logo[2];
+
 /**
  * Settings for QentaCheckoutPage.
  */
@@ -78,21 +85,21 @@ return array(
 	'pt_ccard'                 => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'ccard' ),
-		'default' => 'no',
+		'default' => 'yes',
 	),
-	'pt_eps'                   => array(
+	'pt_afterpay'                 => array(
+		'type'    => 'checkbox',
+		'label'   => $this->get_paymenttype_name( 'afterpay' ),
+		'default' => 'yes',
+	),
+  'pt_eps'                   => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'eps' ),
-		'default' => 'no',
+		'default' => 'yes',
 	),
-	'pt_sofortueberweisung'    => array(
+	'pt_crypto'    => array(
 		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'sofort' ),
-		'default' => 'no',
-	),
-	'pt_psc'                   => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'psc' ),
+		'label'   => $this->get_paymenttype_name( 'crypto' ),
 		'default' => 'no',
 	),
 	'pt_paypal'                => array(
@@ -100,20 +107,30 @@ return array(
 		'label'   => $this->get_paymenttype_name( 'paypal' ),
 		'default' => 'no',
 	),
-	'pt_sepa-dd'                  => array(
+	'pt_psc'                   => array(
 		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'sepa' ),
-		'default' => 'no',
-	),
-	'pt_invoice'               => array(
-		'type'    => 'checkbox',
-		'label'   => $this->get_paymenttype_name( 'invoice' ),
+		'label'   => $this->get_paymenttype_name( 'psc' ),
 		'default' => 'no',
 	),
 	'pt_przelewy24'            => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'przelewy24' ),
 		'default' => 'no',
+	),
+  'pt_sofortueberweisung'    => array(
+		'type'    => 'checkbox',
+		'label'   => $this->get_paymenttype_name( 'sofort' ),
+		'default' => 'yes',
+	),
+	'pt_sepa-dd'                  => array(
+		'type'    => 'checkbox',
+		'label'   => $this->get_paymenttype_name( 'sepa' ),
+		'default' => 'yes',
+	),
+	'pt_invoice'               => array(
+		'type'    => 'checkbox',
+		'label'   => $this->get_paymenttype_name( 'invoice' ),
+		'default' => 'yes',
 	),
 	'paymenttypes_end' => array(
 		'title' => '<hr/>',
@@ -126,7 +143,7 @@ return array(
 	'image_url'                => array(
 		'title'       => __( 'URL to image on payment page', 'woocommerce-qcp' ),
 		'type'        => 'text',
-		'default'     => '',
+		'default'     => esc_url($logo_url),
 		'description' => __(
 			'Image Url for displaying an image on the Qenta Checkout Page (95x65 pixels preferred).',
 			'woocommerce-qcp'
@@ -172,7 +189,7 @@ return array(
 	'send_consumer_shipping'   => array(
 		'type'        => 'checkbox',
 		'title'       => __( 'Forward consumer shipping data', 'woocommerce-qcp' ),
-		'default'     => 'no',
+		'default'     => 'yes',
 		'description' => __( 'Forwarding shipping data about your consumer to the respective financial service provider.',
 			'woocommerce-qcp' ),
 		'desc_tip'    => false,
@@ -181,7 +198,7 @@ return array(
 	'send_consumer_billing'    => array(
 		'type'        => 'checkbox',
 		'title'       => __( 'Forward consumer billing data', 'woocommerce-qcp' ),
-		'default'     => 'no',
+		'default'     => 'yes',
 		'description' => __( 'Forwarding billing data about your consumer to the respective financial service provider.',
 			'woocommerce-qcp' ),
 		'desc_tip'    => false,
@@ -190,7 +207,7 @@ return array(
 	'send_basket_data'         => array(
 		'type'        => 'checkbox',
 		'title'       => __( 'Forward basket data', 'woocommerce-qcp' ),
-		'default'     => 'no',
+		'default'     => 'yes',
 		'description' => __( 'Forwarding basket data to the respective financial service provider.',
 			'woocommerce-qcp' ),
 		'desc_tip'    => false,
@@ -258,59 +275,5 @@ return array(
 	'invoice_settings_end' => array(
 		'title' => '<hr/>',
 		'type' => 'title'
-	),
-	'installment_settings'      => array(
-		'title' => __( 'Installment settings', 'woocommerce-qcp' ),
-		'type'  => 'title'
-	),
-	'installment_provider'            => array(
-		'title'       => __( 'Installment Provider', 'woocommerce-qcp' ),
-		'type'        => 'select',
-		'class'       => 'wc-enhanced-select',
-		'description' => __( 'Choose your installment provider.', 'woocommerce-qcp' ),
-		'default'     => 'payolution',
-		'desc_tip'    => false,
-		'options'     => array(
-			'payolution'       => __( 'payolution', 'woocommerce-qcp' )
-		)
-	),
-	'installment_shipping' => array(
-		'title' => __('Billing/shipping address must be identical', 'woocommerce-qcp'),
-		'type' => 'checkbox',
-		'default' => 'no',
-		'description' => __('Only applicable for payolution', 'woocommerce-qcp'),
-		'desc_tip' => false,
-		'label' => __('Enable/Disable', 'woocommerce-qcp')
-	),
-	'installment_billing_countries' => array(
-		'title' => __('Allowed billing countries', 'woocommerce-qcp'),
-		'type' => 'multiselect',
-		'class' => 'wc-enhanced-select',
-		'default' => array('AT','DE','CH'),
-		'options' => $this->countries
-	),
-	'installment_shipping_countries' => array(
-		'title' => __('Allowed shipping countries', 'woocommerce-qcp'),
-		'type' => 'multiselect',
-		'class' => 'wc-enhanced-select',
-		'default' => array('AT', 'DE', 'CH'),
-		'options' => $this->countries
-	),
-	'installment_currencies' => array(
-		'title' => __('Accepted currencies', 'woocommerce-qcp'),
-		'type' => 'multiselect',
-		'class' => 'wc-enhanced-select',
-		'default' => array('EUR'),
-		'options' => $this->currency_code_options
-	),
-	'installment_min_amount'   => array(
-		'type'        => 'text',
-		'title'       => __( 'Minimum amount', 'woocommerce-qcp' ),
-		'default'     => '10'
-	),
-	'installment_max_amount'   => array(
-		'type'        => 'text',
-		'title'       => __( 'Maximum amount', 'woocommerce-qcp' ),
-		'default'     => '3500'
 	)
 );
