@@ -1,4 +1,6 @@
-#. Plugin Name of the plugin#: class-woocommerce-qcp-gateway.php:47#: class-woocommerce-qcp-gateway.php:134
+#. Plugin Name of the plugin
+#: class-woocommerce-qcp-gateway.php:47
+#: class-woocommerce-qcp-gateway.php:134
 msgid "Qenta Checkout Page"
 msgstr ""
 #. Plugin URI of the plugin
@@ -7,7 +9,8 @@ msgstr ""
 #. Description of the plugin
 msgid "Qenta is a popular payment service provider (PSP) and has connections with over 20 national and international currencies."
 msgstr ""
-#. Author of the plugin#: includes/settings-qcp.php:233
+#. Author of the plugin
+#: includes/settings-qcp.php:233
 msgid "Qenta"
 msgstr ""
 #. Author URI of the plugin
@@ -28,7 +31,8 @@ msgstr ""
 #: class-woocommerce-qcp-gateway.php:185
 msgid "Payment type is not available, please select another payment type."
 msgstr ""
-#: class-woocommerce-qcp-gateway.php:314#: class-woocommerce-qcp-gateway.php:321
+#: class-woocommerce-qcp-gateway.php:314
+#: class-woocommerce-qcp-gateway.php:321
 msgid "Panic: Order-Id missing"
 msgstr ""
 #: class-woocommerce-qcp-gateway.php:333
@@ -52,7 +56,8 @@ msgstr ""
 #: classes/class-woocommerce-qcp-payments.php:114
 msgid "Date of Birth:"
 msgstr ""
-#: classes/class-woocommerce-qcp-payments.php:142#: classes/class-woocommerce-qcp-payments.php:147
+#: classes/class-woocommerce-qcp-payments.php:142
+#: classes/class-woocommerce-qcp-payments.php:147
 msgid "consent"
 msgstr ""
 #: classes/class-woocommerce-qcp-payments.php:153
@@ -73,7 +78,8 @@ msgstr ""
 #: classes/class-woocommerce-qcp-payments.php:218
 msgid "You have to be 18 years or older to use this payment."
 msgstr ""
-#: classes/class-woocommerce-qcp-payments.php:226#: classes/class-woocommerce-qcp-payments.php:232
+#: classes/class-woocommerce-qcp-payments.php:226
+#: classes/class-woocommerce-qcp-payments.php:232
 msgid "Financial institution must not be empty."
 msgstr ""
 #: includes/settings-qcp.php:18
@@ -160,7 +166,12 @@ msgstr ""
 #: includes/settings-qcp.php:177
 msgid "Consumer must accept payolution terms during the checkout process. <a href=\"%s\">More information</a>"
 msgstr ""
-#: includes/settings-qcp.php:179#: includes/settings-qcp.php:187#: includes/settings-qcp.php:196#: includes/settings-qcp.php:205#: includes/settings-qcp.php:214#: includes/settings-qcp.php:242
+#: includes/settings-qcp.php:179
+#: includes/settings-qcp.php:187
+#: includes/settings-qcp.php:196
+#: includes/settings-qcp.php:205
+#: includes/settings-qcp.php:214
+#: includes/settings-qcp.php:242
 msgid "Enable/Disable"
 msgstr ""
 #: includes/settings-qcp.php:184
