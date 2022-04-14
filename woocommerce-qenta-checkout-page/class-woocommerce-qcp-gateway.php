@@ -574,12 +574,19 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
 		if ( isset( WC()->session->qenta_checkout_page_redirect_url ) && WC()->session->qenta_checkout_page_redirect_url['id'] == $order->get_id() ) {
 			return WC()->session->qenta_checkout_page_redirect_url['url'];
 		}
+
 		$paymenttype = strtoupper( $paymenttype );
+
 		try {
 			$config = $this->_config->get_client_config();
+
+      // TEST MODE OVERRIDE
+      $customerId = $config['CUSTOMER_ID'];
+      $orderDescription = $customerId === 'D200410' ? 'Test:0000' : $this->get_order_description( $order );
+
 			$client = new QentaCEE\QPay\FrontendClient( $config );
 
-			// consumer data (IP and User aget) are mandatory!
+      // consumer data (IP and User aget) are mandatory!
 			$consumerData = new QentaCEE\Stdlib\ConsumerData();
 			$consumerData->setUserAgent( $_SERVER['HTTP_USER_AGENT'] )->setIpAddress( WC_Geolocation::get_ip_address() );
 
@@ -614,7 +621,7 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
 			$client->setAmount( $order->get_total() )
 			       ->setCurrency( get_woocommerce_currency() )
 			       ->setPaymentType( $paymenttype )
-			       ->setOrderDescription( $this->get_order_description( $order ) )
+			       ->setOrderDescription( $orderDescription )
 			       ->setPluginVersion( $version )
 			       ->setSuccessUrl( $returnUrl )
 			       ->setPendingUrl( $returnUrl )
