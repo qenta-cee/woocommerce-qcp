@@ -4,11 +4,11 @@
  */
 /*
 Plugin Name: Qenta Checkout Page
-Plugin URI: http://www.qenta.com/integration/plugins/
+Plugin URI: https://github.com/qenta-cee/woocommerce-qcp
 Description: Qenta is a popular payment service provider (PSP) and has connections with over 20 national and international currencies.
-Version: 2.0.3
+Version: 2.1.0
 Author: Qenta
-Author URI: http://www.qenta-cee.at/
+Author URI: https://www.qenta.com/
 License: Proprietary
 */
 
