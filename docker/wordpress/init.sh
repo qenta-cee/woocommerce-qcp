@@ -79,7 +79,6 @@ function setup_store() {
   wp post delete 1 --force
   wp wc --user=admin tool run install_pages
   wp option set woocommerce_onboarding_opt_in "yes"
-  wp option set woocommerce_onboarding_profile ""
   wp option set woocommerce_store_address "Store Street 11"
   wp option set woocommerce_store_address_2 ""
   wp option set woocommerce_store_city "Graz"
