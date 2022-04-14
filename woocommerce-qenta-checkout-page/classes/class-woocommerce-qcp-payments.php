@@ -85,8 +85,6 @@ class WC_Gateway_QCP_Payments {
 		switch ($payment_code) {
 			case 'invoice':
 			case 'installment':
-			case 'eps':
-			case 'idl':
 				return true;
 			default:
 				return false;
@@ -163,26 +161,6 @@ class WC_Gateway_QCP_Payments {
 
 				return $html;
 				break;
-			case 'eps':
-				$html = '<fieldset  class="wc-eps-form wc-payment-form">';
-
-				// dropdown for financial institution
-				$html .= "<p class='form-row'>";
-				$html .= "<label>" . __( 'Financial institution:',
-						'woocommerce-qcp' ) . " <span class='required'>*</span></label>";
-				$html .= "<select name='qcp_eps_financialInstitution' autocomplete='off'>";
-				$html .= "<option value=''>" . esc_html(__( 'Choose your bank', 'woocommerce-qcp' )) . "</option>";
-				foreach ( QentaCEE\Stdlib\PaymentTypeAbstract::getFinancialInstitutions( QentaCEE\Stdlib\PaymentTypeAbstract::EPS ) as $key => $value ) {
-					$html .= "<option value='" . esc_attr($key) . "'>" . esc_html($value) . "</option>";
-				}
-
-				$html .= "</select>";
-				$html .= "</p>";
-
-				$html .= '</fieldset>';
-
-				return $html;
-				break;
 			default:
 				return;
 		}
@@ -217,19 +195,6 @@ class WC_Gateway_QCP_Payments {
 				if ( $age < 18 ) {
 					$errors[] = "&bull; " . __( 'You have to be 18 years or older to use this payment.',
 							'woocommerce-qcp' );
-				}
-
-				return count( $errors ) == 0 ? true : join( "<br>", $errors );
-			case 'eps':
-				$errors = [];
-				if ( $data['qcp_eps_financialInstitution'] == '' ) {
-					$errors[] = "&bull; " . __( 'Financial institution must not be empty.', 'woocommerce-qcp' );
-				}
-
-				return count( $errors ) == 0 ? true : join( "<br>", $errors );
-			case 'idl':
-				if ( $data['qcp_idl_financialInstitution'] == '' ) {
-					$errors[] = "&bull; " . __( 'Financial institution must not be empty.', 'woocommerce-qcp' );
 				}
 
 				return count( $errors ) == 0 ? true : join( "<br>", $errors );

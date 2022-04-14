@@ -182,7 +182,7 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
 		}
 		$financial_inst = null;
 		if ( $paymenttype == 'eps' ) {
-			$financial_inst = $postdata['qcp_eps_financialInstitution'];
+			$financial_inst = 'EPS-SO';
 		}
 
     $redirectUrl = $this->initiate_payment( $order, $paymenttype, $birthday, $financial_inst );
@@ -204,14 +204,19 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
 	 */
 	function payment_page( $order_id ) {
 		$order = new WC_Order( $order_id );
+
 		$birthday = null;
+    $financial_inst = null;
+
     $postdata = $this->get_post_data();
+    $paymenttype = $postdata['qcp_payment_method'];
+
 		if ( isset( $postdata['qcp_birthday'] ) ) {
 			$birthday = $postdata['qcp_birthday'];
 		}
-		$financial_inst = null;
-		if ( WC()->session->qenta_checkout_page_type == 'eps' && ( isset( $postdata['qcp_eps_financialInstitution'] ) || isset( WC()->session->qenta_checkout_page_eps ) ) ) {
-			$financial_inst = isset( $postdata['qcp_eps_financialInstitution'] ) ? $postdata['qcp_eps_financialInstitution'] : WC()->session->qenta_checkout_page_eps;
+		if ( $paymenttype == 'eps' ) {
+			// $financial_inst = $postdata['qcp_eps_financialInstitution'];
+			$financial_inst = 'EPS-SO';
 		}
 
 		$iframeUrl = $this->initiate_payment( $order, WC()->session->qenta_checkout_page_type, $birthday,
@@ -456,7 +461,7 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
         }
 		?>
         <script language='JavaScript'>
-            var di = {t:'<?php esc_attr($consumer_device_id); ?>',v:'WDWL',l:'Checkout'};
+            var di = {t:'<?php echo esc_attr($consumer_device_id); ?>',v:'WDWL',l:'Checkout'};
         </script>
         <input id="payment_method_qcp" type="hidden" value="woocommerce_qenta_checkout_page"
                name="qcp_payment_method"/>
@@ -486,7 +491,7 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
 				echo "<img src='" . esc_url_raw( $this->_payments->get_payment_icon($type->code) ) . "' alt='Qenta " . esc_html($type->label) . "'>";
 				?>
             </label>
-        <div class="payment_box payment_method_qenta_checkout_page_<?php ( $this->_payments->has_payment_fields($type->code) ) ? esc_attr($type->code) : "" ?>" style="display:none;">
+        <div class="payment_box payment_method_qenta_checkout_page_<?php echo ( $this->_payments->has_payment_fields($type->code) ) ? esc_attr($type->code) : "" ?>" style="display:none;">
 			<?php
 			echo esc_attr($this->_payments->get_payment_fields($type->code));
 		}

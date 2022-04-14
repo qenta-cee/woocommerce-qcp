@@ -52,7 +52,7 @@ return array(
 	'secret'                   => array(
 		'title'       => __( 'Secret', 'woocommerce-qcp' ),
 		'type'        => 'text',
-		'default'     => '',
+		'default'     => 'B8AKTPWBRMNBV455FG6M2DANE99WU2',
 		'description' => sprintf( __( 'String which you received from Qenta for signing and validating data to prove their authenticity. <a href="%s">More information</a>',
 			'woocommerce-qcp' ), 'https://guides.qenta.com/products/securing-your-online-shop/#secret' ),
 		'desc_tip'    => false
