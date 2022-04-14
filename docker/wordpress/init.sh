@@ -2,6 +2,7 @@
 
 set -e
 
+trap exit SIGTERM
 touch /tmp/shop.log
 
 # If we are in Github plugin repo CI environment
@@ -54,7 +55,7 @@ function install_woocommerce() {
 
   echo "Install Sample Data"
   wp plugin install wordpress-importer --activate
-  wp import wp-content/plugins/woocommerce/sample-data/sample_products.xml --authors=create
+  wp import wp-content/plugins/woocommerce/sample-data/sample_products.xml --authors=create >& /dev/null &
 }
 
 function wp_set_array() {
@@ -74,21 +75,29 @@ function install_plugin() {
 }
 
 function setup_store() {
-  wp theme install twentytwenty --activate
-  wp post delete 2 --force
-  wp post delete 1 --force
+  wp theme install twentytwenty --activate &
+  wp post delete 2 --force &
+  wp post delete 1 --force &
+  wp option set woocommerce_onboarding_opt_in "yes" &
+  wp option set woocommerce_store_address "Store Street 11" &
+  wp option set woocommerce_store_address_2 "" &
+  wp option set woocommerce_store_city "Graz" &
+  wp option set woocommerce_store_postcode "8020" &
+  wp option set woocommerce_default_country "AT" &
+  wp option set woocommerce_currency "EUR" &
+  wp option set woocommerce_product_type "physical" &
+  wp option set woocommerce_allow_tracking "no" &
+  wp option set --format=json woocommerce_stripe_settings '{"enabled":"no","create_account":false,"email":false}' &
+  wp option set --format=json woocommerce_ppec_paypal_settings '{"reroute_requests":false,"email":false}' &
+  wp option set --format=json woocommerce_cheque_settings '{"enabled":"no"}' &
+  wp option set --format=json woocommerce_bacs_settings '{"enabled":"no"}' &
+  wp option set --format=json woocommerce_cod_settings '{"enabled":"no"}' &
+  # wp_set_array woocommerce_onboarding_profile skipped 1
+  wp option update page_on_front 5 &
+  wp option update show_on_front page &
+  wp option update blogdescription "QENTA Plugin DEMO" &
+  wait
   wp wc --user=admin tool run install_pages
-  wp option set woocommerce_onboarding_opt_in "yes"
-  wp option set woocommerce_store_address "Store Street 11"
-  wp option set woocommerce_store_address_2 ""
-  wp option set woocommerce_store_city "Graz"
-  wp option set woocommerce_store_postcode "8020"
-  wp option set woocommerce_default_country "AT"
-  wp option set woocommerce_currency "EUR"
-  wp_set_array woocommerce_onboarding_profile skipped 1
-  wp option update page_on_front 5
-  wp option update show_on_front page
-  wp option update blogdescription "QENTA Plugin DEMO"
 }
 
 function change_api_uri() {
@@ -172,4 +181,5 @@ _log "ready"
 
 echo "ready" > /tmp/debug.log
 
-apache2-foreground "$@"
+apache2-foreground "$@" &
+wait

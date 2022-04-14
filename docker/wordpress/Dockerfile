@@ -9,6 +9,41 @@ ENV DEBIAN_FRONTEND=noninteractive
 # use proper shell
 SHELL ["/bin/bash", "-c"]
 
+# to avoid all too common aborts because of debian repo timeouts
+RUN echo 'APT::Acquire::Retries "30";' > /etc/apt/apt.conf.d/80-retries
+
+# upgrade package list and default packages
+RUN apt-get -qq update
+RUN apt-get -qq upgrade
+
+# install npm nodesource repo
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+
+# install php extension dependencies
+RUN apt-get -qq install libmemcached-dev zlib1g-dev libpng-dev libonig-dev libtidy-dev
+
+# install dependencies for WP-CLI aand tools
+RUN apt-get -qq install git unzip vim mariadb-client zip jq nodejs
+
+# clean up to reduce docker image size
+RUN apt-get -qq autoremove
+
+# install PHP extensions required
+RUN bash -c "pecl install xdebug memcached &> /dev/null"
+RUN bash -c "docker-php-ext-install -j64 gd mbstring mysqli pdo pdo_mysql tidy bcmath &> /dev/null"
+RUN docker-php-ext-enable  memcached xdebug gd mbstring mysqli pdo pdo_mysql tidy bcmath
+
+# enable apache modules
+RUN a2enmod rewrite headers ext_filter expires
+
+# create self-signed cert and enable SSL on apache
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=AT/ST=Vienna/L=Vienna/O=Security/OU=Development/CN=example.com"
+RUN a2ensite default-ssl
+RUN a2enmod ssl
+
+# get composer binary from composer docker image
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
 # override entrypoint
 # copy entrypoint script
 COPY init.sh /usr/local/bin/init.sh
@@ -24,41 +59,6 @@ RUN chmod +x /usr/local/bin/*.sh
 
 # override default entrypoin with ours
 ENTRYPOINT [ "init.sh" ]
-
-# to avoid all too common aborts because of debian repo timeouts
-RUN echo 'APT::Acquire::Retries "30";' > /etc/apt/apt.conf.d/80-retries
-
-# upgrade package list and default packages
-RUN apt-get -qq update
-RUN apt-get -qq upgrade
-
-# install npm nodesource repo
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
-
-# install php extension dependencies
-RUN apt-get -qq install libmemcached-dev zlib1g-dev libpng-dev libonig-dev libtidy-dev
-
-# install dependencies for WP-CLI aand tools
-RUN apt-get -qq install git unzip vim bat mariadb-client zip jq nodejs
-
-# clean up to reduce docker image size
-RUN apt-get -qq autoremove
-
-# install PHP extensions required
-RUN bash -c "pecl install xdebug memcached &> /dev/null"
-RUN bash -c "docker-php-ext-install -j5 gd mbstring mysqli pdo pdo_mysql tidy bcmath &> /dev/null"
-RUN docker-php-ext-enable  memcached xdebug gd mbstring mysqli pdo pdo_mysql tidy bcmath
-
-# enable apache modules
-RUN a2enmod rewrite headers ext_filter expires
-
-# create self-signed cert and enable SSL on apache
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -subj "/C=AT/ST=Vienna/L=Vienna/O=Security/OU=Development/CN=example.com"
-RUN a2ensite default-ssl
-RUN a2enmod ssl
-
-# get composer binary from composer docker image
-COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # add user and dir for executing composer
 RUN useradd -u 431 -r -g www-data -s /sbin/nologin -c "Wordpress user" wp
