@@ -7,7 +7,7 @@
         }
 
         h3 {
-            color: #55555;
+            color: #555555;
             font-size: 1.1em;
             font-weight: bold;
             margin: 20px 0 10px;
