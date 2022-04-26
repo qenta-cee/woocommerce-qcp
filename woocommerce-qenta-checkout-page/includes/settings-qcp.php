@@ -90,7 +90,7 @@ return array(
 	'pt_afterpay'                 => array(
 		'type'    => 'checkbox',
 		'label'   => $this->get_paymenttype_name( 'afterpay' ),
-		'default' => 'yes',
+		'default' => 'no',
 	),
   'pt_eps'                   => array(
 		'type'    => 'checkbox',
