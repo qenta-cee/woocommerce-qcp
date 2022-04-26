@@ -580,9 +580,25 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
 		try {
 			$config = $this->_config->get_client_config();
 
-      // TEST MODE OVERRIDE
       $customerId = $config['CUSTOMER_ID'];
-      $orderDescription = ($customerId === 'D200410' && strtolower($paymenttype) === 'ccard') ? 'Test:0000' : $this->get_order_description( $order );
+      $orderReference = $this->get_order_reference( $order );
+      $orderDescription = $this->get_order_description( $order );
+
+      /**
+       * Test Mode
+       * Credit Card requries: orderDescription must be Test:0000
+       * PayPal requires: random orderReference (commented, seems no longer necessary)
+       * */
+      if (strtoupper($customerId) === 'D200410') {
+        switch(strtoupper($paymenttype)) {
+          case 'CCARD':
+            $orderDescription = 'Test:0000';
+            break;
+          // case 'PAYPAL':
+          //   $orderReference = md5( random_int( 0, 999999 ) ) . $orderReference;
+          //   break;
+        }
+      }
 
 			$client = new QentaCEE\QPay\FrontendClient( $config );
 
@@ -632,7 +648,7 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
 			       ->setImageUrl( $this->get_option( 'image_url' ) )
 			       ->setConsumerData( $consumerData )
 			       ->setDisplayText( $this->get_option( 'display_text' ) )
-			       ->setOrderReference( $this->get_order_reference( $order ) )
+             ->setOrderReference( $orderReference )
 			       ->setCustomerStatement( $this->get_customer_statement( $order, $paymenttype ) )
 			       ->setDuplicateRequestCheck( false )
 			       ->setMaxRetries( $this->get_option( 'max_retries' ) )
