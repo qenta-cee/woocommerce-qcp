@@ -582,7 +582,7 @@ class WC_Gateway_QCP extends WC_Payment_Gateway {
 
       // TEST MODE OVERRIDE
       $customerId = $config['CUSTOMER_ID'];
-      $orderDescription = $customerId === 'D200410' ? 'Test:0000' : $this->get_order_description( $order );
+      $orderDescription = ($customerId === 'D200410' && strtolower($paymenttype) === 'ccard') ? 'Test:0000' : $this->get_order_description( $order );
 
 			$client = new QentaCEE\QPay\FrontendClient( $config );
 
