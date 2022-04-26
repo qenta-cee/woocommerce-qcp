@@ -355,6 +355,9 @@ msgstr "eps-Überweisung"
 msgid "sofort"
 msgstr "Sofortüberweisung"
 
+msgid "sofortueberweisung"
+msgstr "Sofortüberweisung"
+
 msgid "przelewy24"
 msgstr "Przelewy24"
 

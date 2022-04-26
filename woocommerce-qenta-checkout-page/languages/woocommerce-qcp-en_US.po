@@ -355,6 +355,9 @@ msgstr "eps e-payment"
 msgid "sofort"
 msgstr "Klarna"
 
+msgid "sofortueberweisung"
+msgstr "Klarna"
+
 msgid "przelewy24"
 msgstr "Przelewy24"
 
