@@ -4,11 +4,11 @@
  */
 /*
 Plugin Name: Qenta Checkout Page
-Plugin URI: http://www.qenta.com/integration/plugins/
+Plugin URI: https://github.com/qenta-cee/woocommerce-qcp
 Description: Qenta is a popular payment service provider (PSP) and has connections with over 20 national and international currencies.
-Version: 2.0.3
+Version: 2.1.0
 Author: Qenta
-Author URI: http://www.qenta-cee.at/
+Author URI: https://www.qenta.com/
 License: Proprietary
 */
 
@@ -29,20 +29,20 @@ License: Proprietary
 
 // coding standards: https://codex.wordpress.org/WordPress_Coding_Standards
 
-// po File erzeugen: xgettext -k__ -L php class-woocommerce-wcp-gateway.php -o languages/woocommerce-wcp-en_US.po
+// po File erzeugen: xgettext -k__ -L php class-woocommerce-qcp-gateway.php -o languages/woocommerce-qcp-en_US.po
 // im po File charset=UTF-8 setzen
-// mo File erzeugen msgfmt woocommerce-wcp-en_US.po -o woocommerce-wcp-en_US.mo
+// mo File erzeugen msgfmt woocommerce-qcp-en_US.po -o woocommerce-qcp-en_US.mo
 // en_US muss nicht übersetzt werden
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-define( 'WOOCOMMERCE_GATEWAY_WCP_BASEDIR', plugin_dir_path( __FILE__ ) );
-define( 'WOOCOMMERCE_GATEWAY_WCP_URL', plugin_dir_url( __FILE__ ) );
+define( 'WOOCOMMERCE_GATEWAY_QCP_BASEDIR', plugin_dir_path( __FILE__ ) );
+define( 'WOOCOMMERCE_GATEWAY_QCP_URL', plugin_dir_url( __FILE__ ) );
 
 
 require_once 'vendor/autoload.php';
 
-load_plugin_textdomain( 'woocommerce-wcp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+load_plugin_textdomain( 'woocommerce-qcp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 register_activation_hook( __FILE__, 'woocommerce_install_qenta_checkout_page' );
 
@@ -65,17 +65,25 @@ function woocommerce_init_qenta_checkout_page()
     if ( ! class_exists( 'WC_Payment_Gateway' ) )
         return;
 
-    require_once( WOOCOMMERCE_GATEWAY_WCP_BASEDIR . 'class-woocommerce-wcp-gateway.php' );
+    require_once( WOOCOMMERCE_GATEWAY_QCP_BASEDIR . 'class-woocommerce-qcp-gateway.php' );
 
     add_filter( 'woocommerce_payment_gateways', 'woocommerce_add_qenta_checkout_page' );
+    add_filter( 'default_checkout_billing_country', 'qcp_change_default_checkout_country' );
+    add_filter( 'default_checkout_shipping_country', 'qcp_change_default_checkout_country' );
 }
 
+/**
+ * Return default billing country
+ **/
+function qcp_change_default_checkout_country() {
+  return getenv('DEFAULT_COUNTRY_CODE') ?: 'AT';
+}
 
 /**
  * Add the gateway to woocommerce
  */
 function woocommerce_add_qenta_checkout_page( $methods ) {
-    $methods[] = 'WC_Gateway_WCP';
+    $methods[] = 'WC_Gateway_QCP';
     return $methods;
 }
 

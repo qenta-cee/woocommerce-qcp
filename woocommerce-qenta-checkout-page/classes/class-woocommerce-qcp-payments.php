@@ -38,7 +38,7 @@
  *
  * @since 1.3.0
  */
-class WC_Gateway_WCP_Payments {
+class WC_Gateway_QCP_Payments {
 
 	/**
 	 * Payment gateway settings
@@ -50,7 +50,7 @@ class WC_Gateway_WCP_Payments {
 	protected $_settings;
 
 	/**
-	 * WC_Gateway_WCP_Payments constructor.
+	 * WC_Gateway_QCP_Payments constructor.
 	 *
 	 * @since 1.3.0
 	 *
@@ -70,7 +70,7 @@ class WC_Gateway_WCP_Payments {
 	 * @return string
 	 */
 	public function get_payment_icon( $payment_code ) {
-		return WOOCOMMERCE_GATEWAY_WCP_URL . "assets/images/" . $payment_code . ".png";
+		return WOOCOMMERCE_GATEWAY_QCP_URL . "assets/images/" . $payment_code . ".png";
 	}
 
 	/**
@@ -85,8 +85,6 @@ class WC_Gateway_WCP_Payments {
 		switch ($payment_code) {
 			case 'invoice':
 			case 'installment':
-			case 'eps':
-			case 'idl':
 				return true;
 			default:
 				return false;
@@ -111,8 +109,8 @@ class WC_Gateway_WCP_Payments {
 
 				// account owner field
 				$html .= "<p class='form-row'>";
-				$html .= "<label>" . __( 'Date of Birth:', 'woocommerce-wcp' ) . "</label>";
-				$html .= "<select name='".$payment_code."_wcp_day' class=''>";
+				$html .= "<label>" . __( 'Date of Birth:', 'woocommerce-qcp' ) . "</label>";
+				$html .= "<select name='".$payment_code."_qcp_day' class=''>";
 
 				for ( $day = 31; $day > 0; $day -- ) {
 					$html .= "<option value='$day'> $day </option>";
@@ -120,13 +118,13 @@ class WC_Gateway_WCP_Payments {
 
 				$html .= "</select>";
 
-				$html .= "<select name='".$payment_code."_wcp_month' class=''>";
+				$html .= "<select name='".$payment_code."_qcp_month' class=''>";
 				for ( $month = 12; $month > 0; $month -- ) {
 					$html .= "<option value='$month'> $month </option>";
 				}
 				$html .= "</select>";
 
-				$html .= "<select name='".$payment_code."_wcp_year' class=''>";
+				$html .= "<select name='".$payment_code."_qcp_year' class=''>";
 				for ( $year = date( "Y" ); $year > 1900; $year -- ) {
 					$html .= "<option value='$year'> $year </option>";
 				}
@@ -139,67 +137,27 @@ class WC_Gateway_WCP_Payments {
 
 					$payolution_mid = urlencode( base64_encode( $this->_settings['payolution_mid'] ) );
 
-					$consent_link = __( 'consent', 'woocommerce-wcp' );
+					$consent_link = __( 'consent', 'woocommerce-qcp' );
 
 					if ( strlen( $this->_settings['payolution_mid'] ) > 5 ) {
 						$consent_link = sprintf( '<a href="https://payment.payolution.com/payolution-payment/infoport/dataprivacyconsent?mId=%s" target="_blank">%s</a>',
 							$payolution_mid,
-							__( 'consent', 'woocommerce-wcp' ) );
+							__( 'consent', 'woocommerce-qcp' ) );
 					}
 
 					$html .= "<p class='form-row'>";
 
 					$html .= "<label><input type='checkbox' name='".$payment_code."_consent'>"
 					         . __( 'I agree that the data which are necessary for the liquidation of purchase on account and which are used to complete the identity and credit check are transmitted to payolution. My ',
-							'woocommerce-wcp' )
+							'woocommerce-qcp' )
 					         . $consent_link
 					         . __( ' can be revoked at any time with effect for the future.',
-							'woocommerce-wcp' ) . "</label>";
+							'woocommerce-qcp' ) . "</label>";
 
 					$html .= "</p>";
 				}
 
 				$html .= "</fieldset>";
-
-				return $html;
-				break;
-			case 'eps':
-				$html = '<fieldset  class="wc-eps-form wc-payment-form">';
-
-				// dropdown for financial institution
-				$html .= "<p class='form-row'>";
-				$html .= "<label>" . __( 'Financial institution:',
-						'woocommerce-wcp' ) . " <span class='required'>*</span></label>";
-				$html .= "<select name='wcp_eps_financialInstitution' autocomplete='off'>";
-				$html .= "<option value=''>" . __( 'Choose your bank', 'woocommerce-wcp' ) . "</option>";
-				foreach ( QentaCEE\Stdlib\PaymentTypeAbstract::getFinancialInstitutions( QentaCEE\Stdlib\PaymentTypeAbstract::EPS ) as $key => $value ) {
-					$html .= "<option value='$key'>$value</option>";
-				}
-
-				$html .= "</select>";
-				$html .= "</p>";
-
-				$html .= '</fieldset>';
-
-				return $html;
-				break;
-			case 'idl':
-				$html = '<fieldset  class="wc-idl-form wc-payment-form">';
-
-				// dropdown for financial institution
-				$html .= "<p class='form-row'>";
-				$html .= "<label>" . __( 'Financial institution:',
-						'woocommerce-wcp' ) . " <span class='required'>*</span></label>";
-				$html .= "<select name='wcp_idl_financialInstitution' autocomplete='off'>";
-				$html .= "<option value=''>" . __( 'Choose your bank', 'woocommerce-wcp' ) . "</option>";
-				foreach ( QentaCEE\Stdlib\PaymentTypeAbstract::getFinancialInstitutions( QentaCEE\Stdlib\PaymentTypeAbstract::IDL ) as $key => $value ) {
-					$html .= "<option value='$key'>$value</option>";
-				}
-
-				$html .= "</select>";
-				$html .= "</p>";
-
-				$html .= '</fieldset>';
 
 				return $html;
 				break;
@@ -223,7 +181,7 @@ class WC_Gateway_WCP_Payments {
 		switch ( $payment_code ) {
 			case 'invoice':
 			case 'installment':
-				$birthdate = new DateTime( $data[$payment_code.'_wcp_year'] . '-' . $data[$payment_code.'_wcp_month'] . '-' . $data[$payment_code.'_wcp_day'] );
+				$birthdate = new DateTime( $data[$payment_code.'_qcp_year'] . '-' . $data[$payment_code.'_qcp_month'] . '-' . $data[$payment_code.'_qcp_day'] );
 				$age = $birthdate->diff( new DateTime );
 				$age = $age->format( '%y' );
 
@@ -232,24 +190,11 @@ class WC_Gateway_WCP_Payments {
 				$hasConsent = isset($data[$payment_code.'_consent']) && $data[$payment_code.'_consent'] == 'on';
 
 				if ( $this->_settings['payolution_terms'] == 'yes' && !$hasConsent && $this->_settings[ $payment_code . '_provider' ] == 'payolution' ) {
-					$errors[] = "&bull; " . __( 'Please accept the consent terms!', 'woocommerce-wcp' );
+					$errors[] = "&bull; " . __( 'Please accept the consent terms!', 'woocommerce-qcp' );
 				}
 				if ( $age < 18 ) {
 					$errors[] = "&bull; " . __( 'You have to be 18 years or older to use this payment.',
-							'woocommerce-wcp' );
-				}
-
-				return count( $errors ) == 0 ? true : join( "<br>", $errors );
-			case 'eps':
-				$errors = [];
-				if ( $data['wcp_eps_financialInstitution'] == '' ) {
-					$errors[] = "&bull; " . __( 'Financial institution must not be empty.', 'woocommerce-wcp' );
-				}
-
-				return count( $errors ) == 0 ? true : join( "<br>", $errors );
-			case 'idl':
-				if ( $data['wcp_idl_financialInstitution'] == '' ) {
-					$errors[] = "&bull; " . __( 'Financial institution must not be empty.', 'woocommerce-wcp' );
+							'woocommerce-qcp' );
 				}
 
 				return count( $errors ) == 0 ? true : join( "<br>", $errors );
@@ -270,8 +215,6 @@ class WC_Gateway_WCP_Payments {
 		switch ( $payment_code ) {
 			case 'invoice':
 				return $this->is_available_invoice();
-			case 'installment':
-				return $this->is_available_installment();
 			default:
 				return true;
 		}

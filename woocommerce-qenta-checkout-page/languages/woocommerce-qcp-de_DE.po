@@ -1,0 +1,377 @@
+# WooCommerce QCP Translation
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-13 14:50+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Herbert Knapp <herbert.knapp@qenta.com>\n"
+"Language-Team: QENTA <support@qenta.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: classes/class-woocommerce-qcp-payments.php:114
+msgid "Date of Birth:"
+msgstr "Geburtsdatum:"
+
+#: classes/class-woocommerce-qcp-payments.php:142
+#: classes/class-woocommerce-qcp-payments.php:147
+msgid "consent"
+msgstr "Einwilligung"
+
+#: classes/class-woocommerce-qcp-payments.php:153
+msgid ""
+"I agree that the data which are necessary for the liquidation of purchase on "
+"account and which are used to complete the identity and credit check are "
+"transmitted to payolution. My "
+msgstr "Mit der Übermittlung jener Daten an payolution, die für die Abwicklung von Zahlungen mit Kauf auf Rechnung und die Identitäts- und Bonitätsprüfung erforderlich sind, bin ich einverstanden. Meine "
+
+#: classes/class-woocommerce-qcp-payments.php:156
+msgid " can be revoked at any time with effect for the future."
+msgstr " kann ich jederzeit mit Wirkung für die Zukunft widerrufen."
+
+#: classes/class-woocommerce-qcp-payments.php:171
+msgid "Financial institution:"
+msgstr "Finanzinstitut:"
+
+#: classes/class-woocommerce-qcp-payments.php:174
+msgid "Choose your bank"
+msgstr "Wählen Sie Ihre Bank"
+
+#: classes/class-woocommerce-qcp-payments.php:215
+msgid "Please accept the consent terms!"
+msgstr "Bitten akzeptieren Sie die Nutzungsbedingungen!"
+
+#: classes/class-woocommerce-qcp-payments.php:218
+msgid "You have to be 18 years or older to use this payment."
+msgstr "Sie müssen mindestens 18 Jahre alt sein um dieses Zahlungsmittel zu nutzen."
+
+#: classes/class-woocommerce-qcp-payments.php:226
+#: classes/class-woocommerce-qcp-payments.php:232
+msgid "Financial institution must not be empty."
+msgstr "Bitte wählen Sie ein Finanzistitut aus."
+
+#: includes/settings-qcp.php:18
+msgid "Access data"
+msgstr "Zugangsdaten"
+
+#: includes/settings-qcp.php:20
+msgid "Enter access data for using Qenta Checkout Page."
+msgstr "Geben Sie ihre Zugangsdaten ein um Qenta Checkout Page zu nutzen."
+
+#: includes/settings-qcp.php:23
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#: includes/settings-qcp.php:26
+msgid ""
+"For integration, select predefined configuration settings or 'Production' "
+"for live systems"
+msgstr "Zum Testen der Integration eine vordefinierte Konfiguration auswählen. Für Produktivsysteme \"Production\" auswählen."
+
+#: includes/settings-qcp.php:31
+msgid "Demo"
+msgstr ""
+
+#: includes/settings-qcp.php:32
+msgid "Test"
+msgstr ""
+
+#: includes/settings-qcp.php:33
+msgid "Production"
+msgstr ""
+
+#: includes/settings-qcp.php:37
+msgid "Customer ID"
+msgstr ""
+
+#: includes/settings-qcp.php:40
+#, php-format
+msgid ""
+"Customer number you received from Qenta (customerId, i.e. D2#####). <a href="
+"\"%s\">More information</a>"
+msgstr "Ihre QENTA-Kundennummer (customerId, im Format D2#####). <a href=\"%s\">Weitere Informationen</a>"
+
+#: includes/settings-qcp.php:45
+msgid "Shop ID"
+msgstr ""
+
+#: includes/settings-qcp.php:48
+#, php-format
+msgid ""
+"Shop identifier in case of more than one shop. <a href=\"%s\">More "
+"information</a>"
+msgstr "Shop-Kennung bei mehreren Onlineshops. <a href=\"%s\">Weitere Informationen</a>"
+
+#: includes/settings-qcp.php:53
+msgid "Secret"
+msgstr ""
+
+#: includes/settings-qcp.php:56
+#, php-format
+msgid ""
+"String which you received from Qenta for signing and validating data to "
+"prove their authenticity. <a href=\"%s\">More information</a>"
+msgstr "Geheime Zeichenfolge, die Sie von QENTA erhalten haben, zum Signieren und Validieren von Daten zur Prüfung der Authentizität. <a href=\"%s\">Weitere Informationen</a>"
+
+#: includes/settings-qcp.php:61
+msgid "URL to contact page"
+msgstr "URL zur Kontakt-Seite"
+
+#: includes/settings-qcp.php:65
+msgid "URL to web page containing your contact information (imprint)."
+msgstr "URL der Kontakt-Seite des Onlineshops (Impressum)."
+
+#: includes/settings-qcp.php:76
+msgid "Payment methods"
+msgstr "Zahlungsmittel"
+
+#: includes/settings-qcp.php:78
+msgid "Enable payment methods."
+msgstr "Aktivieren Sie die gewünschten Zahlungsmittel."
+
+#: includes/settings-qcp.php:140
+msgid "Additional settings"
+msgstr "Zusätzliche Einstellungen"
+
+#: includes/settings-qcp.php:144
+msgid "URL to image on payment page"
+msgstr "Bild URL auf der Bezahlseite"
+
+#: includes/settings-qcp.php:148
+msgid ""
+"Image Url for displaying an image on the Qenta Checkout Page (95x65 pixels "
+"preferred)."
+msgstr "Url zu Ihrem Logo auf der Bezahlseite (vorzugsweise 95x65 Pixel)."
+
+#: includes/settings-qcp.php:154
+msgid "Max. retries"
+msgstr "Max. Versuche"
+
+#: includes/settings-qcp.php:157
+msgid "Maximal number of payment retries."
+msgstr "Anzahl der maximalen Zahlungsversuche."
+
+#: includes/settings-qcp.php:161
+msgid "Display text"
+msgstr "Text auf der Bezahlseite"
+
+#: includes/settings-qcp.php:163
+msgid "Display Text on the Qenta Checkout Page."
+msgstr "Text, der auf den Bestelldaten angezeigt wird."
+
+#: includes/settings-qcp.php:167
+msgid "payolution mID"
+msgstr ""
+
+#: includes/settings-qcp.php:170
+msgid "Your payolution merchant ID, non-base64-encoded."
+msgstr "payolution-Händler-ID, Nicht base64 kodiert."
+
+#: includes/settings-qcp.php:174
+msgid "payolution terms"
+msgstr "payolution Nutzungsbedingungen"
+
+#: includes/settings-qcp.php:177
+#, php-format
+msgid ""
+"Consumer must accept payolution terms during the checkout process. <a href="
+"\"%s\">More information</a>"
+msgstr "Kunde muss die Nutzungsbedingungen von payolution während des Bezahlprozesses akzeptieren. <a href=\"%s\">Weitere Informationen</a>"
+
+#: includes/settings-qcp.php:179 includes/settings-qcp.php:187
+#: includes/settings-qcp.php:196 includes/settings-qcp.php:205
+#: includes/settings-qcp.php:214 includes/settings-qcp.php:242
+msgid "Enable/Disable"
+msgstr "Aktivieren/Deaktivieren"
+
+#: includes/settings-qcp.php:184
+msgid "Debug Log"
+msgstr ""
+
+#: includes/settings-qcp.php:185
+msgid "Log Qenta Checkout Page events."
+msgstr "Qenta Checkout Page Ereignisse in WooCommerce Logdatei schreiben."
+
+#: includes/settings-qcp.php:191
+msgid "Forward consumer shipping data"
+msgstr "Versanddaten des Konsumenten mitsenden"
+
+#: includes/settings-qcp.php:193
+msgid ""
+"Forwarding shipping data about your consumer to the respective financial "
+"service provider."
+msgstr "Weiterleitung der Versanddaten des Kunden an den Finanzdienstleister."
+
+#: includes/settings-qcp.php:200
+msgid "Forward consumer billing data"
+msgstr "Verrechnungsdaten des Konsumenten mitsenden"
+
+#: includes/settings-qcp.php:202
+msgid ""
+"Forwarding billing data about your consumer to the respective financial "
+"service provider."
+msgstr "Weiterleitung der Verrechnungsdaten des Kunden an den Finanzdienstleister."
+
+#: includes/settings-qcp.php:209
+msgid "Forward basket data"
+msgstr "Warenkorbdaten des Konsumenten mitsenden"
+
+#: includes/settings-qcp.php:211
+msgid "Forwarding basket data to the respective financial service provider."
+msgstr "Weiterleitung des Warenkorbs des Kunden an den Finanzdienstleister."
+
+#: includes/settings-qcp.php:221
+msgid "Invoice settings"
+msgstr "Einstellungen für Kauf auf Rechnung"
+
+#: includes/settings-qcp.php:225
+msgid "Invoice Provider"
+msgstr "Provider für Kauf auf Rechnung"
+
+#: includes/settings-qcp.php:228
+msgid "Choose your invoice provider."
+msgstr "Wählen Sie einen Kauf auf Rechnung Provider aus."
+
+#: includes/settings-qcp.php:232
+msgid "payolution"
+msgstr ""
+
+#: includes/settings-qcp.php:233
+msgid "Qenta"
+msgstr ""
+
+#: includes/settings-qcp.php:237
+msgid "Billing/shipping address must be identical"
+msgstr "Rechnungsadresse und Versandadresse müssen übereinstimmen"
+
+#: includes/settings-qcp.php:240
+msgid "Only applicable for payolution"
+msgstr "Nur für payolution einstellbar"
+
+#: includes/settings-qcp.php:245
+msgid "Allowed billing countries"
+msgstr "Erlaubte Länder für Rechnungsadresse"
+
+#: includes/settings-qcp.php:252
+msgid "Allowed shipping countries"
+msgstr "Erlaubte Länder für Versandadresse"
+
+#: includes/settings-qcp.php:259
+msgid "Accepted currencies"
+msgstr "Akzeptierte Währungen"
+
+#: includes/settings-qcp.php:267
+msgid "Minimum amount"
+msgstr "Mindestbetrag"
+
+#: includes/settings-qcp.php:272
+msgid "Maximum amount"
+msgstr "Höchstbetrag"
+
+#: class-woocommerce-qcp-gateway.php:47
+msgid "Qenta Checkout Page"
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:49
+msgid ""
+"Qenta is a popular payment service provider (PSP) and has connections with "
+"over 20 national and international currencies. "
+msgstr "QENTA ist ein beliebter Payment-Service-Provider (PSP) und hat Anbindungen an über 20 nationale und internationale Zahlungsmittel."
+
+#: class-woocommerce-qcp-gateway.php:137
+msgid ""
+"Qenta - Your Full Service Payment Provider - Comprehensive solutions from "
+"one single source"
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:140
+msgid ""
+"Qenta is one of the world´s leading providers of outsourcing and white label "
+"solutions for electronic payment transactions."
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:143
+msgid ""
+"As independent provider of payment solutions, we accompany our customers "
+"along the entire business development. Our payment solutions are perfectly "
+"tailored to suit e-Commerce requirements and have made us Austria´s leading "
+"payment service provider. Customization, competence, and commitment."
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:185
+msgid "Payment type is not available, please select another payment type."
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:314 class-woocommerce-qcp-gateway.php:321
+msgid "Panic: Order-Id missing"
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:333
+msgid "Payment has been cancelled."
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:342
+msgid "Payment has failed."
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:407
+msgid "Validation error: invalid response"
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:432
+msgid "Awaiting payment notification from 3rd party."
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:440
+msgid "Payment cancelled."
+msgstr ""
+
+#: class-woocommerce-qcp-gateway.php:481
+msgid ""
+"Your order will be processed, as soon as we get the payment notification "
+"from your bank institute"
+msgstr ""
+
+msgid "select"
+msgstr "Im nächsten Schritt wählen..."
+
+msgid "afterpay"
+msgstr "AfterPay"
+
+msgid "ccard"
+msgstr "Credit Card"
+
+msgid "crypto"
+msgstr "Salamantex"
+
+msgid "eps"
+msgstr "eps-Überweisung"
+
+msgid "sofort"
+msgstr "Sofortüberweisung"
+
+msgid "przelewy24"
+msgstr "Przelewy24"
+
+msgid "psc"
+msgstr "paysafecard"
+
+msgid "paypal"
+msgstr "PayPal"
+
+msgid "sepa-dd"
+msgstr "SEPA Lastschrift"
+
+msgid "sepa"
+msgstr "SEPA Überweisung"
+
+msgid "invoice"
+msgstr "Invoice"
+
+msgid "installment"
+msgstr "Installment"
