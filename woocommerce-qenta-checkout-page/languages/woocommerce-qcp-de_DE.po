@@ -344,7 +344,7 @@ msgid "afterpay"
 msgstr "AfterPay"
 
 msgid "ccard"
-msgstr "Credit Card"
+msgstr "Kreditkarte"
 
 msgid "crypto"
 msgstr "Salamantex"
