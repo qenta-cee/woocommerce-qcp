@@ -11,7 +11,7 @@ require_once( WOOCOMMERCE_GATEWAY_QCP_BASEDIR . 'classes/class-woocommerce-qcp-c
 require_once( WOOCOMMERCE_GATEWAY_QCP_BASEDIR . 'classes/class-woocommerce-qcp-payments.php' );
 
 define( 'WOOCOMMERCE_GATEWAY_QCP_NAME', 'Woocommerce2_QentaCheckoutPage' );
-define( 'WOOCOMMERCE_GATEWAY_QCP_VERSION', '2.1.3' );
+define( 'WOOCOMMERCE_GATEWAY_QCP_VERSION', '2.1.4' );
 define( 'WOOCOMMERCE_GATEWAY_QCP_WINDOWNAME', 'QentaCheckoutPageFrame' );
 define( 'WOOCOMMERCE_GATEWAY_QCP_TABLE_NAME', 'woocommerce_qcp_transaction' );
 
