@@ -21,7 +21,7 @@ jobs:
 
       - name: Upload Artifact
         id: upload_artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: woocommerce-qenta-checkout-page
           path: woocommerce-qenta-checkout-page
