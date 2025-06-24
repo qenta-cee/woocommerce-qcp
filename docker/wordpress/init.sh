@@ -104,7 +104,7 @@ function change_api_uri() {
   PATH_CONF_QMORE='/var/www/html/wp-content/plugins/woocommerce-qenta-checkout-seamless/vendor/qenta/checkout-client-library/src/QentaCEE/QMore/Config/client.config.php'
   PATH_CONF_QPAY='/var/www/html/wp-content/plugins/woocommerce-qenta-checkout-seamless/vendor/qenta/checkout-client-library/src/QentaCEE/QPay/Config/client.config.php'
 
-  DEFAULT_API_URI='https://api.qenta.com'
+  DEFAULT_API_URI='https://papi.hobex.at'
 
   new_api_uri_protocol=$(sed -n 's,^\(https\?\):.\+,\1,p' <<< ${1})
   new_api_uri_protocol=${new_api_uri_protocol:-https}
