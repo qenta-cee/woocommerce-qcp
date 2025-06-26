@@ -5,7 +5,7 @@ name: Create Artifact
 jobs:
   build:
     name: Add Artifact
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,7 +21,7 @@ jobs:
 
       - name: Upload Artifact
         id: upload_artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: woocommerce-qenta-checkout-page
           path: woocommerce-qenta-checkout-page
